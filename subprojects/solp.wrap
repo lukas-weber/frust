@@ -1,0 +1,4 @@
+[wrap-git]
+directory = solp
+url = https://github.com/lukas-weber/solp.git
+revision = master
