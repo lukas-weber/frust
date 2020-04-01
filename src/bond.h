@@ -4,7 +4,7 @@
 
 using vec2 = std::array<double,2>;
 
-const vec2 operator+(const vec2 &a, const vec2 &b) {
+inline const vec2 operator+(const vec2 &a, const vec2 &b) {
 	vec2 r;
 	for(int i = 0; i < 2; i++) {
 		r[i] = a[i] + b[i];
@@ -12,7 +12,7 @@ const vec2 operator+(const vec2 &a, const vec2 &b) {
 	return r;
 }
 
-const vec2 operator*(double a, const vec2 &b) {
+inline const vec2 operator*(double a, const vec2 &b) {
 	vec2 r;
 
 	for(int i = 0; i < 2; i++) {
@@ -26,10 +26,15 @@ struct bond {
 	int j{0};
 	
 	double J{0};
+
+	// prefactor of S_i^2 and S_j^2 terms
+	double Ki{0};
+	double Kj{0};
 };
 
 struct site {
 	vec2 pos;
 
-	double Jin;
+	int nspinhalfs{}; // S=1/2 spins contained in this site
+	double Jin{};
 };

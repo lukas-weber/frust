@@ -35,10 +35,9 @@ public:
 	void do_update() override;
 
 	void do_measurement() override;
-	void measure_bond_correlations();
 
-	template<class... Estimators>
-	void opstring_measurement(Estimators... est);
+	//template<class... Estimators>
+	//void opstring_measurement(Estimators... est);
 
 	void checkpoint_write(const loadl::iodump::group &out) override;
 	void checkpoint_read(const loadl::iodump::group &in) override;
