@@ -18,14 +18,12 @@ struct unitcell {
 class lattice {
 public:
 	int Lx{}, Ly{};
-
-	std::vector<int8_t> sublattice;
+	int spinhalf_count{};
+	double energy_offset{};
 
 	std::vector<site> sites;
 	std::vector<bond> bonds;
 
-	double energy_offset() const;
-	
 	const vertex_data::transition &vertex_transition(opercode op, int leg_in, jm_action action_in) const;
 	double vertex_weight(opercode op) const;
 	opercode vertex_idx_opercode(int bond, int vertex_idx) const;
@@ -36,8 +34,6 @@ public:
 	void to_json(nlohmann::json &out);
 private:
 	std::vector<vertex_data> vertices_; // [uc_bond]
-	
-	double energy_offset_{};
 
 	void calculate_energy_offset();
 	void init_sublattice();

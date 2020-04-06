@@ -33,4 +33,6 @@ struct site {
 
 	int nspinhalfs{}; // S=1/2 spins contained in this site
 	double Jin{};
+	
+	int8_t sublattice{};
 };

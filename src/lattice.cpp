@@ -7,25 +7,24 @@ void lattice::init_sublattice() {
 		return;
 	}
 
-	sublattice.resize(sites.size(), 0);
-	sublattice.at(0) = 1;
+	sites.at(0).sublattice = 1;
 
 	int num_set = 1;
 
 	for(const auto &site : sites) {
 		(void)site;
 		for(const auto &b : bonds) {
-			if(sublattice[b.i] != 0 && sublattice[b.j] == sublattice[b.i]) {
+			if(sites[b.i].sublattice != 0 && sites[b.j].sublattice == sites[b.i].sublattice) {
 				throw std::runtime_error("lattice not bipartite!");
 			}
 
-			if(sublattice[b.i] != 0) {
-				sublattice[b.j] = -sublattice[b.i];
+			if(sites[b.i].sublattice != 0) {
+				sites[b.j].sublattice = -sites[b.i].sublattice;
 				num_set++;
 			}
 
-			if(sublattice[b.j] != 0) {
-				sublattice[b.i] = -sublattice[b.j];
+			if(sites[b.j].sublattice != 0) {
+				sites[b.i].sublattice = -sites[b.j].sublattice;
 				num_set++;
 			}
 		}
@@ -47,6 +46,7 @@ lattice::lattice(const unitcell &uc, int Lx, int Ly)
 		for(int x = 0; x < Lx; x++) {
 			for(auto &s : uc.sites) {
 				sites.emplace_back(site{(x + s.pos[0]) * uc.a1 + (y + s.pos[1]) * uc.a2, s.nspinhalfs, s.Jin});
+				spinhalf_count += s.nspinhalfs;
 			}
 
 			for(auto b : uc.bonds) {
@@ -70,7 +70,12 @@ lattice::lattice(const unitcell &uc, int Lx, int Ly)
 void lattice::init_vertex_data(const unitcell &uc) {
 	std::transform(uc.bonds.begin(), uc.bonds.end(), std::back_inserter(vertices_), [&](const bond &b) {
 		return vertex_data{b, sites[b.i], sites[b.j]};
-	});	
+	});
+	energy_offset = 0;
+	for(const auto &vd : vertices_) {
+		energy_offset += vd.energy_offset;
+	}
+	energy_offset *= Lx*Ly;
 }
 
 void lattice::vertex_print() const {
@@ -79,5 +84,24 @@ void lattice::vertex_print() const {
 		const auto &b = bonds[idx];
 		vd.print(sites[b.i], sites[b.j]);
 		idx++;
+	}
+}
+
+void lattice::to_json(nlohmann::json &out) {
+	for(const auto &site : sites) {
+		out["sites"].push_back({
+			{"pos", site.pos},
+			{"sublattice", site.sublattice},
+			{"nspinhalfs", site.nspinhalfs},
+			{"Jin", site.Jin},
+		});
+	}
+
+	for(const auto &bond : bonds) {
+		out["bonds"].push_back({
+		    {"i", bond.i},
+		    {"j", bond.j},
+		    {"J", bond.J},
+		});
 	}
 }

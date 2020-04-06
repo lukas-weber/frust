@@ -5,6 +5,7 @@ frust_sources = files([
   'lattice.cpp',
   'vertex_data.cpp',
   'latticedef.cpp',
+  'write_lattice.cpp',
 ])
 
 frust = executable('frust',

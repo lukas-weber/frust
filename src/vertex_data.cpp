@@ -78,8 +78,8 @@ void vertex_data::construct_vertices(const bond &b, const site &si, const site &
 	H.diagonal() *= -1; // from -β ;)
 
 	double epsilon = 0.;
-	energy_offset_ = H.diagonal().minCoeff()-epsilon;
-	H -= decltype(H)::Identity()*energy_offset_;
+	energy_offset = H.diagonal().minCoeff()-epsilon;
+	H -= decltype(H)::Identity()*energy_offset;
 
 	for(uint8_t l0 = 0; l0 < jm::basis_size; l0++) {
 		for(uint8_t l1 = 0; l1 < jm::basis_size; l1++) {
