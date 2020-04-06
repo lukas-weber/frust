@@ -1,6 +1,7 @@
 #include "lattice.h"
 #include <tuple>
 
+	
 void lattice::init_sublattice() {
 	if(sites.size() == 0) {
 		return;
@@ -11,7 +12,8 @@ void lattice::init_sublattice() {
 
 	int num_set = 1;
 
-	for(int tries = 0; tries < sites.size(); tries++) {
+	for(const auto &site : sites) {
+		(void)site;
 		for(const auto &b : bonds) {
 			if(sublattice[b.i] != 0 && sublattice[b.j] == sublattice[b.i]) {
 				throw std::runtime_error("lattice not bipartite!");
@@ -27,12 +29,13 @@ void lattice::init_sublattice() {
 				num_set++;
 			}
 		}
-		if(num_set >= sites.size())
+		if(num_set >= static_cast<int>(sites.size())) {
 			break;
+		}
 	}
 }
 
-lattice::lattice(unitcell uc, int Lx, int Ly)
+lattice::lattice(const unitcell &uc, int Lx, int Ly)
     : Lx{Lx}, Ly{Ly}  {
 	int uc_spin_count = uc.sites.size();
 
@@ -43,7 +46,7 @@ lattice::lattice(unitcell uc, int Lx, int Ly)
 	for(int y = 0; y < Ly; y++) {
 		for(int x = 0; x < Lx; x++) {
 			for(auto &s : uc.sites) {
-				sites.emplace_back(site{(x + s.pos[0]) * uc.a1 + (y + s.pos[1]) * uc.a2, s.Jin});
+				sites.emplace_back(site{(x + s.pos[0]) * uc.a1 + (y + s.pos[1]) * uc.a2, s.nspinhalfs, s.Jin});
 			}
 
 			for(auto b : uc.bonds) {
@@ -61,4 +64,20 @@ lattice::lattice(unitcell uc, int Lx, int Ly)
 	}
 
 	init_sublattice();
+	init_vertex_data(uc);
+}
+
+void lattice::init_vertex_data(const unitcell &uc) {
+	std::transform(uc.bonds.begin(), uc.bonds.end(), std::back_inserter(vertices_), [&](const bond &b) {
+		return vertex_data{b, sites[b.i], sites[b.j]};
+	});	
+}
+
+void lattice::vertex_print() const {
+	int idx{};
+	for(const auto &vd : vertices_) {
+		const auto &b = bonds[idx];
+		vd.print(sites[b.i], sites[b.j]);
+		idx++;
+	}
 }
