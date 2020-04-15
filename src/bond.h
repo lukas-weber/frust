@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <vector>
 
 using vec2 = std::array<double,2>;
 
@@ -25,7 +26,9 @@ struct bond {
 	int i{0};
 	int j{0};
 	
-	double J{0};
+	// bonds between individual constituent spins
+	// shape should be [spin_i * site_j.nspinhalfs + spin_j]
+	std::vector<double> J;
 };
 
 struct site {

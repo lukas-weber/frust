@@ -22,10 +22,17 @@ static unitcell make_square(int Lx, const loadl::parser &p) {
 		{{0,0}, nspinhalf, 0}
 	};
 
-	uc.bonds = {
-		{0,1,J},
-		{0,Lx,J}
-	};
+	if(nspinhalf == 1) {
+		uc.bonds = {
+			{0,1,{J}},
+			{0,Lx,{J}}
+		};
+	} else {
+		uc.bonds = {
+			{0,1,{J,J,J,J}},
+			{0,Lx,{J,J,J,J}}
+		};
+	}
 
 	return uc;
 }
@@ -40,17 +47,19 @@ static unitcell make_triangle_square(int Lx, const loadl::parser &p) {
 	double Jin = p.get<double>("Jin",Jtri);
 
 	double Jup = p.get<double>("Jup");
-	double Jdiag = p.get<double>("Jdiag");
+
+	double Jdirect = p.get<double>("Jdirect");
+	double Jindirect = p.get<double>("Jindirect");
 
 	uc.sites = {
 		{{0,0}, 2, Jin},
-		{{0,1}, 1, 0},
+		{{0,0.5}, 1, 0},
 	};
 
 	uc.bonds = {
-		{0,1,Jtri},
-		{0,2,Jdiag},
-		{1,2*Lx,Jup},
+		{0,1,{Jtri, Jtri}},
+		{0,2,{Jindirect, Jindirect, Jdirect, Jindirect}},
+		{1,2*Lx,{Jup, Jup}},
 	};
 
 	return uc;

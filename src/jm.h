@@ -9,6 +9,7 @@ using jm_action = uint8_t;
 class jm {
 public:
 	static const int basis_size = 4;
+	static const jm invalid;
 	static int local_basis_size(const site &s);
 
 	uint8_t code() const;
@@ -22,11 +23,13 @@ public:
 	jm apply(jm_action action);
 
 	jm() = default;
-	explicit jm(uint8_t code);
+	jm(uint8_t code);
 	bool operator==(const jm &other) const;
 private:
 	uint8_t code_{};
 };
+
+inline const jm jm::invalid = jm{jm::basis_size+1};
 
 inline jm::jm(uint8_t code)
 	: code_{code} {
@@ -95,6 +98,7 @@ inline double jm::j(const site &s) const {
 		return 1;
 	}
 	assert(false);
+	return 0;
 }
 
 inline double jm::m(const site &s) const {
@@ -122,5 +126,6 @@ inline double jm::m(const site &s) const {
 		}
 	}
 	assert(false);
+	return 0;
 }
 
