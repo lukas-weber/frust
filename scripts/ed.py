@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.linalg as spl
 import scipy.sparse as sps
 import scipy.sparse.linalg as spsl
 import lattice
@@ -68,16 +69,21 @@ H = sps.dok_matrix((2**(N), 2**(N)))
 
 print('H constructed.')
 
+def onsite_term(site):
+    res = sps.dok_matrix((2**(N), 2**(N)))
+    for i in mult2half[idx]:
+        for j in mult2half[idx]:
+            if i < j:
+                res += H_heisen_bond(i, j)
+    return res
+
 for b in lat.bonds:
     for spini, i in enumerate(mult2half[b.i]):
         for spinj, j in enumerate(mult2half[b.j]):
             H += b.J[spini*len(mult2half[b.j])+spinj] * H_heisen_bond(i, j)
 
 for idx, s in enumerate(lat.sites):
-    for i in mult2half[idx]:
-        for j in mult2half[idx]:
-            if i < j:
-                H += s.Jin * H_heisen_bond(i, j)
+    H += s.Jin * onsite_term(idx)
 
 if num_states == 0:
     H = np.array(H.todense())
@@ -103,7 +109,7 @@ def calc_observables(E, psi):
     def mean(A):
         nAn = np.zeros(psi.shape[1])
         for i in range(psi.shape[1]):
-            nAn[i] = np.real(np.dot(psi[:,i].conj().T, A.dot(psi[:,i])))
+            nAn[i] = np.real(psi[:,i].conj()@ A @psi[:,i])
 
         return np.sum(nAn[na,:]*ρ, axis=1)
         
@@ -151,12 +157,23 @@ def calc_observables(E, psi):
         print('observable prefix "{}"'.format(prefix))
 
         return obs
+    def j_obs():
+        J = sum([spl.sqrtm(sum(H_heisen_bond(i,j) for i in mult2half[site] for j in mult2half[site]).todense()+0.25*Id)-0.5*Id for site in range(len(lat.sites))])/Nmult
+
+        obs = {}
+        obs['J'] = mean(J)
+        obs['JVar'] = mean(J@J)-obs['J']**2
+
+        return obs
+
 
     obs = {}
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
 
     obs.update(mag_obs('', Sz))
     obs.update(mag_obs('Stag', lambda i: lat.sites[half2mult[i]].sublattice * Sz(i)))
+    if N < 8:
+        obs.update(j_obs())
 
     return obs
 

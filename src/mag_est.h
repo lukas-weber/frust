@@ -24,7 +24,7 @@ public:
 	mag_est(const lattice &lat, double T, double sign) : lat_{lat}, T_{T}, sign_{sign} {
 	}
 
-	void init(const std::vector<jm> &spin) {
+	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;
 
 		int i = 0;
@@ -33,7 +33,7 @@ public:
 			if(Staggered) {
 				sign *= site.sublattice;
 			}
-			tmpmag_ += sign * spin[i].m(site);
+			tmpmag_ += sign * lat_.get_uc_site(i).basis.states[spin[i]].m;
 			i++;
 		}
 		
@@ -43,20 +43,20 @@ public:
 		mag4_ = mag2_ * mag2_;
 	}
 
-	void measure(opercode op, const std::vector<jm> &) {
+	void measure(opercode op, const std::vector<state_idx> &) {
 		if(!Staggered) {
 			return;
 		}
 		
 		if(!op.diagonal()) {
 			const auto &bond = lat_.bonds[op.bond()];
-			const auto &si = lat_.sites[bond.i];
-			const auto &sj = lat_.sites[bond.j];
+			const auto &bi = lat_.get_uc_site(bond.i).basis;
+			const auto &bj = lat_.get_uc_site(bond.j).basis;
 
-			double m20 = op.leg_state(2).m(si)-op.leg_state(0).m(si);
-			double m31 = op.leg_state(3).m(sj) - op.leg_state(1).m(sj);
+			double m20 = bi.states[op.leg_state(2)].m-bi.states[op.leg_state(0)].m;
+			double m31 = bj.states[op.leg_state(3)].m - bj.states[op.leg_state(1)].m;
 			
-			tmpmag_ += si.sublattice*m20 + sj.sublattice*m31;
+			tmpmag_ += lat_.sites[bond.i].sublattice*m20 + lat_.sites[bond.j].sublattice*m31;
 		}
 
 		mag_ += tmpmag_;

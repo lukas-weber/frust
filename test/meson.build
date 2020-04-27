@@ -1,6 +1,6 @@
 test_srcs = files([
   'test_opercode.cpp',
-#  'test_wormfunc.cpp'
+  'test_util.cpp'
 ])
 
 catch2_dep = dependency('catch2', fallback : [ 'catch2', 'catch2_dep' ])
@@ -8,4 +8,26 @@ unit_tests = executable('unit_tests', test_srcs,
                         dependencies : [ frust_deps, catch2_dep ],
 			include_directories : include_directories('../src'))
 
-test('unit tests', unit_tests)
+test('unit_tests', unit_tests)
+
+sim_tests = find_program('simtest.py')
+test('ed_square',
+   sim_tests,
+   args : [frust, files('testjobs/square')],
+   timeout : 200,
+   is_parallel : false,
+   suite : 'ed_test')
+
+test('ed_square_1',
+   sim_tests,
+   args : [frust, files('testjobs/square1')],
+   timeout : 200,
+   is_parallel : false,
+   suite : 'ed_test')
+
+test('ed_triang',
+   sim_tests,
+   args : [frust, files('testjobs/triangle_square')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')

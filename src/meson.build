@@ -2,6 +2,7 @@
 frust_sources = files([
   'main.cpp',
   'frust.cpp',
+  'basis.cpp',
   'lattice.cpp',
   'vertex_data.cpp',
   'latticedef.cpp',

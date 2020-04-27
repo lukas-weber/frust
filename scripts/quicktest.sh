@@ -12,8 +12,9 @@ job=$1
 shift
 jobname=$(basename -s .py $job)
 
+loadl delete $job
 python3 $ed_code $job -o $jobname.npz
-loadl run --restart $job
+loadl run $job -s
 if loadl status $job --need-merge; then
     loadl merge $job
 fi

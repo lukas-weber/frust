@@ -33,6 +33,12 @@ print('Common observables:')
 print(*obs_names, sep='\n')
 print('\nConfidence level: p = {:.3g}\n'.format(args.confidence))
 
+if not args.cli:
+    sign = mc.get_observable('Sign', filter=cond)
+    plt.errorbar(Ts, sign.mean, sign.error, fmt='.')
+    plt.show()
+
+
 failure = 0
 
 def compare(obs_name, mean, error, edobs):
