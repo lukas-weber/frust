@@ -53,8 +53,10 @@ public:
 			const auto &bi = lat_.get_uc_site(bond.i).basis;
 			const auto &bj = lat_.get_uc_site(bond.j).basis;
 
-			double m20 = bi.states[op.leg_state(2)].m-bi.states[op.leg_state(0)].m;
-			double m31 = bj.states[op.leg_state(3)].m - bj.states[op.leg_state(1)].m;
+			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+
+			double m20 = bi.states[leg_state[2]].m - bi.states[leg_state[0]].m;
+			double m31 = bj.states[leg_state[3]].m - bj.states[leg_state[1]].m;
 			
 			tmpmag_ += lat_.sites[bond.i].sublattice*m20 + lat_.sites[bond.j].sublattice*m31;
 		}

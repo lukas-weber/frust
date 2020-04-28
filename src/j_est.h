@@ -39,8 +39,10 @@ public:
 			const auto &bi = lat_.get_uc_site(bond.i).basis;
 			const auto &bj = lat_.get_uc_site(bond.j).basis;
 
-			double j20 = bi.states[op.leg_state(2)].j-bi.states[op.leg_state(0)].j;
-			double j31 = bj.states[op.leg_state(3)].j-bj.states[op.leg_state(1)].j;
+			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+
+			double j20 = bi.states[leg_state[2]].j-bi.states[leg_state[0]].j;
+			double j31 = bj.states[leg_state[3]].j-bj.states[leg_state[1]].j;
 			
 			tmpj_ += lat_.sites[bond.i].sublattice*j20 + lat_.sites[bond.j].sublattice*j31;
 		}
