@@ -67,10 +67,10 @@ int frust::worm_traverse() {
 	idx++;
 
 	do {
-		
 		wormlength++;
 
 		auto &op = operators_[v/4];
+		assert(!op.vertex().invalid());
 		//auto oldop = op;
 		int leg_in = v%4;
 		const auto &trans = lat_.get_vertex_data(op.bond()).get_transition(op.vertex(), leg_in, wormfunc);
