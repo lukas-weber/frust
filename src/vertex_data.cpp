@@ -32,7 +32,6 @@ static Eigen::MatrixXd bond_term(const uc_bond &b, const uc_site &si, const uc_s
 		auto spini = si.basis.spinop(i);
 		for(int j = 0; j < sj.basis.nspinhalfs; j++) {
 			auto spinj = sj.basis.spinop(j);
-
 			res += b.J[sj.basis.nspinhalfs*i + j] * scalar_product(spini, spinj);
 		}
 	}
@@ -54,6 +53,8 @@ void vertex_data::construct_vertices(const uc_bond &b, const uc_site &si, const 
 	double epsilon = fabs(H.maxCoeff())/2;
 	energy_offset = H.diagonal().minCoeff()-epsilon;
 	H -= decltype(H)::Identity(dim, dim)*energy_offset;
+
+	assert(H.isApprox(H.transpose()));
 
 	for(state_idx l0 = 0; l0 < si.basis.size(); l0++) {
 		for(state_idx l1 = 0; l1 < sj.basis.size(); l1++) {

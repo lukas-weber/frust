@@ -10,20 +10,15 @@ tm.lattice = 'triangle_square'
 tm.Lx = 2
 tm.Ly = 2
 
-tm.basis = 2
+tm.J1 = 2.1023
+tm.J2 = 3.36
+tm.J3 = 1.1356
+tm.Jn = 4.423
+tm.Jnn=0
 
-tm.J1 = 1
-tm.J2 = 0.0
-tm.J3 = 0.543
-tm.Jn = 0.124
-tm.Jnn = 0.35
+bases = [1, 2]
 
-tm.ed_compare = 1
-tm.ed_num_states = 0
-
-Ts = np.linspace(0.06,0.5,7)
-
-for T in Ts:
-    tm.task(T=T)
+for basis in bases:
+    tm.task(basis = basis)
 
 tm.write()

@@ -67,24 +67,47 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 	uc.a1 = {1,0};
 	uc.a2 = {0,2};
 
-	double Jtri = p.get<double>("Jtri");
-	double Jin = p.get<double>("Jin",Jtri);
+	double J3 = p.get<double>("J3");
+	double J2 = p.get<double>("J2", J3);
+	double J1 = p.get<double>("J1", J3);
 
-	double Jup = p.get<double>("Jup");
+	double Jn = p.get<double>("Jn");
+	double Jnn = p.get<double>("Jnn");
 
-	double Jdirect = p.get<double>("Jdirect");
-	double Jindirect = p.get<double>("Jindirect");
+	int basis = p.get<int>("basis",2);
 
-	uc.sites = {
-		{{0,0}, Jin, site_bases::dimer},
-		{{0,0.5}, 0, site_bases::spin},
-	};
+	if(basis == 1) {
+		uc.sites = {
+			{{-0.3,0}, 0, site_bases::spin},
+			{{0.3,0}, 0, site_bases::spin},
+			{{0,0.5}, 0, site_bases::spin},
+		};
+		uc.bonds = {
+			{0,{0,0,1}, {J3}},
+			{1,{0,0,2}, {J2}},
+			{2,{0,0,0}, {J1}},
+			{1,{1,0,0}, {Jn}},
+			{2,{0,1,0}, {Jn}},
+			{2,{0,1,1}, {Jn}},
+		};
+		if(Jnn != 0) {
+			throw std::runtime_error{"basis = 1 does not support Jnn"};
+		}
+	} else if(basis == 2) {
+		uc.sites = {
+			{{0,0}, J3, site_bases::dimer},
+			{{0,0.5}, 0, site_bases::spin},
+		};
 
-	uc.bonds = {
-		{0,{0,0,1},{Jtri, Jtri}},
-		{0,{1,0,0},{Jindirect, Jindirect, Jdirect, Jindirect}},
-		{1,{0,1,0},{Jup, Jup}},
-	};
+		uc.bonds = {
+			{0,{0,0,1},{J1, J2}},
+			{0,{1,0,0},{Jnn, Jn, Jnn, Jnn}},
+			{1,{0,1,0},{Jn, Jn}},
+		};
+	} else if(basis == 3) {
+	} else {
+		throw std::runtime_error("invalid basis! must be 1, 2 or 3");
+	}
 
 	return uc;
 }

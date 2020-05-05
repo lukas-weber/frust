@@ -4,9 +4,9 @@ import scipy.sparse as sps
 import scipy.sparse.linalg as spsl
 import lattice
 import argparse
+import ed_hamiltonian
 from loadleveller import jobfile
 import os
-import functools
 
 parser = argparse.ArgumentParser(description='ED code for the frust project. Automatically calculates the results for a chosen loadleveller jobfile. If there is more than one task in the jobfile, those tasks must only vary by temperature.')
 
@@ -38,53 +38,11 @@ taskname, Ts = extract_jobdata(job)
 num_states = job.tasks[taskname].get('ed_num_states', 0)
 lat = lattice.load(job, taskname)
 
-σz2 = np.array([[1,0],[0,-1]])
-σy2 = np.array([[0,-1j],[1j,0]])
-σx2 = np.array([[0,1],[1,0]])
-
-Nmult = len(lat.sites)
-half2mult = sum([site.nspinhalfs*[i] for i, site in enumerate(lat.sites)], [])
-mult2half = [[i for i, x in enumerate(half2mult) if x == idx] for idx in range(Nmult)]
-
-N = len(half2mult)
-
+N = sum(s.nspinhalfs for s in lat.sites)
 print('dimension = 2**{} = {}'.format(N, 2**N))
-
-def lift_op(pos, op):
-    return sps.kron(sps.kron(sps.identity(2**(pos)), op), sps.identity(2**(N-pos-1)))
-    
-def Sx(pos):
-    return lift_op(pos, σx2/2)
-def Sy(pos):
-    return lift_op(pos, σy2/2)
-def Sz(pos):
-    return lift_op(pos, σz2/2)
-
-Id = sps.identity(2**N)
-
-def H_heisen_bond(i, j):
-    return Sx(i)*Sx(j) + Sy(i)*Sy(j) + Sz(i)*Sz(j)
-
-H = sps.dok_matrix((2**(N), 2**(N)))
+H, obs_ops = ed_hamiltonian.construct(lat)
 
 print('H constructed.')
-
-def onsite_term(site):
-    res = sps.dok_matrix((2**(N), 2**(N)))
-    for i in mult2half[idx]:
-        for j in mult2half[idx]:
-            if i < j:
-                res += H_heisen_bond(i, j)
-    return res
-
-for b in lat.bonds:
-    for spini, i in enumerate(mult2half[b.i]):
-        for spinj, j in enumerate(mult2half[b.j]):
-            H += b.J[spini*len(mult2half[b.j])+spinj] * H_heisen_bond(i, j)
-
-for idx, s in enumerate(lat.sites):
-    H += s.Jin * onsite_term(idx)
-
 if num_states == 0:
     H = np.array(H.todense())
     E, psi = np.linalg.eigh(H)
@@ -135,8 +93,7 @@ def calc_observables(E, psi):
 
     #     return mean(np.dot(struc, struc.conj().T))/len(sset)
 
-    def mag_obs(prefix, spin):
-        M = sum(spin(i) for i in range(N))/N
+    def mag_obs(prefix, M):
         M2 = np.dot(M,M)
         M4 = np.dot(M2,M2)
 
@@ -158,7 +115,7 @@ def calc_observables(E, psi):
 
         return obs
     def j_obs():
-        J = sum([spl.sqrtm(sum(H_heisen_bond(i,j) for i in mult2half[site] for j in mult2half[site]).todense()+0.25*Id)-0.5*Id for site in range(len(lat.sites))])/Nmult
+        J = obs_ops['J']
 
         obs = {}
         obs['J'] = mean(J)
@@ -170,9 +127,9 @@ def calc_observables(E, psi):
     obs = {}
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
 
-    obs.update(mag_obs('', Sz))
-    obs.update(mag_obs('Stag', lambda i: lat.sites[half2mult[i]].sublattice * Sz(i)))
-    if N < 8:
+    obs.update(mag_obs('', obs_ops['M']))
+    obs.update(mag_obs('Stag', obs_ops['sM']))
+    if 'J' in obs_ops.keys():
         obs.update(j_obs())
 
     return obs

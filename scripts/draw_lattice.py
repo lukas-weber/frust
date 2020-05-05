@@ -21,6 +21,8 @@ d = svgwrite.Drawing(args.outfile, size=(100,100), profile='full')
 
 poss = []
 
+maxJ = max([max(b.J) for b in lat.bonds])
+
 
 for s in lat.sites:
     idx = np.arange(s.nspinhalfs)
@@ -38,15 +40,14 @@ for s in lat.sites:
         if s.Jin != 0:
             for j in range(s.nspinhalfs):
                 if i < j:
-                    d.add(d.line(start=pos[:,i], end=pos[:,j], stroke='black', stroke_width=0.1, opacity=s.Jin))
+                    d.add(d.line(start=pos[:,i], end=pos[:,j], stroke='black', stroke_width=0.1, opacity=s.Jin/maxJ))
 
 for b in lat.bonds:
     nsi = lat.sites[b.i].nspinhalfs
     nsj = lat.sites[b.j].nspinhalfs
-    bmax = max(b.J)
     for i in range(nsi): 
        for j in range(nsj):
-           d.add(d.line(start=poss[b.i][:,i], end=poss[b.j][:,j], stroke='black', stroke_width = 0.1, opacity=b.J[i*nsj+j]/bmax))
+           d.add(d.line(start=poss[b.i][:,i], end=poss[b.j][:,j], stroke='black', stroke_width = 0.1, opacity=b.J[i*nsj+j]/maxJ))
 
 if args.outfile:
     d.save()
