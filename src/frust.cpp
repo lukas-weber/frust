@@ -293,11 +293,15 @@ double frust::measure_sign() const {
 void frust::do_measurement() {
 	double sign = measure_sign();
 
-	opstring_measurement(mag_est<true>{lat_,T_,sign},
-			     mag_est<false>{lat_, T_, sign},
-			     j_est{lat_, sign});
+	opstring_measurement(
+			//   mag_est<true>{lat_,T_,sign},
+			     mag_est<false>{lat_, T_, sign}
+			//     j_est{lat_, sign}
+			     );
 	measure.add("Sign", sign);
 	measure.add("nOper", static_cast<double>(noper_));
+	measure.add("SignNOper", sign*static_cast<double>(noper_));
+	measure.add("SignNOper2", sign*static_cast<double>(noper_)*static_cast<double>(noper_));
 
 	measure.add("SignEnergy", sign*(-static_cast<double>(noper_) * T_ - lat_.energy_offset) / lat_.spinhalf_count);
 }
@@ -309,7 +313,6 @@ void frust::checkpoint_write(const loadl::iodump::group &out) {
 	});
 	
 	out.write("noper", noper_);
-	out.write("avgwormlen_", avgwormlen_);
 	out.write("avgwormlen", avgwormlen_);
 	out.write("nworm", nworm_);
 	out.write("operators", saveops);
@@ -320,7 +323,7 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	std::vector<unsigned int> saveops;
 
 	in.read("noper", noper_);
-	in.read("avgwormlen_", avgwormlen_);
+	in.read("avgwormlen", avgwormlen_);
 	in.read("nworm", nworm_);
 	in.read("operators", saveops);
 
@@ -335,9 +338,16 @@ void frust::register_evalables(loadl::evaluator &eval) {
 		return std::vector<double>{obs[0][0]/obs[1][0]};
 	};
 	
-	mag_est<true>{lat_, T_, 0}.register_evalables(eval);
+	//mag_est<true>{lat_, T_, 0}.register_evalables(eval);
 	mag_est<false>{lat_, T_, 0}.register_evalables(eval);
-	j_est{lat_,0}.register_evalables(eval);
+	//j_est{lat_,0}.register_evalables(eval);
 
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
+	eval.evaluate("SpecificHeat", {"SignNOper2", "SignNOper", "Sign"}, [&](const std::vector<std::vector<double>> &obs) {
+		double sn2 = obs[0][0];
+		double sn = obs[1][0];
+		double sign = obs[2][0];
+
+		return std::vector<double>{(sn2/sign - sn*sn/sign/sign - sn/sign)/lat_.spinhalf_count};
+	});
 }

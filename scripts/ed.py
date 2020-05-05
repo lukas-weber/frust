@@ -119,6 +119,7 @@ def calc_observables(E, psi):
 
         obs = {}
         obs['J'] = mean(J)
+        obs['J2'] = mean(J@J)
         obs['JVar'] = mean(J@J)-obs['J']**2
 
         return obs
@@ -126,7 +127,7 @@ def calc_observables(E, psi):
 
     obs = {}
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
-
+    obs['SpecificHeat'] = Ts**(-2)*(np.sum(E[na,:]**2*ρ,axis=1) - np.sum(E[na,:]*ρ,axis=1)**2)/N
     obs.update(mag_obs('', obs_ops['M']))
     obs.update(mag_obs('Stag', obs_ops['sM']))
     if 'J' in obs_ops.keys():

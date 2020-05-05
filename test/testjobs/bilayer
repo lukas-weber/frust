@@ -3,19 +3,21 @@ from loadleveller import taskmaker
 import numpy as np
 
 tm = taskmaker.TaskMaker(__file__, 'jobconfig.yml')
-tm.sweeps = 100000
-tm.thermalization = 50000
+tm.sweeps = 1000000
+tm.thermalization = 90000
 tm.binsize = 100
-tm.lattice = 'square'
-tm.Lx = 4
+tm.lattice = 'bilayer'
+tm.Lx = 2
 tm.Ly = 2
 
-tm.J = 1.15
+tm.Jpar = 1.24
+tm.Jperp = 2
+tm.Jx = 0.5
 
 tm.ed_compare = 1
 tm.ed_num_states = 0
 
-Ts = np.linspace(0.01,6,7)
+Ts = np.linspace(0.05,4,7)
 
 for T in Ts:
     tm.task(T=T)

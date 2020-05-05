@@ -17,7 +17,7 @@ parser.add_argument('jobfile', type=str, help='Jobscript containing tasks that s
 args = parser.parse_args()
 
 jobname = os.path.basename(args.jobfile)
-jobdir = 'testjobs/'
+jobdir = 'test_equal_hamiltonian/'
 
 os.makedirs(jobdir, exist_ok=True)
 shutil.copy(args.jobfile, jobdir+jobname)
