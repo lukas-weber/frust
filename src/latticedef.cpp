@@ -68,8 +68,8 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 	uc.a2 = {0,2};
 
 	double J3 = p.get<double>("J3");
-	double J2 = p.get<double>("J2", J3);
 	double J1 = p.get<double>("J1", J3);
+	double J2 = p.get<double>("J2", J1);
 
 	double Jn = p.get<double>("Jn");
 	double Jnn = p.get<double>("Jnn");

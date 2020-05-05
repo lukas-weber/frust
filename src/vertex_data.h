@@ -31,6 +31,7 @@ public:
 	int get_sign(vertexcode v) const;
 	vertexcode get_diagonal_vertex(state_idx state_i, state_idx state_j) const;
 	const std::array<state_idx, 4> &get_legstate(vertexcode v) const;
+	int vertex_count() const;
 	
 	vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj);
 	void print(const site_basis &bi, const site_basis &bj) const;
@@ -50,6 +51,10 @@ private:
 };
 
 inline const vertex_data::transition invalid_transition{};
+
+inline int vertex_data::vertex_count() const {
+	return weights_.size();
+}
 
 inline vertexcode vertex_data::get_diagonal_vertex(state_idx state_i, state_idx state_j) const {
 	return diagonal_vertices_[state_i*site_basis::max_size + state_j];

@@ -50,6 +50,7 @@ void vertex_data::construct_vertices(const uc_bond &b, const uc_site &si, const 
 
 	H *= -1; // from -β ;)
 
+
 	double epsilon = fabs(H.maxCoeff())/2;
 	energy_offset = H.diagonal().minCoeff()-epsilon;
 	H -= decltype(H)::Identity(dim, dim)*energy_offset;
@@ -273,7 +274,7 @@ void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 		idxs[idx] = idx;
 		idx++;
 	}
-	std::sort(idxs.begin(), idxs.end(), [&](int i, int j) {return weights_[i] < weights_[j];});
+	//std::sort(idxs.begin(), idxs.end(), [&](int i, int j) {return weights_[i] < weights_[j];});
 
 
 	for(const auto &idx : idxs) {
