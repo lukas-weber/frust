@@ -291,4 +291,3 @@ void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 	}
 
 }
-

@@ -351,3 +351,18 @@ void frust::register_evalables(loadl::evaluator &eval) {
 		return std::vector<double>{(sn2/sign - sn*sn/sign/sign - sn/sign)/lat_.spinhalf_count};
 	});
 }
+
+double frust::pt_weight_ratio(const std::string &param_name, double new_param) {
+	// we only implement temperature swaps
+	if(param_name != "T") {
+		return 0;
+	}
+
+	return -noper_*(log(new_param/T_));
+}
+
+void frust::pt_update_param(const std::string &param_name, double new_param) {
+	if(param_name == "T") {
+		T_ = new_param;
+	}
+}

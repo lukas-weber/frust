@@ -18,6 +18,8 @@ public:
 	void checkpoint_read(const loadl::iodump::group &in) override;
 
 	void register_evalables(loadl::evaluator &eval) override;
+	double pt_weight_ratio(const std::string &param_name, double new_param) override;
+	void pt_update_param(const std::string &param_name, double new_param) override;
 
 	frust(const loadl::parser &p);
 private:
