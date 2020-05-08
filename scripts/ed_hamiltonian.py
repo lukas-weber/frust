@@ -26,11 +26,11 @@ def l_operator(n):
     
 
 def construct(lat):
-    Nmult = len(lat.sites)
-    half2mult = sum([site.nspinhalfs*[i] for i, site in enumerate(lat.sites)], [])
-    mult2half = [[i for i, x in enumerate(half2mult) if x == idx] for idx in range(Nmult)]
+    Nfull = len(lat.sites)
+    half2full = sum([site.nspinhalfs*[i] for i, site in enumerate(lat.sites)], [])
+    full2half = [[i for i, x in enumerate(half2full) if x == idx] for idx in range(Nfull)]
 
-    N = len(half2mult)
+    N = len(half2full)
 
     Id = sps.identity(2**N)
 
@@ -39,17 +39,17 @@ def construct(lat):
 
     def onsite_term(site):
         res = sps.dok_matrix((2**(N), 2**(N)))
-        for i in mult2half[idx]:
-            for j in mult2half[idx]:
+        for i in full2half[idx]:
+            for j in full2half[idx]:
                 if i < j:
                     res += H_heisen_bond(i, j)
         return res
 
     H = sps.dok_matrix((2**N, 2**N))
     for b in lat.bonds:
-        for spini, i in enumerate(mult2half[b.i]):
-            for spinj, j in enumerate(mult2half[b.j]):
-                H += b.J[spini*len(mult2half[b.j])+spinj] * H_heisen_bond(i, j)
+        for spini, i in enumerate(full2half[b.i]):
+            for spinj, j in enumerate(full2half[b.j]):
+                H += b.J[spini*len(full2half[b.j])+spinj] * H_heisen_bond(i, j)
 
     for idx, s in enumerate(lat.sites):
         H += s.Jin * onsite_term(idx)
@@ -61,6 +61,21 @@ def construct(lat):
     
     obs_ops = {}
     obs_ops['M'] = sum(Sz(i, N) for i in range(N))/N
-    obs_ops['sM'] = sum(lat.sites[half2mult[i]].sublattice * Sz(i,N) for i in range(N))/N
+
+
+    def signed_mag(sx, sy):
+        M = sps.dok_matrix((2**N,2**N))
+        for x in range(lat.Lx):
+            for y in range(lat.Ly):
+                for uc in range(lat.uc_spin_count):
+                    i = lat.uc_spin_count*(lat.Lx*y+x)+uc
+                    sign = sx**x * sy**y
+
+                    for idx in full2half[i]:
+                        M += sign*Sz(idx,N)
+        return M/N
+    obs_ops['sxM'] = signed_mag(-1,1)
+    obs_ops['syM'] = signed_mag(1,-1)
+    obs_ops['sxsyM'] = signed_mag(-1,-1)
     
     return H, obs_ops

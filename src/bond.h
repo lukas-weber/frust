@@ -52,5 +52,4 @@ struct lat_bond {
 
 struct lat_site {
 	vec2 pos;
-	int8_t sublattice{};
 };

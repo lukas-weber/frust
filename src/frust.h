@@ -6,6 +6,7 @@
 
 #include "opercode.h"
 #include "lattice.h"
+#include "measurement_settings.h"
 
 class frust : public loadl::mc {
 public:
@@ -34,6 +35,8 @@ private:
 	std::vector<state_idx> spin_;
 
 	lattice lat_;
+
+	measurement_settings settings_;
 
 	void diagonal_update();
 

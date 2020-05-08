@@ -5,9 +5,11 @@
 #include "mag_est.h"
 #include "j_est.h"
 
+#include "template_selector.h"
+
 frust::frust(const loadl::parser &p)
 	: loadl::mc(p),
-	  lat_{lattice_from_param(p)} {
+	  lat_{lattice_from_param(p)}, settings_{p} {
 	T_ = param.get<double>("T");
 	v_first_.resize(lat_.sites.size());
 	v_last_.resize(lat_.sites.size());
@@ -43,7 +45,7 @@ void frust::init() {
 }
 
 int frust::worm_traverse() {
-	if(noper_ == 0) { // XXX: remove when loop measurements are added
+	if(noper_ == 0) {
 		return 0;
 	}
 	
@@ -293,11 +295,21 @@ double frust::measure_sign() const {
 void frust::do_measurement() {
 	double sign = measure_sign();
 
-	opstring_measurement(
-			//   mag_est<true>{lat_,T_,sign},
-			     mag_est<false>{lat_, T_, sign}
-			//     j_est{lat_, sign}
-			     );
+	auto obs = std::tuple{
+	    j_est{lat_, sign},
+	    mag_est<1, 1>{lat_, T_, sign},
+	    mag_est<1, -1>{lat_, T_, sign},
+	    mag_est<-1, 1>{lat_, T_, sign},
+	    mag_est<-1, -1>{lat_, T_, sign},
+	};
+
+	std::array<bool, 5> flags = {
+	    settings_.measure_j,     settings_.measure_mag,     settings_.measure_sxmag,
+	    settings_.measure_symag, settings_.measure_sxsymag,
+	};
+
+	template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
+	
 	measure.add("Sign", sign);
 	measure.add("nOper", static_cast<double>(noper_));
 	measure.add("SignNOper", sign*static_cast<double>(noper_));
@@ -338,10 +350,27 @@ void frust::register_evalables(loadl::evaluator &eval) {
 		return std::vector<double>{obs[0][0]/obs[1][0]};
 	};
 	
-	//mag_est<true>{lat_, T_, 0}.register_evalables(eval);
-	mag_est<false>{lat_, T_, 0}.register_evalables(eval);
-	//j_est{lat_,0}.register_evalables(eval);
 
+	if(settings_.measure_j) {
+		j_est{lat_,0}.register_evalables(eval);
+	}
+	
+	if(settings_.measure_mag) {
+		mag_est<1,1>{lat_, T_, 0}.register_evalables(eval);
+	}
+
+	if(settings_.measure_sxmag) {
+		mag_est<-1,1>{lat_, T_, 0}.register_evalables(eval);
+	}
+	
+	if(settings_.measure_sxsymag) {
+		mag_est<1,-1>{lat_, T_, 0}.register_evalables(eval);
+	}
+
+	if(settings_.measure_sxsymag) {
+		mag_est<-1,-1>{lat_, T_, 0}.register_evalables(eval);
+	}
+	
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
 	eval.evaluate("SpecificHeat", {"SignNOper2", "SignNOper", "Sign"}, [&](const std::vector<std::vector<double>> &obs) {
 		double sn2 = obs[0][0];

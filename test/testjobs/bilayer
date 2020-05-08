@@ -10,6 +10,8 @@ tm.lattice = 'bilayer'
 tm.Lx = 2
 tm.Ly = 2
 
+tm.measure = ['j', 'mag', 'sxmag', 'symag', 'sxsymag']
+
 tm.Jpar = 1.24
 tm.Jperp = 2
 tm.Jx = 0.5
