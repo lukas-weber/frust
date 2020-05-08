@@ -18,7 +18,7 @@ void write_lattice(int argc, char **argv) {
 	loadl::parser jobfile{jobfilename};
 	auto task = jobfile["tasks"][taskname];
 
-	auto lat = lattice_from_param(task);
+	lattice lat = lattice_from_param(task, false);
 
 	nlohmann::json out;
 	lat.to_json(out);

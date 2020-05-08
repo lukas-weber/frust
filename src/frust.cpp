@@ -9,7 +9,7 @@
 
 frust::frust(const loadl::parser &p)
 	: loadl::mc(p),
-	  lat_{lattice_from_param(p)}, settings_{p} {
+	  lat_{lattice_from_param(p, true)}, settings_{p} {
 	T_ = param.get<double>("T");
 	v_first_.resize(lat_.sites.size());
 	v_last_.resize(lat_.sites.size());
@@ -345,30 +345,33 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	in.read("spin", spin_);
 }
 
-void frust::register_evalables(loadl::evaluator &eval) {
+void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	auto unsign = [](const std::vector<std::vector<double>> &obs) {
 		return std::vector<double>{obs[0][0]/obs[1][0]};
 	};
-	
 
-	if(settings_.measure_j) {
-		j_est{lat_,0}.register_evalables(eval);
-	}
-	
-	if(settings_.measure_mag) {
-		mag_est<1,1>{lat_, T_, 0}.register_evalables(eval);
-	}
+	double T = p.get<double>("T");
+	measurement_settings settings{p};
+	lattice lat = lattice_from_param(p, false);
 
-	if(settings_.measure_sxmag) {
-		mag_est<-1,1>{lat_, T_, 0}.register_evalables(eval);
+	if(settings.measure_j) {
+		j_est{lat,0}.register_evalables(eval);
 	}
 	
-	if(settings_.measure_sxsymag) {
-		mag_est<1,-1>{lat_, T_, 0}.register_evalables(eval);
+	if(settings.measure_mag) {
+		mag_est<1,1>{lat, T, 0}.register_evalables(eval);
 	}
 
-	if(settings_.measure_sxsymag) {
-		mag_est<-1,-1>{lat_, T_, 0}.register_evalables(eval);
+	if(settings.measure_sxmag) {
+		mag_est<-1,1>{lat, T, 0}.register_evalables(eval);
+	}
+	
+	if(settings.measure_sxsymag) {
+		mag_est<1,-1>{lat, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxsymag) {
+		mag_est<-1,-1>{lat, T, 0}.register_evalables(eval);
 	}
 	
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
@@ -377,7 +380,7 @@ void frust::register_evalables(loadl::evaluator &eval) {
 		double sn = obs[1][0];
 		double sign = obs[2][0];
 
-		return std::vector<double>{(sn2/sign - sn*sn/sign/sign - sn/sign)/lat_.spinhalf_count};
+		return std::vector<double>{(sn2/sign - sn*sn/sign/sign - sn/sign)/lat.spinhalf_count};
 	});
 }
 

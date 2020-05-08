@@ -112,7 +112,7 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 	return uc;
 }
 
-lattice lattice_from_param(const loadl::parser &p) {
+lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 	auto name = p.get<std::string>("lattice");
 
 	unitcell uc;
@@ -132,5 +132,5 @@ lattice lattice_from_param(const loadl::parser &p) {
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}
 
-	return lattice{uc, Lx, Ly};
+	return lattice{uc, Lx, Ly, with_vertex_data};
 }
