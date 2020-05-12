@@ -115,6 +115,14 @@ public:
 		eval.evaluate(p2 + "Mag", {p+p2+"Mag", "Sign"}, unsign);
 		eval.evaluate(p2 + "Mag2", {p+p2+"Mag2", "Sign"}, unsign);
 		eval.evaluate(p2 + "Mag4", {p+p2+"Mag4", "Sign"}, unsign);
+
+		eval.evaluate(p2 + "BinderRatio", {p+p2+"Mag4", p+p2+"Mag2", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+			double smag4 = obs[0][0];
+			double smag2 = obs[1][0];
+			double sign = obs[2][0];
+			
+			return std::vector<double>{smag2*smag2/smag4/sign};
+		});
 		
 		eval.evaluate(p2 + "MagChi", {p+p2+"MagChi", "Sign"}, unsign);
 	}
