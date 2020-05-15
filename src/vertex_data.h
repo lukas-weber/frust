@@ -10,14 +10,13 @@ public:
 	
 	class transition {
 	public:
-		auto scatter(double randnum) const;
 		bool invalid() const {
 			return probs[probs.size()-1] < 1-1e-8;
 		}
 		void print() const;
 	private:
-		std::array<double,leg_count*site_basis::worm_count> probs;
-		std::array<vertexcode,leg_count*site_basis::worm_count> targets;
+		std::vector<double> probs;
+		std::vector<vertexcode> targets;
 
 		friend vertex_data;
 	};
@@ -26,7 +25,7 @@ public:
 
 	double energy_offset{};
 
-	const transition &get_transition(vertexcode v, int leg_in, worm_idx worm_in) const;
+	auto scatter(vertexcode v, int leg_in, worm_idx worm_in, double random) const;
 	double get_weight(vertexcode v) const;
 	int get_sign(vertexcode v) const;
 	vertexcode get_diagonal_vertex(state_idx state_i, state_idx state_j) const;
@@ -37,6 +36,7 @@ public:
 	void print(const site_basis &bi, const site_basis &bj) const;
 private:
 	std::array<vertexcode,site_basis::max_size*site_basis::max_size> diagonal_vertices_; // [site_basis::max_size * statei + state_j]
+	int max_worm_count_{};
 	
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
@@ -64,9 +64,26 @@ inline int vertex_data::get_sign(vertexcode v) const {
 	return signs_[v.vertex_idx()];
 }
 
-inline const vertex_data::transition &vertex_data::get_transition(vertexcode v, int leg_in, worm_idx worm_in) const {
+inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, double random) const {
 	int vi = v.vertex_idx();
-	return transitions_[vi*leg_count*site_basis::worm_count + worm_in*leg_count + leg_in];
+	const auto &t = transitions_[vi*leg_count*max_worm_count_ + worm_in*leg_count + leg_in];
+	
+	assert(!t.invalid());
+	uint32_t out;
+	for(out = 0; out < t.probs.size(); out++) {
+		if(random < t.probs[out]) {
+			break;
+		}
+	}
+
+	assert(out < t.probs.size());
+
+	int leg = out%leg_count;
+	worm_idx worm_out = out/leg_count;
+
+	assert(!t.targets[out].invalid());
+
+	return std::tuple{leg, worm_out, t.targets[out]};
 }
 
 inline double vertex_data::get_weight(vertexcode v) const {
@@ -78,23 +95,4 @@ inline double vertex_data::get_weight(vertexcode v) const {
 
 inline const std::array<state_idx, 4> &vertex_data::get_legstate(vertexcode v) const {
 	return legstates_[v.vertex_idx()];
-}
-
-inline auto vertex_data::transition::scatter(double randnum) const {
-	assert(!invalid());
-	uint32_t out;
-	for(out = 0; out < probs.size(); out++) {
-		if(randnum < probs[out]) {
-			break;
-		}
-	}
-
-	assert(out < leg_count * site_basis::worm_count);
-
-	int leg = out%leg_count;
-	worm_idx worm_out = out/leg_count;
-
-	assert(!targets[out].invalid());
-
-	return std::tuple{leg, worm_out, targets[out]};
 }

@@ -14,7 +14,6 @@ frust::frust(const loadl::parser &p)
 	v_first_.resize(lat_.sites.size());
 	v_last_.resize(lat_.sites.size());
 
-	//lat_.vertex_print();
 }
 
 void frust::print_operators() {
@@ -57,11 +56,10 @@ int frust::worm_traverse() {
 	} while(vertices_[v0] < 0);
 
 	auto op0 = operators_[v0/4];
-	int wormfunc0 = random01()*site_basis::worm_count;
+	const auto &bond0 = lat_.bonds[op0.bond()];
+	int site0 = v0&1 ? bond0.j : bond0.i;
+	int wormfunc0 = random01()*lat_.get_uc_site(site0).basis.worms.size();
 
-	if(lat_.get_vertex_data(op0.bond()).get_transition(op0.vertex(), v0%4, wormfunc0).invalid()) {
-		return 0;
-	}
 
 	uint32_t v = v0;
 	int wormfunc = wormfunc0;
@@ -75,10 +73,8 @@ int frust::worm_traverse() {
 		assert(!op.vertex().invalid());
 		//auto oldop = op;
 		int leg_in = v%4;
-		const auto &trans = lat_.get_vertex_data(op.bond()).get_transition(op.vertex(), leg_in, wormfunc);
-
-
-		auto [leg_out, wormfunc_out, new_vertex] = trans.scatter(random01());
+		const auto [leg_out, wormfunc_out, new_vertex] = lat_.get_vertex_data(op.bond()).scatter(op.vertex(), leg_in, wormfunc, random01());
+		
 		op = opercode{op.bond(), new_vertex};/*
 		if(wormlength >= noper_) {
 			const auto &bond = lat_.bonds[op.bond()];
@@ -122,7 +118,7 @@ void frust::worm_update() {
 
 	if(!is_thermalized()) {
 		avgwormlen_ += 0.01*(wormlength-avgwormlen_);
-		double target_worms = param.get<double>("wormlength_fraction", 1.0)*noper_/avgwormlen_;
+		double target_worms = param.get<double>("wormlength_fraction", 2.0)*noper_/avgwormlen_;
 		nworm_ += 0.01*(target_worms-nworm_)+tanh(target_worms-nworm_);
 		nworm_ = std::clamp(nworm_, 1., 1.+noper_/2.);
 	}

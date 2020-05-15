@@ -33,5 +33,7 @@ with open('jobconfig.yml', 'w') as f:
     yaml.dump(jobconfig, f)
 
 
-subprocess.run(['../../scripts/quicktest.sh', jobname, '--cli'], check=True)
+res = subprocess.run(['../../scripts/quicktest.sh', jobname, '--cli'], check=True)
+if res.returncode != 0:
+    raise Exception('simulation had nonzero return code')
 
