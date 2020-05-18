@@ -8,6 +8,7 @@
 #include "lattice.h"
 #include "measurement_settings.h"
 
+
 class frust : public loadl::mc {
 public:
 	void init() override;
@@ -24,6 +25,7 @@ public:
 
 	frust(const loadl::parser &p);
 private:
+	static constexpr int dump_version_ = 1;
 	double T_{};
 
 
