@@ -1,6 +1,7 @@
 test_srcs = files([
   'test_opercode.cpp',
-  'test_util.cpp'
+  'test_util.cpp',
+  '../src/basis.cpp'
 ])
 
 catch2_dep = dependency('catch2', fallback : [ 'catch2', 'catch2_dep' ])
@@ -35,6 +36,12 @@ test('ed_bilayer',
 test('ed_triang_square',
    sim_tests,
    args : [frust, files('testjobs/triangle_square')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')
+test('ed_triang_square3',
+   sim_tests,
+   args : [frust, files('testjobs/triangle_square3')],
    timeout : 5000,
    is_parallel : false,
    suite : 'ed_test')

@@ -9,7 +9,7 @@ static unitcell make_square(const loadl::parser &p) {
 	double J = p.get<double>("J");
 
 	uc.sites = {
-		{{0,0}, 0, site_bases::spin}
+		{{0,0}, {}, site_bases::spin}
 	};
 	uc.bonds = {
 		{0,{1,0,0},{J}},
@@ -31,7 +31,7 @@ static unitcell make_bilayer(const loadl::parser &p) {
 	double Jx = p.get<double>("Jx", Jpar);
 
 	uc.sites = {
-		{{0,0}, Jperp, site_bases::dimer}
+		{{0,0}, {Jperp}, site_bases::dimer}
 	};
 	uc.bonds = {
 		{0,{1,0,0},{Jpar,Jx,Jx,Jpar}},
@@ -49,7 +49,7 @@ static unitcell make_triangle(const loadl::parser &p) {
 	uc.a2 = {0,1};
 	
 	uc.sites = {
-		{{0,0}, 0, site_bases::spin},
+		{{0,0}, {}, site_bases::spin},
 	};
 
 	uc.bonds = {
@@ -78,9 +78,9 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 
 	if(basis == 1) {
 		uc.sites = {
-			{{-0.3,0}, 0, site_bases::spin},
-			{{0.3,0}, 0, site_bases::spin},
-			{{0,0.5}, 0, site_bases::spin},
+			{{-0.3,0}, {}, site_bases::spin},
+			{{0.3,0}, {}, site_bases::spin},
+			{{0,0.5}, {}, site_bases::spin},
 		};
 		uc.bonds = {
 			{0,{0,0,1}, {J3}},
@@ -95,8 +95,8 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 		}
 	} else if(basis == 2) {
 		uc.sites = {
-			{{0,0}, J3, site_bases::dimer},
-			{{0,0.5}, 0, site_bases::spin},
+			{{0,0}, {J3}, site_bases::dimer},
+			{{0,0.5}, {}, site_bases::spin},
 		};
 
 		uc.bonds = {
@@ -105,6 +105,16 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 			{1,{0,1,0},{Jn, Jn}},
 		};
 	} else if(basis == 3) {
+		uc.sites = {{{0,0}, {J3, J1, J2}, site_bases::trimer}};
+
+		uc.bonds = {
+			{0, {1,0,0}, {Jnn,Jnn,Jnn,
+				      Jn, Jnn, Jnn,
+				      Jnn, Jnn, Jnn}},
+			{0, {0,1,0}, {Jnn, Jnn, Jnn,
+				      Jnn, Jnn, Jnn,
+				      Jn, Jn, Jnn}},
+		};
 	} else {
 		throw std::runtime_error("invalid basis! must be 1, 2 or 3");
 	}

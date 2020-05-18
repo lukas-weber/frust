@@ -12,14 +12,20 @@ static Eigen::MatrixXd onsite_term(const uc_site &s) {
 
 	Eigen::MatrixXd res = res.Zero(b.size(), b.size());
 
+	if(static_cast<int>(s.Jin.size()) != b.nspinhalfs*(b.nspinhalfs-1)/2) {
+		throw std::runtime_error{"Jin does not have the right shape"};
+	}
+
+	int idx = 0;
 	for(int i = 0; i < b.nspinhalfs; i++) {
 		auto spini = b.spinop(i);
 		for(int j = 0; j < i; j++) {
 			auto spinj = b.spinop(j);
-			res += 0.5*(spini[0]*spinj[1] + spini[1]*spinj[0]) + spini[2]*spinj[2];
+			res += s.Jin[idx]*(0.5*(spini[0]*spinj[1] + spini[1]*spinj[0]) + spini[2]*spinj[2]);
+			idx++;
 		}
 	}
-	return s.Jin * res;
+	return res;
 }
 
 static Eigen::MatrixXd bond_term(const uc_bond &b, const uc_site &si, const uc_site &sj) {
@@ -105,7 +111,6 @@ int vertex_data::vertex_change_apply(const site_basis &bi, const site_basis &bj,
 	}
 		
 	legstate[leg_out] = worm_out.action[legstate[leg_out]];
-
 	auto it = std::find(legstates_.begin(), legstates_.end(), legstate);
 	if(it == legstates_.end()) {
 		return -1;
