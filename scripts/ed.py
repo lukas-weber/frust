@@ -134,6 +134,10 @@ def calc_observables(E, psi):
     obs.update(mag_obs('StagX', obs_ops['sxM']))
     obs.update(mag_obs('StagY', obs_ops['syM']))
     obs.update(mag_obs('StagXStagY', obs_ops['sxsyM']))
+
+    if 'chirality' in job.tasks[taskname].get('measure'):
+        obs['TauZ'] = mean(obs_ops['chirality_tauz'])
+
     if 'J' in obs_ops.keys():
         obs.update(j_obs())
 

@@ -25,6 +25,23 @@ def l_operator(n):
     return v@np.diag(np.sqrt(w+0.25)+0.5)@v.T
     
 
+def chirality(Nfull):
+    j = np.exp(2j*np.pi/3)
+
+    uL = 1/3**0.5*np.matrix([0,1,j,0,j*j,0,0,0])
+    uR = 1/3**0.5*np.matrix([0,1,j*j,0,j,0,0,0])
+    dL = 1/3**0.5*np.matrix([0,0,0,j*j,0,j,1,0])
+    dR = 1/3**0.5*np.matrix([0,0,0,j,0,j*j,1,0])
+
+    tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
+
+    def lift_tauz(i):
+        return sps.kron(sps.kron(sps.identity(8**i), tauz), sps.identity(8**(Nfull-i-1)))
+        
+    meantauz = sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
+
+    return meantauz
+
 def construct(lat):
     Nfull = len(lat.sites)
     half2full = sum([site.nspinhalfs*[i] for i, site in enumerate(lat.sites)], [])
@@ -79,5 +96,7 @@ def construct(lat):
     obs_ops['sxM'] = signed_mag(-1,1)
     obs_ops['syM'] = signed_mag(1,-1)
     obs_ops['sxsyM'] = signed_mag(-1,-1)
+
+    obs_ops['chirality_tauz'] = chirality(Nfull)
     
     return H, obs_ops
