@@ -103,16 +103,22 @@ std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0, 
 	}
 
 	for(int l = 0; l < opsize; l++) {
-		int p = (p0 + direction0*l)%opsize; 
+		int p = p0 + direction0*l; 
+		if(p < 0) {
+			p += opsize;
+		}
+		if(p >= opsize) {
+			p -= opsize;
+		}
 
 		auto op = operators_[p];
 		if(!op.identity()) {
 			const auto &bond = lat_.bonds[op.bond()];
 			if(bond.i == site0 || bond.j == site0) {
 				if(direction0 == 1) {
-				//	p0 = p0 ? p0-1 : opsize-1;
+					p0 = p0 ? p0-1 : opsize-1;
 				}
-				return 4*p + 2*((1-direction0)/2) + (bond.j==site0);
+				return 4*p + (1+direction0) + (bond.j==site0);
 			}
 		}
 	}
@@ -131,8 +137,6 @@ double frust::worm_traverse_measure() {
 	double sign = measure_sign();
 	
 	if(noper_ == 0) {
-		measure.add("TauZProb1", 0);
-		measure.add("TauZProb2", sign);
 		return 0;
 	}
 
@@ -142,8 +146,6 @@ double frust::worm_traverse_measure() {
 
 	auto v0opt = find_worm_measure_start(site0, p0, direction0);
 	if(!v0opt) {
-		measure.add("TauZProb1", 0);
-		measure.add("TauZProb2", sign);
 		return 0;
 	}
 	uint32_t v0 = *v0opt;
@@ -193,8 +195,7 @@ double frust::worm_traverse_measure() {
 		assert(vertices_[vstep] != -1);
 		bool up = leg_out > 1;
 
-		mean = 0;
-		if(matelem0 && site0 == 0 && site_idx == 1) {
+		if(matelem0 && site0 != site_idx) {
 			if((up && v/4 <= p0 && p0 < vnext/4) ||
 			   (vnext/4 >= v/4 && !up && (vnext/4 <= p0 || p0 < v/4)) ||
 			   (!up && vnext/4 <= p0 && p0 < v/4) ||
@@ -204,27 +205,18 @@ double frust::worm_traverse_measure() {
 
 				double matelem = matelem_func((1-2*up), state_old,state_new);
 
-				if(matelem != 0) {
+				/*if(matelem != 0) {
 					print_operators();
 					std::cout << fmt::format("v0: {}, 4p0: {}, v: {}, leg_out: {}, vnext: {}, worm: {}->{} sign: {}\n", v0, 4*p0, v, leg_out, vnext, state_old.name, state_new.name, sign);
-				}
+				}*/
 
-				mean = sign*matelem*matelem0;
+				mean += sign*matelem*matelem0;
 			}
 		}
-		if(vnext != v0 || wormfunc != wormfunc0) {
-			measure.add("TauZProb1", mean);
-			measure.add("TauZProb2", 0);
-		}
-
 		v = vnext;
 	} while(v != v0 || wormfunc != wormfunc0);
-	
-	measure.add("TauZProb1", 0);
-	measure.add("TauZProb2", sign);
 
-
-	return 0;
+	return mean;
 }		
 		
 
@@ -239,7 +231,7 @@ void frust::worm_update() {
 			measure.add("wormlength_fraction", wormlength/noper_);
 		}
 		
-		wormlength /= floor(nworm_);
+		wormlength /= ceil(nworm_);
 
 		if(!is_thermalized()) {
 			avgwormlen_ += 0.01*(wormlength-avgwormlen_);
@@ -251,8 +243,9 @@ void frust::worm_update() {
 		double mean = 0;
 
 		for(int i = 0; i < nworm_; i++) {
-			worm_traverse_measure();
+			mean += worm_traverse_measure();
 		}	
+		measure.add("SignTauZ", 7*mean/lat_.sites.size()/ceil(nworm_));
 	}
 
 	for(size_t i = 0; i < spin_.size(); i++) {
@@ -568,7 +561,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	}
 
 	if(settings.measure_chirality) {
-		eval.evaluate("TauZ", {"TauZProb1", "TauZProb2"}, unsign);
+		eval.evaluate("TauZ", {"SignTauZ", "Sign"}, unsign);
 	}
 	
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
