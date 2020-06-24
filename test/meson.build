@@ -39,9 +39,17 @@ test('ed_triang_square',
    timeout : 5000,
    is_parallel : false,
    suite : 'ed_test')
+
 test('ed_triang_square3',
    sim_tests,
    args : [frust, files('testjobs/triangle_square3')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')
+
+test('ed_chirality',
+   sim_tests,
+   args : [frust, files('testjobs/chirality')],
    timeout : 5000,
    is_parallel : false,
    suite : 'ed_test')

@@ -25,7 +25,7 @@ public:
 
 	frust(const loadl::parser &p);
 private:
-	static constexpr int dump_version_ = 1;
+	static constexpr int dump_version_ = 2;
 	double T_{};
 
 
@@ -45,7 +45,7 @@ private:
 	void make_vertex_list();
 	int worm_traverse();
 	std::optional<uint32_t> find_worm_measure_start(int site0, uint32_t &p0, int direction0) const;
-	double worm_traverse_measure();
+	double worm_traverse_measure(double &sign);
 	void worm_update();
 
 	template<class... Estimators>

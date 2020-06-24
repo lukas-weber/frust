@@ -46,9 +46,6 @@ void frust::init() {
 	for(int i = 0; i < warmup; i++) {
 		diagonal_update();
 	}
-
-	measure.register_observable("TauZProb1", 100000);
-	measure.register_observable("TauZProb2", 100000);
 }
 
 int frust::worm_traverse() {
@@ -102,7 +99,7 @@ std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0, 
 		return std::nullopt;
 	}
 
-	for(int l = 0; l < opsize; l++) {
+	for(int l = 0; l <= opsize; l++) {
 		int p = p0 + direction0*l; 
 		if(p < 0) {
 			p += opsize;
@@ -112,29 +109,30 @@ std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0, 
 		}
 
 		auto op = operators_[p];
-		if(!op.identity()) {
+		if(!op.identity() && (l != 0 || direction0 < 0)) {
 			const auto &bond = lat_.bonds[op.bond()];
 			if(bond.i == site0 || bond.j == site0) {
-				if(direction0 == 1) {
+				/*if(direction0 == 1) {
 					p0 = p0 ? p0-1 : opsize-1;
-				}
-				return 4*p + (1+direction0) + (bond.j==site0);
+				}*/
+				return 4*p + 2*(direction0<0) + (bond.j==site0);
 			}
 		}
 	}
+	assert(false);
 
 	return std::nullopt;
 }
-double frust::worm_traverse_measure() {
-	const auto matelem_func = [](double direction, const site_basis::state &sold, const site_basis::state &snew) -> double {
-		if(sold.j == snew.j && sold.m == snew.m) {
-			return sold.jdim != snew.jdim;
-			return direction*(sold.jdim-snew.jdim);
+
+double frust::worm_traverse_measure(double &sign) {
+	const auto matelem_func = [](const site_basis::state &sbefore, const site_basis::state &safter) -> double {
+		if(sbefore.j == safter.j && sbefore.m == safter.m) {
+			//return sold.jdim != snew.jdim;
+			return -sbefore.jdim+safter.jdim;
 		}
 		return 0;
 	};
 	
-	double sign = measure_sign();
 	
 	if(noper_ == 0) {
 		return 0;
@@ -150,15 +148,9 @@ double frust::worm_traverse_measure() {
 	}
 	uint32_t v0 = *v0opt;
 
-	auto op0 = operators_[v0/4];
 	const auto &basis0 = lat_.get_uc_site(site0).basis;
 	int wormfunc0 = random01()*basis0.worms.size();
-
-	int leg0 = v0%4;
-	const auto &ls0 = lat_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
-	const auto &state_old0 = basis0.states[ls0[leg0]];
-	const auto &state_new0 = basis0.states[basis0.worms[wormfunc0].action[ls0[leg0]]];
-	double matelem0 = matelem_func(-direction0,state_old0,state_new0);
+	assert(basis0.worms.size() == 7);
 
 	uint32_t v = v0;
 	int wormfunc = wormfunc0;
@@ -186,31 +178,36 @@ double frust::worm_traverse_measure() {
 		if(vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) {
 			break;
 		}
-		
-
+	
 		wormfunc = wormfunc_out;
-
 		uint32_t vnext = vertices_[vstep];
+		
+		assert(vnext != -1);
 
-		assert(vertices_[vstep] != -1);
-		bool up = leg_out > 1;
-
-		if(matelem0 && site0 != site_idx) {
-			if((up && v/4 <= p0 && p0 < vnext/4) ||
-			   (vnext/4 >= v/4 && !up && (vnext/4 <= p0 || p0 < v/4)) ||
+		if(site0 != site_idx) {
+			bool up = leg_out > 1;
+			if((up  &&     v/4 <= p0 && p0 < vnext/4) ||
 			   (!up && vnext/4 <= p0 && p0 < v/4) ||
-			   (vnext/4 <= v/4 && up && (v/4 <= p0 || p0 < vnext/4))) {
-				const auto &state_old = site_out.basis.states[vd.get_legstate(old_op.vertex())[leg_out]];
-				const auto &state_new = site_out.basis.states[vd.get_legstate(op.vertex())[leg_out]];
+			   (up  && vnext/4 <=     v/4 && (p0 >=     v/4 || p0 < vnext/4)) ||
+			   (!up &&     v/4 <= vnext/4 && (p0 >= vnext/4 || p0 <     v/4))) {
+				int state_new_idx = vd.get_legstate(op.vertex())[leg_out];
+				int state_old_idx = site_out.basis.worms[site_out.basis.worms[wormfunc].inverse_idx].action[state_new_idx];
+				const auto &state_before = site_out.basis.states[v < vnext ? state_old_idx : state_new_idx];
+				const auto &state_after = site_out.basis.states[v < vnext ? state_new_idx : state_old_idx];	
+				double matelem = matelem_func(state_before,state_after);
 
-				double matelem = matelem_func((1-2*up), state_old,state_new);
-
-				/*if(matelem != 0) {
-					print_operators();
-					std::cout << fmt::format("v0: {}, 4p0: {}, v: {}, leg_out: {}, vnext: {}, worm: {}->{} sign: {}\n", v0, 4*p0, v, leg_out, vnext, state_old.name, state_new.name, sign);
-				}*/
-
-				mean += sign*matelem*matelem0;
+				if(matelem) {
+					uint32_t v1 = vertices_[v0];
+					auto op0 = operators_[std::min(v0,v1)/4];
+					auto op1 = operators_[std::max(v0,v1)/4];
+					const auto &ls0 = lat_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
+					const auto &ls1 = lat_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
+					const auto &state_before0 = basis0.states[ls0[v0%4]];
+					const auto &state_after0 = basis0.states[ls1[v1%4]];
+					double matelem0 = matelem_func(state_before0,state_after0);
+					
+					mean += sign*matelem*matelem0;
+				}
 			}
 		}
 		v = vnext;
@@ -241,11 +238,16 @@ void frust::worm_update() {
 		}
 	} else {
 		double mean = 0;
+		double sign = measure_sign();
 
 		for(int i = 0; i < nworm_; i++) {
-			mean += worm_traverse_measure();
+			mean += worm_traverse_measure(sign);
 		}	
-		measure.add("SignTauZ", 7*mean/lat_.sites.size()/ceil(nworm_));
+		measure.add("SignTauZ", -7*mean/lat_.sites.size()/ceil(nworm_));
+		measure.add("SignTauZ1", -(noper_==1)*7*mean/lat_.sites.size()/ceil(nworm_));
+		measure.add("SignTauZ2", -(noper_==2)*7*mean/lat_.sites.size()/ceil(nworm_));
+		measure.add("SignTauZ3", -(noper_==3)*7*mean/lat_.sites.size()/ceil(nworm_));
+		measure.add("SignTauZ4", -(noper_==4)*7*mean/lat_.sites.size()/ceil(nworm_));
 	}
 
 	for(size_t i = 0; i < spin_.size(); i++) {
@@ -309,7 +311,7 @@ void frust::diagonal_update() {
 		if(is_thermalized()) {
 			std::cout << "Warning: spin array resized after thermalization\n";
 		}
-		operators_.resize(operators_.size() * 1.5 + 10, opercode::make_identity());
+		operators_.resize(operators_.size() * 1.5 + 100, opercode::make_identity());
 	}
 
 	auto tmpspin = spin_;
@@ -552,7 +554,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 		mag_est<-1,1>{lat, T, 0}.register_evalables(eval);
 	}
 	
-	if(settings.measure_sxsymag) {
+	if(settings.measure_symag) {
 		mag_est<1,-1>{lat, T, 0}.register_evalables(eval);
 	}
 
@@ -562,8 +564,13 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 
 	if(settings.measure_chirality) {
 		eval.evaluate("TauZ", {"SignTauZ", "Sign"}, unsign);
+		eval.evaluate("TauZ1", {"SignTauZ1", "Sign"}, unsign);
+		eval.evaluate("TauZ2", {"SignTauZ2", "Sign"}, unsign);
+		eval.evaluate("TauZ3", {"SignTauZ3", "Sign"}, unsign);
+		eval.evaluate("TauZ4", {"SignTauZ4", "Sign"}, unsign);
 	}
 	
+	eval.evaluate("Energy1", {"SignEnergy1", "Sign"}, unsign);
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
 	eval.evaluate("SpecificHeat", {"SignNOper2", "SignNOper", "Sign"}, [&](const std::vector<std::vector<double>> &obs) {
 		double sn2 = obs[0][0];
