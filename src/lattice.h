@@ -29,6 +29,8 @@ public:
 	const vertex_data &get_vertex_data(int bond) const;
 	const uc_site &get_uc_site(int site) const;
 
+	auto split_idx(int idx) const;
+
 	void vertex_print() const;
 
 	lattice(const unitcell &uc, int Lx, int Ly, bool with_vertex_data);
@@ -40,6 +42,16 @@ private:
 	void calculate_energy_offset();
 	void init_vertex_data(const unitcell &uc);
 };
+
+inline auto lattice::split_idx(int idx) const {
+	int iuc = idx % uc.sites.size();
+	idx /= uc.sites.size();
+
+	int x = idx % Lx;
+	int y = idx / Lx;
+
+	return std::tuple{iuc, x, y};
+}
 
 inline const vertex_data &lattice::get_vertex_data(int bond) const {
 	assert(vertices_.size());

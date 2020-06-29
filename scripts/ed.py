@@ -45,7 +45,6 @@ H, obs_ops = ed_hamiltonian.construct(lat)
 print('H constructed.')
 if num_states == 0:
     H = np.array(H.todense())
-    H += lat.energy_offset*np.identity(H.shape[0])
     E, psi = np.linalg.eigh(H)
     print('Full diagonalization done.')
 else:
@@ -60,7 +59,7 @@ Egap = E[E>E.min()+1e-8].min()-E.min()
 print('{} energies: {:.3g}..{:.3g}, gap={:.3g}'.format(len(E), E.min(), E.max(), Egap))
 
 def calc_observables(E, psi):
-    Enorm = E + 0*E.min()
+    Enorm = E - E.min()
     ρ = np.exp(-Enorm[na,:]/Ts[:,na])
     Z = np.sum(ρ, axis=1)
     ρ /= Z[:,na]
@@ -132,7 +131,6 @@ def calc_observables(E, psi):
     obs['Ts'] = Ts
     obs['Z'] = Z
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
-    obs['Energy1'] = np.trace(H@H)/Ts/Z
     obs['SpecificHeat'] = Ts**(-2)*(np.sum(E[na,:]**2*ρ,axis=1) - np.sum(E[na,:]*ρ,axis=1)**2)/N
     obs.update(mag_obs('', obs_ops['M']))
     obs.update(mag_obs('StagX', obs_ops['sxM']))
@@ -140,11 +138,7 @@ def calc_observables(E, psi):
     obs.update(mag_obs('StagXStagY', obs_ops['sxsyM']))
 
     if 'chirality' in job.tasks[taskname].get('measure'):
-        obs['TauZ'] = mean(obs_ops['chirality_tauz'])
-        obs['TauZ1'] = -(np.trace(obs_ops['chirality_tauz']@H)/Ts).real/Z
-        obs['TauZ2'] = (np.trace(obs_ops['chirality_tauz']@H@H)/Ts**2).real/Z/2
-        obs['TauZ3'] = -(np.trace(obs_ops['chirality_tauz']@H@H@H)/Ts**3).real/Z/6
-        obs['TauZ4'] = (np.trace(obs_ops['chirality_tauz']@H@H@H@H)/Ts**4).real/Z/24
+        obs['TauZ'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauz']]).T
 
     if 'J' in obs_ops.keys():
         obs.update(j_obs())

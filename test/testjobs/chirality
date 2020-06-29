@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+from loadleveller import taskmaker
+import numpy as np
+
+tm = taskmaker.TaskMaker(__file__, 'jobconfig.yml')
+tm.sweeps = 50000000
+tm.thermalization = 10000
+tm.binsize = 2000
+tm.lattice = 'triangle_square'
+tm.Lx = 3
+tm.Ly = 1
+
+tm.measure = ['chirality']
+
+tm.basis = 3
+
+tm.J1 = 1
+tm.J2 = 1.3
+tm.J3 = 1.2
+tm.Jn = 0.2
+tm.Jnn = 0
+
+tm.ed_compare = 1
+tm.ed_num_states = 0
+
+Ts = np.linspace(0.1,2,7)
+
+for T in Ts:
+    tm.task(T=T)
+
+tm.write()
