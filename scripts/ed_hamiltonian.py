@@ -48,7 +48,7 @@ def chirality(Nfull):
 
     tauzcorr = []
     for i in range(Nfull):
-        tauzcorr.append(-lift_tauz(0)@lift_tauz(i))
+        tauzcorr.append(lift_tauz(0)@lift_tauz(i))
     #meantauz = -sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
 
     return tauzcorr

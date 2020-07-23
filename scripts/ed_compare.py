@@ -84,7 +84,6 @@ for obs_name in sorted(obs_names):
     obs = mc.get_observable(obs_name, filter=cond)
     edobs = ed[obs_name]
 
-    print(obs_name, obs.mean.shape, edobs.shape)
     if len(obs.mean.shape) > 1:
         for i in range(obs.mean.shape[1]):
             compare('{}[{}]'.format(obs_name, i), obs.mean[:,i], obs.error[:,i], edobs[:,i])

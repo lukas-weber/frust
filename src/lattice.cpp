@@ -9,6 +9,10 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly, bool with_vertex_data)
 		auto it = std::remove_if(uc.bonds.begin(), uc.bonds.end(), [](const auto &b) {return b.j.dy !=0;});
 		uc.bonds.erase(it, uc.bonds.end());
 	}
+	if(Lx == 1) {
+		auto it = std::remove_if(uc.bonds.begin(), uc.bonds.end(), [](const auto &b) {return b.j.dx !=0;});
+		uc.bonds.erase(it, uc.bonds.end());
+	}
 
 	for(const auto &b : uc.bonds) {
 		uc.sites[b.i].coordination++;

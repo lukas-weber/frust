@@ -104,8 +104,8 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 			{0,{1,0,0},{Jnn, Jn, Jnn, Jnn}},
 			{1,{0,1,0},{Jn, Jn}},
 		};
-	} else if(basis == 3) {
-		uc.sites = {{{0,0}, {J3, J1, J2}, site_bases::trimer}};
+	} else if(basis == 3 || basis == 4) {
+		uc.sites = {{{0,0}, {J3, J1, J2}, basis == 3 ? site_bases::trimer : site_bases::trimer_proj}};
 
 		uc.bonds = {
 			{0, {1,0,0}, {Jnn,Jnn,Jnn,
