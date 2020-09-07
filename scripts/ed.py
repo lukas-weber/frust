@@ -118,11 +118,18 @@ def calc_observables(E, psi):
         return obs
     def j_obs():
         J = obs_ops['J']
+        Jq1 = obs_ops['Jq1']
+        Jq2 = obs_ops['Jq2']
 
         obs = {}
         obs['J'] = mean(J)
         obs['J2'] = mean(J@J)
         obs['JVar'] = mean(J@J)-obs['J']**2
+
+        obs['JStruc1'] = mean(np.real(Jq1)@np.real(Jq1)+np.imag(Jq1)@np.imag(Jq1))
+        obs['JStruc2'] = mean(np.real(Jq2)@np.real(Jq2)+np.imag(Jq2)@np.imag(Jq2))
+        r = obs['JStruc1']/obs['JStruc2']
+        obs['JCorrLen'] = lat.Lx/2/np.pi*np.sqrt(np.maximum((r-1)/(4-r),0))
 
         return obs
 

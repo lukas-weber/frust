@@ -10,7 +10,7 @@ tm.lattice = 'triangle'
 tm.Lx = 4
 tm.Ly = 2
 
-tm.measure = ['j', 'mag', 'sxmag', 'symag', 'sxsymag']
+tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag']
 
 tm.J = 1.15
 

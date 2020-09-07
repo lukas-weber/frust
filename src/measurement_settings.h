@@ -8,6 +8,8 @@ struct measurement_settings {
 		for(const auto &obs : p.get<std::vector<std::string>>("measure")) {
 			if(obs == "j") {
 				measure_j = true;
+			} else if(obs == "jcorrlen") {
+				measure_jcorrlen = true;
 			} else if(obs == "mag") {
 				measure_mag = true;
 			} else if(obs == "sxmag") {
@@ -22,6 +24,9 @@ struct measurement_settings {
 				throw std::runtime_error{fmt::format("unknown observable '{}'", obs)};
 			}
 		}
+		if(!measure_j && measure_jcorrlen) {
+			throw std::runtime_error{"jcorrlen can only be measured if j is measured"};
+		}
 	}
 	
 	bool measure_j{};
@@ -30,4 +35,5 @@ struct measurement_settings {
 	bool measure_symag{};
 	bool measure_sxsymag{};
 	bool measure_chirality{};
+	bool measure_jcorrlen{};
 };
