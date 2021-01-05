@@ -61,6 +61,58 @@ static unitcell make_triangle(const loadl::parser &p) {
 	return uc;
 }
 
+static unitcell make_kagome(const loadl::parser &p) {
+	unitcell uc;
+
+	uc.a1 = {1,0};
+	uc.a2 = {-0.5,sqrt(3)/2};
+	
+	double J3 = p.get<double>("J3");
+	double J1 = p.get<double>("J1", J3);
+	double J2 = p.get<double>("J2", J1);
+
+	double J = p.get<double>("J");
+
+	std::string basis = p.get<std::string>("basis");
+
+	if(basis == "trimer") {
+		uc.sites = {
+			{{0,0}, {J3,J1,J2}, site_bases::trimer},
+		};
+
+		uc.bonds = {
+			{0,{1,0,0}, {0,0,0,
+				     J,0,0,
+				     0,0,0}},
+			{0,{1,1,0}, {0,0,0,
+				     0,0,0,
+				     J,0,0,}},
+			{0,{0,1,0}, {0,0,0,
+				     0,0,0,
+				     0,J,0}},
+		};
+	} else if(basis == "spin") {
+		uc.sites = {
+			{{0,0}, {}, site_bases::spin},
+			{{0.5,0}, {}, site_bases::spin},
+			{{0.5,0.5}, {}, site_bases::spin},
+		};
+		
+		uc.bonds = {
+			{0,{0,0,1}, {J3}},
+			{1,{0,0,2}, {J1}},
+			{2,{0,0,0}, {J2}},
+			{1,{1,0,0}, {J}},
+			{2,{1,1,0}, {J}},
+			{2,{0,1,1}, {J}},
+		};
+	} else {
+		throw std::runtime_error(fmt::format("unknown basis: {}", basis));
+	}
+	
+	return uc;
+}
+
 static unitcell make_triangle_square(const loadl::parser &p) {
 	unitcell uc;
 
@@ -138,6 +190,8 @@ lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 		uc = make_bilayer(p);
 	} else if(name == "triangle") {
 		uc = make_triangle(p);
+	} else if(name == "kagome") {
+		uc = make_kagome(p);
 	} else {
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}
