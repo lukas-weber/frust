@@ -91,6 +91,18 @@ static unitcell make_kagome(const loadl::parser &p) {
 				     0,0,0,
 				     0,J,0}},
 		};
+	} else if(basis == "dimer") {
+		uc.sites = {
+			{{0,0}, {J3}, site_bases::dimer},
+			{{0.2,0.5}, {}, site_bases::spin},
+		};
+		uc.bonds = {
+			{0, {0,0,1}, {J1, J2}},
+			{0, {1,0,0}, {0,J,
+						  0,0}},
+			{1, {0,1,0}, {J,0}},
+			{1, {1,1,0}, {0,J}},
+		};
 	} else if(basis == "spin") {
 		uc.sites = {
 			{{0,0}, {}, site_bases::spin},
