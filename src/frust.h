@@ -3,6 +3,7 @@
 #include <loadleveller/loadleveller.h>
 #include <vector>
 #include <cstdint>
+#include <optional>
 
 #include "opercode.h"
 #include "lattice.h"
