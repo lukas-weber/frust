@@ -97,6 +97,16 @@ def construct(lat):
     obs_ops = {}
     obs_ops['M'] = sum(Sz(i, N) for i in range(N))/N
 
+    w = np.exp(1j*2*np.pi/3)
+
+    S_C =  H_heisen_bond(0,1)@( H_heisen_bond(0,1).H +
+            w * H_heisen_bond(1,2).H + w**2 * H_heisen_bond(2,0).H)
+
+    C = H_heisen_bond(0,1) + w * H_heisen_bond(1,2) + w**2 * H_heisen_bond(2,0)
+
+    obs_ops['S_C'] = S_C / N
+    obs_ops['C'] = C / N
+
     for name, q in {'J':0, 'Jq1':2*np.pi/lat.Lx, 'Jq2':4*np.pi/lat.Lx}.items():
         op = sps.dok_matrix((2**N,2**N),dtype=np.complex)
         pos = 0
