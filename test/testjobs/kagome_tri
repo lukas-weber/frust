@@ -16,6 +16,7 @@ tm.J1 = 1
 tm.J2 = 1
 tm.J3 = 1
 tm.J = 0.15
+tm.h = 0.3
 
 tm.basis = 'trimer'
 

@@ -43,6 +43,9 @@ struct uc_site {
 	std::vector<double> Jin;
 	site_basis basis;
 
+	// magnetic field
+	double h{};
+
 	int coordination{}; // filled in automatically
 };
 
