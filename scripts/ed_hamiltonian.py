@@ -23,8 +23,7 @@ def l_operator(n):
     assert np.allclose(v@np.diag(w)@v.T,S2)
 
     return v@np.diag(np.sqrt(w+0.25)-0.5)@v.T
-
-
+    
 
 def chirality(Nfull):
     j = np.exp(2j*np.pi/3)
@@ -100,13 +99,6 @@ def construct(lat):
 
     w = np.exp(1j*2*np.pi/3)
 
-    S_C =  H_heisen_bond(0,1)@( H_heisen_bond(0,1).H +
-            w * H_heisen_bond(1,2).H + w**2 * H_heisen_bond(2,0).H)
-
-    C = H_heisen_bond(0,1) + w * H_heisen_bond(1,2) + w**2 * H_heisen_bond(2,0)
-
-    obs_ops['S_C'] = S_C / N
-    obs_ops['C'] = C / N
 
     for name, q in {'J':0, 'Jq1':2*np.pi/lat.Lx, 'Jq2':4*np.pi/lat.Lx}.items():
         op = sps.dok_matrix((2**N,2**N),dtype=np.complex)
@@ -137,4 +129,15 @@ def construct(lat):
         obs_ops['chirality_tauz'] = tauzcorr
         obs_ops['chirality_tauy'] = tauycorr
     
+        S_C =  H_heisen_bond(0,1)@( H_heisen_bond(0,1).H +
+                w * H_heisen_bond(1,2).H + w**2 * H_heisen_bond(2,0).H)
+
+        C = H_heisen_bond(0,1) + w * H_heisen_bond(1,2) + w**2 * H_heisen_bond(2,0)
+
+        obs_ops['S_C'] = S_C / N
+        obs_ops['C'] = C / N
+
+
+        obs_ops['JDim'] = H_heisen_bond(0,1) + 0.75*Id
+        
     return H, obs_ops
