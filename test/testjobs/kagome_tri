@@ -3,20 +3,22 @@ from loadleveller import taskmaker
 import numpy as np
 
 tm = taskmaker.TaskMaker(__file__, 'jobconfig.yml')
-tm.sweeps = 800000
+tm.sweeps = 5000000
 tm.thermalization = 50000
 tm.binsize = 1000
 tm.lattice = 'kagome'
 tm.Lx = 2
 tm.Ly = 2
 
-tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag']
+tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag', 'chirality']
+
+tm.loopcorr_as_strucfac = True
 
 tm.J1 = 1
 tm.J2 = 1
 tm.J3 = 1
 tm.J = 0.15
-tm.h = 0.3
+tm.h = 0.1
 
 tm.basis = 'trimer'
 

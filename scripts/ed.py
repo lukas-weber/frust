@@ -65,12 +65,14 @@ def calc_observables(E, psi):
     ρ /= Z[:,na]
 
     def mean(A):
-        nAn = np.zeros(psi.shape[1])
+        nAn = np.zeros(psi.shape[1], dtype=np.complex128)
         for i in range(psi.shape[1]):
-            nAn[i] = np.real(psi[:,i].conj()@ A @psi[:,i])
+            nAn[i] = psi[:,i].conj()@ A @psi[:,i]
 
-        return np.sum(nAn[na,:]*ρ, axis=1)
-        
+        res = np.sum(nAn[na,:]*ρ, axis=1)
+        if np.allclose(np.imag(res), 0):
+            res = np.real(res)
+        return res
 
     def integcorrfunc(A): # ∫^β_0 dτ ⟨A(τ)A⟩ integrated correlation function
         result = np.zeros_like(Ts)
@@ -140,13 +142,6 @@ def calc_observables(E, psi):
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
     obs['SpecificHeat'] = Ts**(-2)*(np.sum(E[na,:]**2*ρ,axis=1) - np.sum(E[na,:]*ρ,axis=1)**2)/N
 
-    if 'S_C' in obs_ops.keys():
-        obs['S_C'] = mean(obs_ops['S_C'])
-    if 'C' in obs_ops.keys():
-        obs['C'] = mean(obs_ops['C'])
-    if 'JDim' in obs_ops.keys():
-        obs['JDim'] = mean(obs_ops['JDim'])
-    
     obs.update(mag_obs('', obs_ops['M']))
     obs.update(mag_obs('StagX', obs_ops['sxM']))
     obs.update(mag_obs('StagY', obs_ops['syM']))
@@ -155,9 +150,20 @@ def calc_observables(E, psi):
     if 'chirality' in job.tasks[taskname].get('measure'):
         obs['TauZ'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauz']]).T
         obs['TauY'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauy']]).T
+        obs['NematicityCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityCorr']]).T
+        obs['NematicityDiagCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityDiagCorr']]).T
+        obs['NematicityOffCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityOffCorr']]).T
+        #obs['NematicityCrossCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityCrossCorr']]).T
 
-    if 'J' in obs_ops.keys():
+        obs['NematicityAltCorr'] = 9/16*obs['NematicityDiagCorr'] + obs['NematicityOffCorr']
+        
+    if 'j' in job.tasks[taskname].get('measure'):
         obs.update(j_obs())
+        if 'JDim' in obs_ops.keys():
+            obs['JDim'] = mean(obs_ops['JDim'])
+    for obsname in ['TauZ', 'TauY'] + ['Nematicity{}Corr'.format(n) for n in ['', 'Diag', 'Off', 'Cross']]:
+        if obsname in obs.keys():
+            obs[obsname.strip('Corr') + 'Struc'] = np.sum(obs[obsname],axis=1)
 
     return obs
 
@@ -167,7 +173,7 @@ if args.outfile:
     np.savez_compressed(args.outfile, **obs)
     print('Saved to "{}"'.format(args.outfile))
 else:
-    for k, v in obs.items():
+    for k, v in sorted(obs.items()):
         print('{}: {}'.format(k,v))
         
 

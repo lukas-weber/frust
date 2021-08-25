@@ -126,21 +126,18 @@ std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0, 
 	return std::nullopt;
 }
 
-template<bool TauY>
 void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
-	const auto matelem_func = [](bool switcheroo, const site_basis::state &sbefore, const site_basis::state &safter) -> double {
+	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore, const site_basis::state &safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
 		const auto &sdown = switcheroo ? safter : sbefore;
-		
+
 		if(sdown.j == sup.j && sdown.m == sup.m) {
-			if constexpr(TauY) {
-				return sdown.jdim != sup.jdim;
-			} else {
-				return -sdown.jdim+sup.jdim;
-			}
+			return sup.jdim;
 		}
-		return 0;
+		return -1;
 	};
+
+	assert(lat_.uc.sites.size() == 1); // not implemented
 	
 	
 	if(noper_ == 0) {
@@ -201,22 +198,26 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 			int state_before_idx = site_out.basis.worms[site_out.basis.worms[wormfunc].inverse_idx].action[state_after_idx];
 			const auto &state_before = site_out.basis.states[state_before_idx];
 			const auto &state_after = site_out.basis.states[state_after_idx];	
-			double matelem = matelem_func(!up, state_before, state_after);
+			int matidx = matelem_idx(!up, state_before, state_after);
 			
-			if(matelem) {
+			if(matidx >= 0 && site_idx != site0) {
 				auto op0 = operators_[v0/4];
 				auto op1 = operators_[v1/4];
 				const auto &ls0 = lat_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
 				const auto &ls1 = lat_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
 				const auto &state_before0 = basis0.states[ls0[v0%4]];
 				const auto &state_after0 = basis0.states[ls1[v1%4]];
-				double matelem0 = matelem_func(direction0 > 0, state_before0, state_after0);
+				double matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
-				auto [uc, x, y] = lat_.split_idx(site_idx);
+				if(matidx0 >= 0) {
+					auto [uc, x, y] = lat_.split_idx(site_idx);
 
-				int idx = ((y-y0+lat_.Ly)%lat_.Ly)*lat_.Lx + (x-x0+lat_.Lx)%lat_.Lx;
-
-				corr[idx] += basis0.worms.size()*sign*matelem*matelem0;
+					int idx = ((y-y0+lat_.Ly)%lat_.Ly)*lat_.Lx + (x-x0+lat_.Lx)%lat_.Lx;
+					if(settings_.loopcorr_as_strucfac) {
+						idx = 0;
+					}
+					corr[4*idx + 2*matidx0 + matidx] += basis0.worms.size()*sign;
+				}
 			}
 		}
 		
@@ -245,27 +246,18 @@ void frust::worm_update() {
 			nworm_ = std::clamp(nworm_, 1., 1.+noper_/2.);
 		}
 	} else {
-		std::vector<double> corr(lat_.sites.size());
+		int size = settings_.loopcorr_as_strucfac ? 1 : lat_.sites.size();
+		std::vector<double> corr(4 * size);
 		double sign = measure_sign();
 
-		bool tauy = param.get<bool>("chirality_op_tauy", false);
-
 		for(int i = 0; i < nworm_; i++) {
-			if(tauy) {
-				worm_traverse_measure<true>(sign, corr);
-			} else {
-				worm_traverse_measure<false>(sign, corr);
-			}
+			worm_traverse_measure(sign, corr);
 		}	
 		for(auto &c : corr) {
-			c *= -1./ceil(nworm_);
+			c *= 1./ceil(nworm_);
 		}
-		
-		if(tauy) {
-			measure.add("SignTauY", corr);
-		} else {
-			measure.add("SignTauZ", corr);
-		}
+
+		measure.add("SignJDimOffCorr", corr);
 	}
 
 	for(size_t i = 0; i < spin_.size(); i++) {
@@ -481,6 +473,19 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	}
 }
 
+template<int CoeffDim0, int CoeffDim1, int CoeffM>
+static double corrfunc_matrix(const std::vector<double> &corr, int idx) {
+	double result = 0;
+	for(int jdimi = 0; jdimi < 2; jdimi++) {
+		for(int jdimj = 0; jdimj < 2; jdimj++) {
+			int matidx = 2*jdimi + jdimj;
+			double coeff = (CoeffDim0 + (CoeffDim1-CoeffDim0) * jdimi) * (CoeffDim0 + (CoeffDim1-CoeffDim0) * jdimj);
+			result += coeff * corr[4*idx + matidx];
+		}
+	}
+	return result;
+}
+
 void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	auto unsign = [](const std::vector<std::vector<double>> &obs) {
 		std::vector<double> result = obs[0];
@@ -516,22 +521,48 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	}
 
 	if(settings.measure_chirality) {
-		eval.evaluate("TauZ", {"SignTauZ", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
-			std::vector<double> result = obs[0];
-			result[0] = obs[1][0];
-			for(auto &r : result) {
-				r /= -obs[2][0];
-			}
-			return result;
-		});
-		eval.evaluate("TauY", {"SignTauY", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
-			std::vector<double> result = obs[0];
-			result[0] = obs[1][0];
-			for(auto &r : result) {
-				r /= -obs[2][0];
-			}
-			return result;
-		});
+		if(settings.loopcorr_as_strucfac) {
+			eval.evaluate("NematicityStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign", "SignNematicityDiagStruc"}, [](const std::vector<std::vector<double>> &obs) {
+				double result = 9.0/16.0*(obs[1][0]+corrfunc_matrix<1,1,1>(obs[0], 0) + obs[3][0])/obs[2][0];
+				return std::vector<double>{result};
+			});
+			eval.evaluate("TauZStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+				double result = (obs[1][0] + corrfunc_matrix<-1,1,1>(obs[0], 0))/obs[2][0];
+				return std::vector<double>{result};
+			});
+			eval.evaluate("TauYStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+				double result = (obs[1][0] + corrfunc_matrix<1,1,1>(obs[0], 0))/obs[2][0];
+
+				return std::vector<double>{result};
+			});
+		} else {
+			eval.evaluate("NematicityOffCorr", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+				std::vector<double> result(obs[0].size()/4, 0);
+				for(int i = 1; i < result.size(); i++) {
+					result[i] = 9.0/16.0 * corrfunc_matrix<1,1,1>(obs[0],i)/obs[2][0];
+				}
+				result[0] += 9.0/16.0 * obs[1][0]/obs[2][0];
+				return result;
+			});
+			eval.evaluate("TauZ", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+				std::vector<double> result(obs[0].size()/4, 0);
+				for(int i = 1; i < result.size(); i++) {
+					result[i] = corrfunc_matrix<-1,1,1>(obs[0],i)/obs[2][0];
+				}
+				result[0] += obs[1][0]/obs[2][0];
+				return result;
+			});
+			eval.evaluate("TauY", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+				std::vector<double> result(obs[0].size()/4, 0);
+				for(int i = 1; i < result.size(); i++) {
+					result[i] = corrfunc_matrix<1,1,1>(obs[0], i)/obs[2][0];
+				}
+				result[0] += obs[1][0]/obs[2][0];
+
+				return result;
+			});
+
+		}
 	}
 	
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);

@@ -25,7 +25,7 @@ def l_operator(n):
     return v@np.diag(np.sqrt(w+0.25)-0.5)@v.T
     
 
-def chirality(Nfull):
+def chirality(Nfull, obs_ops):
     j = np.exp(2j*np.pi/3)
 
     uL = 1/3**0.5*np.matrix([0,1,j,0,j*j,0,0,0])
@@ -35,7 +35,7 @@ def chirality(Nfull):
 
     us = 1/2**0.5 * np.matrix([0,0,1,0,-1,0,0,0])
     ut = 1/6**0.5 * np.matrix([0,-2,1,0,1,0,0,0])
-    ds = 1/2**0.5 * np.matrix([0,0,0,1,0,-1,0,0])
+    ds = 1/2**0.5 * np.matrix([0,0,0,-1,0,1,0,0])
     dt = 1/6**0.5 * np.matrix([0,0,0,1,0,1,-2,0])
 
     tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
@@ -43,18 +43,34 @@ def chirality(Nfull):
     #tauz = us.H@ut + ds.H@dt + ut.H@us + dt.H@ds
     #tauz = us.H@ut + ds.H@dt - ut.H@us - dt.H@ds
     tauy = -1j*(uL.H@uR + dL.H@dR - uR.H@uL - dR.H@dL)
+
     
     def lift_tri(i, op):
         return sps.kron(sps.kron(sps.identity(8**i), op), sps.identity(8**(Nfull-i-1)))
 
+    nem_diag = ut.H@ut-us.H@us + dt.H@dt - ds.H@ds
+    nem_off = 3/4*(ut.H@us  + us.H@ut + dt.H@ds + ds.H@dt)
+
+    
+    nem_diag_corr = []
     tauzcorr = []
     tauycorr = []
+
+    nem_off_corr = []
+    nem_cross_corr = []
     for i in range(Nfull):
         tauzcorr.append(lift_tri(0,tauz)@lift_tri(i,tauz))
         tauycorr.append(lift_tri(0,tauy)@lift_tri(i,tauy))
+        nem_diag_corr.append(lift_tri(0,nem_diag)@lift_tri(i,nem_diag))
+        nem_off_corr.append(lift_tri(0,nem_off)@lift_tri(i,nem_off.H))
+        nem_cross_corr.append(1j*(lift_tri(0,nem_diag)@lift_tri(i,nem_off.H)-lift_tri(0,nem_off)@lift_tri(i,nem_diag.H)))
     #meantauz = -sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
-
-    return tauzcorr, tauycorr
+    #
+    obs_ops['chirality_tauz'] = tauzcorr
+    obs_ops['chirality_tauy'] = tauycorr
+    obs_ops['NematicityDiagCorr'] = nem_diag_corr
+    obs_ops['NematicityOffCorr'] = nem_off_corr
+    obs_ops['NematicityCrossCorr'] = nem_cross_corr
 
 
 def construct(lat):
@@ -66,7 +82,7 @@ def construct(lat):
 
     Id = sps.identity(2**N)
 
-    def H_heisen_bond(i, j):
+    def H_heisen_bond(i, j, N=N):
         return Sx(i,N)@Sx(j,N) + Sy(i,N)@Sy(j,N) + Sz(i,N)@Sz(j,N)
 
     def onsite_term(Jin, site,h):
@@ -125,17 +141,20 @@ def construct(lat):
     obs_ops['sxsyM'] = signed_mag(-1,-1)
 
     if all(len(s)==3 for s in full2half):
-        tauzcorr, tauycorr = chirality(Nfull)
-        obs_ops['chirality_tauz'] = tauzcorr
-        obs_ops['chirality_tauy'] = tauycorr
+        chirality(Nfull, obs_ops)
     
-        S_C =  H_heisen_bond(0,1)@( H_heisen_bond(0,1).H +
-                w * H_heisen_bond(1,2).H + w**2 * H_heisen_bond(2,0).H)
-
         C = H_heisen_bond(0,1) + w * H_heisen_bond(1,2) + w**2 * H_heisen_bond(2,0)
 
-        obs_ops['S_C'] = S_C / N
-        obs_ops['C'] = C / N
+        obs_ops['NematicityCorr'] = [C @ (H_heisen_bond(3*i+0,3*i+1) +
+                w * H_heisen_bond(3*i+1,3*i+2) + w**2 * H_heisen_bond(3*i+2,3*i+0)).H for i in range(0,Nfull)]
+        obs_ops['C'] = C
+
+        #idx=0
+        #nem_diff = 9/16*obs_ops['NematicityDiagCorr'][idx] + obs_ops['NematicityOffCorr'][idx] + 3/4*obs_ops['NematicityCrossCorr'][idx] - obs_ops['NematicityCorr'][idx]
+        #nem_diff[np.abs(nem_diff) < 1e-10] = 0
+        #nem_diff = nem_diff.todense()
+
+        #print(nem_diff[np.nonzero(nem_diff)])
 
 
         obs_ops['JDim'] = H_heisen_bond(0,1) + 0.75*Id

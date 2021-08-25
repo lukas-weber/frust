@@ -53,12 +53,6 @@ test('ed_chirality',
    timeout : 5000,
    is_parallel : false,
    suite : 'ed_test')
-test('ed_chirality_tauy',
-   sim_tests,
-   args : [frust, files('testjobs/chirality_tauy')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
 
 test('ed_kagome',
    sim_tests,
@@ -74,11 +68,12 @@ test('ed_kagome_tri',
    is_parallel : false,
    suite : 'ed_test')
 
-test('ed_kagome_dim_spi',
-   sim_tests,
-   args : [frust, files('testjobs/kagome_dim_spi')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
+#test('ed_kagome_dim_spi',
+#   sim_tests,
+#   args : [frust, files('testjobs/kagome_dim_spi')],
+#   timeout : 5000,
+#   is_parallel : false,
+#   suite : 'ed_test')
+
 hamiltonian_test = find_program('test_equal_hamiltonian.py')
 test('equal_hamiltonian', hamiltonian_test, args : [frust, files('testjobs/triangle_square_bases')])
