@@ -41,6 +41,38 @@ static unitcell make_bilayer(const loadl::parser &p) {
 	return uc;
 }
 
+static unitcell make_shastry_sutherland(const loadl::parser &p) {
+	unitcell uc;
+	double J = p.get<double>("J");
+	double JD = p.get<double>("JD");
+
+	uc.a1 = {1,0};
+	uc.a2 = {0,1};
+	
+	uc.sites = {
+		{{0,0}, {}, site_bases::spin},
+		{{0.5,0}, {}, site_bases::spin},
+		{{0.5,0.5}, {}, site_bases::spin},
+		{{0,0.5}, {}, site_bases::spin},
+	};
+
+	uc.bonds = {
+		{0,{0,0,1}, {J}},
+		{1,{0,0,2}, {J}},
+		{2,{0,0,3}, {J}},
+		{3,{0,0,0}, {J}},
+		{1,{0,0,3}, {JD}},
+		
+		{1,{1,0,0}, {J}},
+		{2,{1,0,3}, {J}},
+		{2,{0,1,1}, {J}},
+		{3,{0,1,0}, {J}},
+		{2,{1,1,0}, {JD}},
+	};
+	
+	return uc;
+}
+
 static unitcell make_triangle(const loadl::parser &p) {
 	unitcell uc;
 	double J = p.get<double>("J");
@@ -214,6 +246,8 @@ lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 		uc = make_square(p);
 	} else if(name == "bilayer") {
 		uc = make_bilayer(p);
+	} else if(name == "shastry_sutherland") {
+		uc = make_shastry_sutherland(p);
 	} else if(name == "triangle") {
 		uc = make_triangle(p);
 	} else if(name == "kagome") {
