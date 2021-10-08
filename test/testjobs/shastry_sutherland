@@ -7,8 +7,10 @@ tm.sweeps = 1000000
 tm.thermalization = 90000
 tm.binsize = 100
 tm.lattice = 'shastry_sutherland'
-tm.Lx = 1
+tm.Lx = 2
 tm.Ly = 1
+
+tm.basis = 'dimer'
 
 tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag']
 
