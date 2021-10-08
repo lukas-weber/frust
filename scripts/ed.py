@@ -4,6 +4,8 @@ import scipy.sparse as sps
 import scipy.sparse.linalg as spsl
 import lattice
 import argparse
+import json
+from collections import defaultdict
 import ed_hamiltonian
 from loadleveller import jobfile
 import os
@@ -11,54 +13,47 @@ import os
 parser = argparse.ArgumentParser(description='ED code for the frust project. Automatically calculates the results for a chosen loadleveller jobfile. If there is more than one task in the jobfile, those tasks must only vary by temperature.')
 
 parser.add_argument('jobfile', type=str, help='Jobscript describing the model.')
-parser.add_argument('-o', '--outfile', type=str, help='.npz file to save results to')
+parser.add_argument('-o', '--outfile', type=str, help='.json file to save results to')
 
 args = parser.parse_args()
 
 def extract_jobdata(job):
-    tasknames = []
+    summarized_tasks = []
     Ts = []
     for task, params in job.tasks.items():
-        if params['ed_compare']:
-            tasknames.append(task)
-            Ts.append(params['T'])
-    if len(tasknames) == 0:
-        raise Exception('jobfile did not contain any tasks with ed_compare=True')
 
-    return tasknames[0], np.array(Ts)
+        T = params.pop('T')
+        found = False
+        for previous in summarized_tasks:
+            if params == previous[1]:
+                previous[2].append(T)
+                found = True
+        if not found:
+            summarized_tasks.append((task, params, [T]))
+        
 
-jobdir = os.path.dirname(args.jobfile)
-if jobdir != '':
-    os.chdir(jobdir)
+    return summarized_tasks
 
-job = jobfile.JobFile('./'+os.path.basename(args.jobfile))
+def solve_task(H, num_states=0):
+    if num_states == 0:
+        H = np.array(H.todense())
+        E, psi = np.linalg.eigh(H)
+        print('Full diagonalization done.')
+    else:
+        E, psi = spsl.eigsh(H, num_states, which='SA')
+        Emax = E.max()
+        psi = psi[:,E<E.max()-1e-3]
+        E = E[E<E.max()-1e-3]
+        print('Sparse diagonalization done ({}/{} states).'.format(len(E),num_states))
 
-taskname, Ts = extract_jobdata(job)
+    Egap = E[E>E.min()+1e-8].min()-E.min()
+    print('{} energies: {:.3g}..{:.3g}, gap={:.3g}'.format(len(E), E.min(), E.max(), Egap))
 
-num_states = job.tasks[taskname].get('ed_num_states', 0)
-lat = lattice.load(job, taskname, force_overwrite=True)
+    return E, psi
 
-N = sum(s.nspinhalfs for s in lat.sites)
-print('dimension = 2**{} = {}'.format(N, 2**N))
-H, obs_ops = ed_hamiltonian.construct(lat)
-
-print('H constructed.')
-if num_states == 0:
-    H = np.array(H.todense())
-    E, psi = np.linalg.eigh(H)
-    print('Full diagonalization done.')
-else:
-    E, psi = spsl.eigsh(H, num_states, which='SA')
-    Emax = E.max()
-    psi = psi[:,E<E.max()-1e-3]
-    E = E[E<E.max()-1e-3]
-    print('Sparse diagonalization done ({}/{} states).'.format(len(E),num_states))
-
-na = np.newaxis
-Egap = E[E>E.min()+1e-8].min()-E.min()
-print('{} energies: {:.3g}..{:.3g}, gap={:.3g}'.format(len(E), E.min(), E.max(), Egap))
-
-def calc_observables(E, psi):
+def calc_observables(params, Ts, E, psi, obs_ops):
+    N = sum(s.nspinhalfs for s in lat.sites)
+    na = np.newaxis
     Enorm = E - E.min()
     ρ = np.exp(-Enorm[na,:]/Ts[:,na])
     Z = np.sum(ρ, axis=1)
@@ -96,8 +91,8 @@ def calc_observables(E, psi):
     #     return mean(np.dot(struc, struc.conj().T))/len(sset)
 
     def mag_obs(prefix, M):
-        M2 = np.dot(M,M)
-        M4 = np.dot(M2,M2)
+        M2 = M @ M
+        M4 = M2 @ M2
 
         obs = {}
         obs[prefix+'Mag'] = mean(M)
@@ -106,11 +101,8 @@ def calc_observables(E, psi):
         
         obs[prefix+'BinderRatio'] = obs[prefix+'Mag2']**2/obs[prefix+'Mag4']
 
-        if num_states == 0:
-            obs[prefix+'MagChi'] = chi(M, N)
+        obs[prefix+'MagChi'] = chi(M, N)
                 
-        #obs[prefix+'BinderRatio'] = obs[prefix+'Mag2']**2/obs[prefix+'Mag4']
-        
         #Lx = job.tasks[taskname]['Lx']
         #obs[prefix+'StrucFac2'] = structure_fac([2*np.pi/Lx, 0], spin, positions, sset)
         #obs[prefix+'CorrLenF'] = np.sqrt(np.maximum(len(sset)*obs[prefix+'Mag2']/obs[prefix+'StrucFac2'],1)-1)/2/np.pi
@@ -137,27 +129,30 @@ def calc_observables(E, psi):
 
 
     obs = {}
-    obs['Ts'] = Ts
     obs['Z'] = Z
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
     obs['SpecificHeat'] = Ts**(-2)*(np.sum(E[na,:]**2*ρ,axis=1) - np.sum(E[na,:]*ρ,axis=1)**2)/N
 
-    obs.update(mag_obs('', obs_ops['M']))
-    obs.update(mag_obs('StagX', obs_ops['sxM']))
-    obs.update(mag_obs('StagY', obs_ops['syM']))
-    obs.update(mag_obs('StagXStagY', obs_ops['sxsyM']))
+    if 'mag' in params['measure']:
+        obs.update(mag_obs('', obs_ops['M']))
+    if 'sxmag' in params['measure']:
+        obs.update(mag_obs('StagX', obs_ops['sxM']))
+    if 'symag' in params['measure']:
+        obs.update(mag_obs('StagY', obs_ops['syM']))
+    if 'sxsymag' in params['measure']:
+        obs.update(mag_obs('StagXStagY', obs_ops['sxsyM']))
 
-    if 'chirality' in job.tasks[taskname].get('measure'):
-        obs['TauZ'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauz']]).T
-        obs['TauY'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauy']]).T
-        obs['NematicityCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityCorr']]).T
-        obs['NematicityDiagCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityDiagCorr']]).T
-        obs['NematicityOffCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityOffCorr']]).T
+    if 'chirality' in params['measure']:
+        obs['TauZ'] = np.real(np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauz']]).T)
+        obs['TauY'] = np.real(np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauy']]).T)
+        obs['NematicityCorr'] = np.real(np.array([mean(corr) for corr in obs_ops['NematicityCorr']]).T)
+        obs['NematicityDiagCorr'] = np.real(np.array([mean(corr) for corr in obs_ops['NematicityDiagCorr']]).T)
+        obs['NematicityOffCorr'] = np.real(np.array([mean(corr) for corr in obs_ops['NematicityOffCorr']]).T)
         #obs['NematicityCrossCorr'] = np.array([mean(corr) for corr in obs_ops['NematicityCrossCorr']]).T
 
         obs['NematicityAltCorr'] = 9/16*obs['NematicityDiagCorr'] + obs['NematicityOffCorr']
         
-    if 'j' in job.tasks[taskname].get('measure'):
+    if 'j' in params['measure']:
         obs.update(j_obs())
         if 'JDim' in obs_ops.keys():
             obs['JDim'] = mean(obs_ops['JDim'])
@@ -167,14 +162,40 @@ def calc_observables(E, psi):
 
     return obs
 
-obs = calc_observables(E, psi)
+def to_list(a):
+    if type(a) == np.ndarray:
+        return a.tolist()
+    return a
+
+jobdir = os.path.dirname(args.jobfile)
+if jobdir != '':
+    os.chdir(jobdir)
+
+job = jobfile.JobFile('./'+os.path.basename(args.jobfile))
+
+output = []
+
+summarized_tasks = extract_jobdata(job)
+for i, (taskname, params, Ts) in enumerate(summarized_tasks):
+    print('task {}/{}...'.format(i+1, len(summarized_tasks)))    
+    lat = lattice.load(job, taskname, force_overwrite=True)
+
+    H, obs_ops = ed_hamiltonian.construct(lat)
+    print('dimension = 2**{:d} = {}'.format(int(np.log(H.shape[0])/np.log(2)), H.shape[0]))
+    
+    E, psi = solve_task(H, params.get('ed_num_states', 0))
+
+    obs = calc_observables(params, np.array(Ts), E, psi, obs_ops)
+    print('observables calculated')
+
+    for i, T in enumerate(Ts):
+        task_observables = {obsname: to_list(obsvalue[i]) for obsname, obsvalue in obs.items()}
+        output.append({'parameters': {'T': T, **params}, 'results': task_observables})
 
 if args.outfile:
-    np.savez_compressed(args.outfile, **obs)
-    print('Saved to "{}"'.format(args.outfile))
+    with open(args.outfile, 'w') as outfile:
+        json.dump(output, outfile, indent=1)
 else:
-    for k, v in sorted(obs.items()):
-        print('{}: {}'.format(k,v))
-        
-
+    print(json.dumps(output, indent=4))
+    
 

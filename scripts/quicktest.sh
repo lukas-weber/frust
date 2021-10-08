@@ -15,11 +15,11 @@ shift
 jobname=$(basename -s .py $job)
 
 loadl delete $job
-python3 $ed_code $job -o $jobname.npz
+python3 $ed_code $job -o $jobname.ed.json
 loadl run $job
 if loadl status $job --need-merge; then
     loadl merge $job
 fi
 
-python3 $ed_compare $jobname.npz $jobname.results.json $@
+python3 $ed_compare $jobname.ed.json $jobname.results.json $@
 
