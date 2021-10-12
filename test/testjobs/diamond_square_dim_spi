@@ -13,8 +13,7 @@ tm.Ly = 1
 tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag']
 
 tm.J1 = 1
-tm.J2 = 1
-tm.J3 = 1
+tm.J2 = 1.5
 tm.J = 0.15
 
 tm.basis = 'dimer'
