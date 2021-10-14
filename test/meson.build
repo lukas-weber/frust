@@ -75,6 +75,13 @@ test('ed_triang_square4',
    is_parallel : false,
    suite : 'ed_test')
 
+test('ed_maxwormlen',
+   sim_tests,
+   args : [frust, files('testjobs/maxwormlen')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')
+
 test('ed_chirality',
    sim_tests,
    args : [frust, files('testjobs/chirality')],
