@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include <catch2/catch.hpp>
 #include "opercode.h"
+#include <catch2/catch.hpp>
 
 TEST_CASE("opercode") {
 	uint32_t bond = GENERATE(take(10, random(0, 100 * 100)));
@@ -12,7 +12,7 @@ TEST_CASE("opercode") {
 			CHECK(v.vertex_idx() == vidx);
 
 			opercode op{bond, v};
-			
+
 			CHECK(op.bond() == bond);
 			CHECK(op.diagonal() == diagonal);
 			CHECK(op.vertex().code() == v.code());
