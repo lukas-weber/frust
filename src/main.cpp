@@ -7,6 +7,6 @@ int main(int argc, char *argv[]) {
 		write_lattice(argc - 1, argv + 1);
 		return 0;
 	}
-	
+
 	loadl::run<frust>(argc, argv);
 }

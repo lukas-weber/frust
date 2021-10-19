@@ -1,10 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <nlohmann/json.hpp>
 #include "bond.h"
-#include "vertex_data.h"
 #include "opercode.h"
+#include "vertex_data.h"
+#include <nlohmann/json.hpp>
+#include <vector>
 
 struct unitcell {
 	vec2 a1;
@@ -13,7 +13,6 @@ struct unitcell {
 	std::vector<uc_site> sites;
 	std::vector<uc_bond> bonds;
 };
-
 
 class lattice {
 public:
@@ -36,6 +35,7 @@ public:
 	lattice(const unitcell &uc, int Lx, int Ly, bool with_vertex_data);
 
 	void to_json(nlohmann::json &out);
+
 private:
 	std::vector<vertex_data> vertices_; // [uc_bond]
 
@@ -58,5 +58,5 @@ inline const vertex_data &lattice::get_vertex_data(int bond) const {
 	return vertices_[bond % vertices_.size()];
 }
 inline const uc_site &lattice::get_uc_site(int site) const {
-	return uc.sites[site%uc.sites.size()];
+	return uc.sites[site % uc.sites.size()];
 }

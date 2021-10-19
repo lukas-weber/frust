@@ -1,19 +1,20 @@
 #pragma once
 
 #include "bond.h"
-#include <vector>
 #include "opercode.h"
+#include <vector>
 
 class vertex_data {
-public: 
+public:
 	static const int leg_count = 4;
-	
+
 	class transition {
 	public:
 		bool invalid() const {
-			return probs[probs.size()-1] < 1-1e-8;
+			return probs[probs.size() - 1] < 1 - 1e-8;
 		}
 		void print() const;
+
 	private:
 		std::vector<double> probs;
 		std::vector<vertexcode> targets;
@@ -31,23 +32,28 @@ public:
 	vertexcode get_diagonal_vertex(state_idx state_i, state_idx state_j) const;
 	const std::array<state_idx, 4> &get_legstate(vertexcode v) const;
 	int vertex_count() const;
-	
+
 	vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj);
 	void print(const site_basis &bi, const site_basis &bj) const;
+
 private:
-	std::array<vertexcode,site_basis::max_size*site_basis::max_size> diagonal_vertices_; // [site_basis::max_size * statei + state_j]
+	std::array<vertexcode, site_basis::max_size * site_basis::max_size>
+	    diagonal_vertices_; // [site_basis::max_size * statei + state_j]
 	int max_worm_count_{};
-	
+
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
-	std::vector<transition> transitions_; // [vertex*leg_count*worm_count + worm_in*leg_count + leg_in]
-	
-	std::vector<std::array<state_idx,4>> legstates_;
+	std::vector<transition>
+	    transitions_; // [vertex*leg_count*worm_count + worm_in*leg_count + leg_in]
 
-	void construct_vertices(const uc_bond &b, const uc_site &si, const uc_site &sj, double tolerance);
+	std::vector<std::array<state_idx, 4>> legstates_;
+
+	void construct_vertices(const uc_bond &b, const uc_site &si, const uc_site &sj,
+	                        double tolerance);
 
 	vertexcode wrap_vertex_idx(int vertex_idx);
-	int vertex_change_apply(const site_basis &bi, const site_basis &bj, int vertex, int leg_in, worm_idx worm_in_idx, int leg_out, worm_idx worm_out_idx) const;
+	int vertex_change_apply(const site_basis &bi, const site_basis &bj, int vertex, int leg_in,
+	                        worm_idx worm_in_idx, int leg_out, worm_idx worm_out_idx) const;
 };
 
 inline const vertex_data::transition invalid_transition{};
@@ -57,7 +63,7 @@ inline int vertex_data::vertex_count() const {
 }
 
 inline vertexcode vertex_data::get_diagonal_vertex(state_idx state_i, state_idx state_j) const {
-	return diagonal_vertices_[state_i*site_basis::max_size + state_j];
+	return diagonal_vertices_[state_i * site_basis::max_size + state_j];
 }
 
 inline int vertex_data::get_sign(vertexcode v) const {
@@ -66,8 +72,8 @@ inline int vertex_data::get_sign(vertexcode v) const {
 
 inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, double random) const {
 	int vi = v.vertex_idx();
-	const auto &t = transitions_[vi*leg_count*max_worm_count_ + worm_in*leg_count + leg_in];
-	
+	const auto &t = transitions_[vi * leg_count * max_worm_count_ + worm_in * leg_count + leg_in];
+
 	assert(!t.invalid());
 	uint32_t out;
 	for(out = 0; out < t.probs.size(); out++) {
@@ -78,8 +84,8 @@ inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, dou
 
 	assert(out < t.probs.size());
 
-	int leg = out%leg_count;
-	worm_idx worm_out = out/leg_count;
+	int leg = out % leg_count;
+	worm_idx worm_out = out / leg_count;
 
 	assert(!t.targets[out].invalid());
 

@@ -24,4 +24,3 @@ void write_lattice(int argc, char **argv) {
 	lat.to_json(out);
 	std::cout << out.dump(1) << std::endl;
 }
-
