@@ -64,7 +64,7 @@ int frust::worm_traverse() {
 		return 0;
 	}
 
-	int wormlength{};
+	int wormlength{1};
 
 	uint32_t v0{};
 	do {
@@ -80,8 +80,6 @@ int frust::worm_traverse() {
 	int wormfunc = wormfunc0;
 
 	do {
-		wormlength++;
-
 		auto &op = operators_[v / 4];
 		assert(!op.vertex().invalid());
 		int leg_in = v % 4;
@@ -97,10 +95,12 @@ int frust::worm_traverse() {
 		   worm_too_long(wormlength)) {
 			break;
 		}
+		wormlength++;
+
 		wormfunc = wormfunc_out;
 		v = vertices_[vstep];
 		assert(vertices_[vstep] != -1);
-	} while(v != v0 || wormfunc != wormfunc0);
+	} while((v != v0 || wormfunc != wormfunc0) && !(worm_too_long(wormlength)));
 
 	return wormlength;
 }
@@ -196,8 +196,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		sign *= vd.get_sign(old_op.vertex()) * vd.get_sign(op.vertex());
 
-		if((vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) ||
-		   worm_too_long(wormlength)) {
+		if((vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx)) {
 			break;
 		}
 
@@ -282,10 +281,6 @@ bool frust::worm_update() {
 
 		for(int i = 0; i < nworm_; i++) {
 			wormlength = worm_traverse_measure(sign, corr);
-			if(worm_too_long(wormlength)) {
-				operators_ = old_operators;
-				return 0;
-			}
 		}
 		for(auto &c : corr) {
 			c *= 1. / ceil(nworm_);
