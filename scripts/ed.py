@@ -141,6 +141,8 @@ def calc_observables(params, Ts, E, psi, obs_ops):
         obs.update(mag_obs('StagY', obs_ops['syM']))
     if 'sxsymag' in params['measure']:
         obs.update(mag_obs('StagXStagY', obs_ops['sxsyM']))
+    if 'sxsucmag' in params['measure']:
+        obs.update(mag_obs('StagXStagUC', obs_ops['sxsucM']))
 
     if 'chirality' in params['measure']:
         obs['TauZ'] = np.real(np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauz']]).T)

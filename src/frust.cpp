@@ -449,18 +449,20 @@ void frust::do_measurement() {
 
 	auto obs = std::tuple{
 	    j_est{lat_, sign, settings_.measure_jcorrlen},
-	    mag_est<1, 1>{lat_, T_, sign},
-	    mag_est<1, -1>{lat_, T_, sign},
-	    mag_est<-1, 1>{lat_, T_, sign},
-	    mag_est<-1, -1>{lat_, T_, sign},
+	    mag_est<1, 1, 1>{lat_, T_, sign},
+	    mag_est<1, -1, 1>{lat_, T_, sign},
+	    mag_est<-1, 1, 1>{lat_, T_, sign},
+	    mag_est<-1, -1, 1>{lat_, T_, sign},
+	    mag_est<-1, 1, -1>{lat_, T_, sign},
 	};
 
-	std::array<bool, 5> flags = {
+	std::array<bool, 6> flags = {
 	    settings_.measure_j || settings_.measure_chirality,
 	    settings_.measure_mag,
 	    settings_.measure_sxmag,
 	    settings_.measure_symag,
 	    settings_.measure_sxsymag,
+	    settings_.measure_sxsucmag,
 	};
 
 	template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
@@ -541,19 +543,23 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	}
 
 	if(settings.measure_mag) {
-		mag_est<1, 1>{lat, T, 0}.register_evalables(eval);
+		mag_est<1, 1, 1>{lat, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_sxmag) {
-		mag_est<-1, 1>{lat, T, 0}.register_evalables(eval);
+		mag_est<-1, 1, 1>{lat, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_symag) {
-		mag_est<1, -1>{lat, T, 0}.register_evalables(eval);
+		mag_est<1, -1, 1>{lat, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_sxsymag) {
-		mag_est<-1, -1>{lat, T, 0}.register_evalables(eval);
+		mag_est<-1, -1, 1>{lat, T, 0}.register_evalables(eval);
+	}
+	
+	if(settings.measure_sxsucmag) {
+		mag_est<-1, 1, -1>{lat, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_chirality) {

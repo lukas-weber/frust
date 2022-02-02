@@ -124,20 +124,21 @@ def construct(lat):
             pos += s.nspinhalfs
         obs_ops[name] = op/len(lat.sites) 
 
-    def signed_mag(sx, sy):
+    def signed_mag(sx, sy, suc):
         M = sps.dok_matrix((2**N,2**N))
         for x in range(lat.Lx):
             for y in range(lat.Ly):
                 for uc in range(lat.uc_spin_count):
                     i = lat.uc_spin_count*(lat.Lx*y+x)+uc
-                    sign = sx**x * sy**y
+                    sign = sx**x * sy**y * (lat.uc_signs[uc] if suc < 0 else 1)
 
                     for idx in full2half[i]:
                         M += sign*Sz(idx,N)
         return M/N
-    obs_ops['sxM'] = signed_mag(-1,1)
-    obs_ops['syM'] = signed_mag(1,-1)
-    obs_ops['sxsyM'] = signed_mag(-1,-1)
+    obs_ops['sxM'] = signed_mag(-1,1,1)
+    obs_ops['syM'] = signed_mag(1,-1,1)
+    obs_ops['sxsyM'] = signed_mag(-1,-1,1)
+    obs_ops['sxsucM'] = signed_mag(-1,1,-1)
 
     if all(len(s)==3 for s in full2half):
         chirality(Nfull, obs_ops)

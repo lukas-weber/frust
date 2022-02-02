@@ -1,9 +1,13 @@
 #include "lattice.h"
 #include <tuple>
 
-lattice::lattice(const unitcell &ucell, int Lx, int Ly, bool with_vertex_data)
-    : uc{ucell}, Lx{Lx}, Ly{Ly} {
+lattice::lattice(const unitcell &ucell, const std::vector<int> &uc_signs, int Lx, int Ly, bool with_vertex_data)
+    : uc{ucell}, uc_signs{uc_signs}, Lx{Lx}, Ly{Ly}  {
 	int uc_spin_count = uc.sites.size();
+
+	if(uc_signs.size() != uc_spin_count) {
+		throw std::runtime_error{"length of uc_signs array does not match unit cell spin count"};
+	}
 
 	if(Ly == 1) {
 		auto it = std::remove_if(uc.bonds.begin(), uc.bonds.end(),
@@ -73,6 +77,7 @@ void lattice::to_json(nlohmann::json &out) {
 	out["Lx"] = Lx;
 	out["Ly"] = Ly;
 	out["uc_spin_count"] = uc.sites.size();
+	out["uc_signs"] = uc_signs;
 
 	for(const auto &site : sites) {
 		const auto &uc_st = uc.sites[idx % uc.sites.size()];

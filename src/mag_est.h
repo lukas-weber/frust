@@ -5,7 +5,7 @@
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 
-template<int SignX, int SignY>
+template<int SignX, int SignY, int SignUC>
 class mag_est {
 private:
 	double n_{1};
@@ -19,12 +19,14 @@ private:
 	const lattice &lat_;
 	double T_{};
 	double sign_{};
-
-public:
-	mag_est(const lattice &lat, double T, double sign) : lat_{lat}, T_{T}, sign_{sign} {}
-
-	double stag_sign(uint32_t idx) {
+	
+	double stag_sign(uint32_t idx) const {
 		double sign = 1;
+		
+		if(SignUC < 0) {
+			sign *= lat_.uc_signs[idx % lat_.uc.sites.size()];
+		}
+
 		idx /= lat_.uc.sites.size();
 		if(SignX < 0) {
 			sign *= 2. * ((idx % lat_.Lx) & 1) - 1.;
@@ -32,8 +34,25 @@ public:
 		if(SignY < 0) {
 			sign *= 2. * ((idx / lat_.Lx) & 1) - 1.;
 		}
+
 		return sign;
 	}
+
+	const std::string prefix() const {
+		std::string p;
+		if(SignX < 0) {
+			p += "StagX";
+		}
+		if(SignY < 0) {
+			p += "StagY";
+		}
+		if(SignUC < 0) {
+			p += "StagUC";
+		}
+		return p;
+	}
+public:
+	mag_est(const lattice &lat, double T, double sign) : lat_{lat}, T_{T}, sign_{sign} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;
@@ -71,17 +90,6 @@ public:
 		mag2_ += tmpmag_ * tmpmag_;
 		mag4_ += tmpmag_ * tmpmag_ * tmpmag_ * tmpmag_;
 		n_++;
-	}
-
-	const std::string prefix() {
-		std::string p;
-		if(SignX < 0) {
-			p += "StagX";
-		}
-		if(SignY < 0) {
-			p += "StagY";
-		}
-		return p;
 	}
 
 	void result(loadl::measurements &measure) {

@@ -17,6 +17,7 @@ struct unitcell {
 class lattice {
 public:
 	unitcell uc;
+	std::vector<int> uc_signs;
 
 	int Lx{}, Ly{};
 	int spinhalf_count{};
@@ -32,7 +33,7 @@ public:
 
 	void vertex_print() const;
 
-	lattice(const unitcell &uc, int Lx, int Ly, bool with_vertex_data);
+	lattice(const unitcell &uc, const std::vector<int> &uc_signs, int Lx, int Ly, bool with_vertex_data);
 
 	void to_json(nlohmann::json &out);
 
