@@ -36,7 +36,7 @@ test('ed_bilayer',
 test('ed_dimerized_bilayer',
    sim_tests,
    args : [frust, files('testjobs/dimerized_bilayer')],
-   timeout : 200,
+   timeout : 500,
    is_parallel : false,
    suite : 'ed_test')
 

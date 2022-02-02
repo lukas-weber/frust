@@ -45,6 +45,7 @@ struct uc_site {
 
 	// magnetic field
 	double h{};
+	int sublattice_sign{1};
 
 	int coordination{}; // filled in automatically
 };

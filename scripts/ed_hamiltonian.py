@@ -130,7 +130,7 @@ def construct(lat):
             for y in range(lat.Ly):
                 for uc in range(lat.uc_spin_count):
                     i = lat.uc_spin_count*(lat.Lx*y+x)+uc
-                    sign = sx**x * sy**y * (lat.uc_signs[uc] if suc < 0 else 1)
+                    sign = sx**x * sy**y * (lat.sites[i].sublattice_sign if suc < 0 else 1)
 
                     for idx in full2half[i]:
                         M += sign*Sz(idx,N)

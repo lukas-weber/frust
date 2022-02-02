@@ -24,7 +24,7 @@ private:
 		double sign = 1;
 		
 		if(SignUC < 0) {
-			sign *= lat_.uc_signs[idx % lat_.uc.sites.size()];
+			sign *= lat_.get_uc_site(idx).sublattice_sign;
 		}
 
 		idx /= lat_.uc.sites.size();
