@@ -45,6 +45,9 @@ void frust::init() {
 	    param.get("init_opstring_cutoff", static_cast<int>(lat_.spinhalf_count * T_)));
 
 	maxwormlen_ = param.get<int>("maxwormlen", 0);
+	if(maxwormlen_ != 0) {
+		std::cout << "Warning: maxwormlen set: this feature is not tested!\n";
+	}
 
 	const int warmup = 5;
 	for(int i = 0; i < warmup; i++) {
