@@ -12,8 +12,6 @@ tm.Ly = 1
 
 tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag', 'sxsucmag']
 
-tm.uc_signs = [1, -1]
-
 tm.Jpar = 1
 tm.Jpardim = 2
 tm.Jperp = 1
