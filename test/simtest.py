@@ -18,6 +18,8 @@ num_cores = multiprocessing.cpu_count()//2
 jobname = os.path.basename(args.testjob)
 jobdir = 'testjobs/'
 
+ed_result = args.testjob + '.ed.json'
+
 os.makedirs(jobdir, exist_ok=True)
 shutil.copy(args.testjob, jobdir+jobname)
 os.chdir(jobdir)
@@ -32,8 +34,8 @@ jobconfig = {
 with open('jobconfig.yml', 'w') as f:
     yaml.dump(jobconfig, f)
 
-
-res = subprocess.run(['../../scripts/quicktest.sh', jobname, '--cli'], check=True)
-if res.returncode != 0:
-    raise Exception('simulation had nonzero return code')
-
+try:
+    subprocess.run(['loadl', 'run', jobname, '-r'], check=True)
+    subprocess.run(['../../scripts/ed_compare.py', ed_result, jobdir + args.testjob + '.results.json', '--cli'], check=True)
+except Exception as err:
+    print(err)
