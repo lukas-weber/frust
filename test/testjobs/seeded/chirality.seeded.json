@@ -1,0 +1,101 @@
+[{
+ "parameters": {
+  "J1": 1,
+  "J2": 1,
+  "J3": 1,
+  "Jn": -0.2,
+  "Jnn": 0,
+  "Lx": 3,
+  "Ly": 1,
+  "T": 0.1,
+  "basis": 3,
+  "binsize": 2000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle_square",
+  "measure": [
+   "chirality"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./chirality_seeded.data/task0001"
+},
+{
+ "parameters": {
+  "J1": 1,
+  "J2": 1,
+  "J3": 1,
+  "Jn": -0.2,
+  "Jnn": 0,
+  "Lx": 3,
+  "Ly": 1,
+  "T": 0.2,
+  "basis": 3,
+  "binsize": 2000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle_square",
+  "measure": [
+   "chirality"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./chirality_seeded.data/task0002"
+},
+{
+ "parameters": {
+  "J1": 1,
+  "J2": 1,
+  "J3": 1,
+  "Jn": -0.2,
+  "Jnn": 0,
+  "Lx": 3,
+  "Ly": 1,
+  "T": 0.3,
+  "basis": 3,
+  "binsize": 2000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle_square",
+  "measure": [
+   "chirality"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./chirality_seeded.data/task0003"
+},
+{
+ "parameters": {
+  "J1": 1,
+  "J2": 1,
+  "J3": 1,
+  "Jn": -0.2,
+  "Jnn": 0,
+  "Lx": 3,
+  "Ly": 1,
+  "T": 0.4,
+  "basis": 3,
+  "binsize": 2000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle_square",
+  "measure": [
+   "chirality"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./chirality_seeded.data/task0004"
+}
+]

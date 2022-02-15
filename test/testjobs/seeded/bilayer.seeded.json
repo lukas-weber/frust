@@ -1,0 +1,190 @@
+[{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 0.05,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0001"
+},
+{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 0.7083333333333334,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0002"
+},
+{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 1.3666666666666667,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0003"
+},
+{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 2.025,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0004"
+},
+{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 2.683333333333333,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0005"
+},
+{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 3.3416666666666663,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0006"
+},
+{
+ "parameters": {
+  "Jpar": 1.24,
+  "Jperp": 2,
+  "Jx": 0.5,
+  "Lx": 2,
+  "Ly": 2,
+  "T": 4.0,
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "bilayer",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./bilayer_seeded.data/task0007"
+}
+]
