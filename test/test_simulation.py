@@ -20,7 +20,7 @@ group.add_argument('--generate', type=str, help='generate ED or seeded result fi
 def generate_jobconfig(num_cores, mc_binary):
     jobconfig = {
         'num_cores': num_cores,
-        'mc_binary': '../'+mc_binary,
+        'mc_binary': mc_binary,
         'mc_runtime': '24:00:00',
         'mc_checkpoint_time': '24:00:00',
     }
@@ -31,6 +31,8 @@ def generate_jobconfig(num_cores, mc_binary):
 
 args = parser.parse_args()
 
+mc_binary = os.path.abspath(args.mcbinary)
+
 jobname = os.path.basename(args.testjob)
 jobdir = 'testjobs/'
 
@@ -40,16 +42,15 @@ os.chdir(jobdir)
 
 generate_jobconfig(
     num_cores = multiprocessing.cpu_count()//2,
-    mc_binary = args.mcbinary
+    mc_binary = mc_binary
 )
 
 if not args.seeded: 
-    subprocess.run(['loadl', 'run', jobname, '-r'], check=True)
     if args.generate:
-        # TODO
-        pass
+        subprocess.run(['../../scripts/ed.py', jobname, '-o', args.generate], check=True) 
     else:
-        subprocess.run(['python3', '../../scripts/ed_compare.py', args.result_file, jobname + '.results.json', '--cli'], check=True)
+        subprocess.run(['loadl', 'run', jobname, '-r'], check=True)
+        subprocess.run(['../../scripts/ed_compare.py', args.result_file, jobname + '.results.json', '--cli'], check=True)
 else:
     seeded_job = args.testjob + '_seeded'
     subprocess.run(['../../test/gen_seeded_job.sh', args.testjob, jobname + '_seeded'], check=True)
