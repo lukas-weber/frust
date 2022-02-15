@@ -9,8 +9,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -48,14 +46,7 @@
    "StagXStagYMag2": 0.10858593999040733,
    "StagXStagYMag4": 0.020870796082086914,
    "StagXStagYBinderRatio": 0.5649476099150955,
-   "StagXStagYMagChi": 4.08994981508862,
-   "J": 1.4785291170912092,
-   "J2": 2.1968116978927243,
-   "JVar": 0.010763347806213908,
-   "JStruc1": 0.007215364351321471,
-   "JStruc2": 2.196811697892726,
-   "JCorrLen": 0.0,
-   "JDim": 0.9954479895864178
+   "StagXStagYMagChi": 4.08994981508862
   }
  },
  {
@@ -68,8 +59,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -107,14 +96,7 @@
    "StagXStagYMag2": 0.10761075782613268,
    "StagXStagYMag4": 0.020574070281377126,
    "StagXStagYBinderRatio": 0.562848043267181,
-   "StagXStagYMagChi": 3.8278692823544986,
-   "J": 1.471974574896663,
-   "J2": 2.181495385664425,
-   "JVar": 0.014786236522212892,
-   "JStruc1": 0.007904690236075948,
-   "JStruc2": 2.1814953856644266,
-   "JCorrLen": 0.0,
-   "JDim": 0.9935371886073254
+   "StagXStagYMagChi": 3.8278692823544986
   }
  },
  {
@@ -127,8 +109,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -166,14 +146,7 @@
    "StagXStagYMag2": 0.10271263619959105,
    "StagXStagYMag4": 0.01916775411277717,
    "StagXStagYBinderRatio": 0.5503975882097223,
-   "StagXStagYMagChi": 3.264853363831783,
-   "J": 1.431426295339332,
-   "J2": 2.0858646107387253,
-   "JVar": 0.03688337174984069,
-   "JStruc1": 0.01272046009645513,
-   "JStruc2": 2.0858646107387266,
-   "JCorrLen": 0.0,
-   "JDim": 0.9804424787682312
+   "StagXStagYMagChi": 3.264853363831783
   }
  },
  {
@@ -186,8 +159,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -225,14 +196,7 @@
    "StagXStagYMag2": 0.0929014144730091,
    "StagXStagYMag4": 0.016467092572554205,
    "StagXStagYBinderRatio": 0.524116371670286,
-   "StagXStagYMagChi": 2.5917521687522607,
-   "J": 1.345647348252034,
-   "J2": 1.8852702423039673,
-   "JVar": 0.0745034564462368,
-   "JStruc1": 0.022684217736106016,
-   "JStruc2": 1.8852702423039682,
-   "JCorrLen": 0.0,
-   "JDim": 0.9496136304402282
+   "StagXStagYMagChi": 2.5917521687522607
   }
  },
  {
@@ -245,8 +209,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -284,14 +246,7 @@
    "StagXStagYMag2": 0.08131859631676691,
    "StagXStagYMag4": 0.013416732834643081,
    "StagXStagYBinderRatio": 0.49287067041051447,
-   "StagXStagYMagChi": 1.9968959814707825,
-   "J": 1.2434260586199188,
-   "J2": 1.6496786847794216,
-   "JVar": 0.10357032152435575,
-   "JStruc1": 0.03351766292838346,
-   "JStruc2": 1.649678684779422,
-   "JCorrLen": 0.0,
-   "JDim": 0.9090994547801499
+   "StagXStagYMagChi": 1.9968959814707825
   }
  },
  {
@@ -304,8 +259,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -343,14 +296,7 @@
    "StagXStagYMag2": 0.07095323982156435,
    "StagXStagYMag4": 0.01081519636490029,
    "StagXStagYBinderRatio": 0.46548967502013894,
-   "StagXStagYMagChi": 1.5485488382364614,
-   "J": 1.153448066208665,
-   "J2": 1.445413675365698,
-   "JVar": 0.11497123392518915,
-   "JStruc1": 0.04190266015536527,
-   "JStruc2": 1.4454136753656985,
-   "JCorrLen": 0.0,
-   "JDim": 0.8701203382403937
+   "StagXStagYMagChi": 1.5485488382364614
   }
  },
  {
@@ -363,8 +309,6 @@
    "Lx": 2,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
     "sxmag",
     "symag",
@@ -402,14 +346,7 @@
    "StagXStagYMag2": 0.06270547719307766,
    "StagXStagYMag4": 0.008846841422494449,
    "StagXStagYBinderRatio": 0.44444979651312955,
-   "StagXStagYMagChi": 1.229160714061757,
-   "J": 1.0845215805301902,
-   "J2": 1.2909482082130985,
-   "JVar": 0.11476114957739658,
-   "JStruc1": 0.04746625879635264,
-   "JStruc2": 1.2909482082130985,
-   "JCorrLen": 0.0,
-   "JDim": 0.8377213324398161
+   "StagXStagYMagChi": 1.229160714061757
   }
  }
 ]

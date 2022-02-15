@@ -17,10 +17,6 @@
     "sxsymag",
     "sxsucmag"
    ],
-   "uc_signs": [
-    1,
-    -1
-   ],
    "Jpar": 1,
    "Jpardim": 2,
    "Jperp": 1,
@@ -80,10 +76,6 @@
     "symag",
     "sxsymag",
     "sxsucmag"
-   ],
-   "uc_signs": [
-    1,
-    -1
    ],
    "Jpar": 1,
    "Jpardim": 2,
@@ -145,10 +137,6 @@
     "sxsymag",
     "sxsucmag"
    ],
-   "uc_signs": [
-    1,
-    -1
-   ],
    "Jpar": 1,
    "Jpardim": 2,
    "Jperp": 1,
@@ -208,10 +196,6 @@
     "symag",
     "sxsymag",
     "sxsucmag"
-   ],
-   "uc_signs": [
-    1,
-    -1
    ],
    "Jpar": 1,
    "Jpardim": 2,
@@ -273,10 +257,6 @@
     "sxsymag",
     "sxsucmag"
    ],
-   "uc_signs": [
-    1,
-    -1
-   ],
    "Jpar": 1,
    "Jpardim": 2,
    "Jperp": 1,
@@ -337,10 +317,6 @@
     "sxsymag",
     "sxsucmag"
    ],
-   "uc_signs": [
-    1,
-    -1
-   ],
    "Jpar": 1,
    "Jpardim": 2,
    "Jperp": 1,
@@ -400,10 +376,6 @@
     "symag",
     "sxsymag",
     "sxsucmag"
-   ],
-   "uc_signs": [
-    1,
-    -1
    ],
    "Jpar": 1,
    "Jpardim": 2,
