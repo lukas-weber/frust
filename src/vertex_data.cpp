@@ -272,9 +272,9 @@ void vertex_data::transition::print() const {
 			tmp[i] = fabs(tmp[i]);
 		}
 	}
-	std::vector<uint32_t> codes;
+	std::vector<int> codes;
 	for(const auto &t : targets) {
-		codes.push_back(t.vertex_idx());
+		codes.push_back(t.invalid() ? -1 : t.vertex_idx());
 	}
 	std::cout << fmt::format("{:.2f}|{:2d}\n", fmt::join(probs.begin(), probs.end(), " "),
 	                         fmt::join(codes.begin(), codes.end(), " "));
