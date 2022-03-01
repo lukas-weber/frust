@@ -2,6 +2,8 @@
 
 #include "bond.h"
 #include "opercode.h"
+#include "worms.h"
+#include <Eigen/Dense>
 #include <vector>
 
 class vertex_data {
@@ -32,28 +34,28 @@ public:
 	vertexcode get_diagonal_vertex(state_idx state_i, state_idx state_j) const;
 	const std::array<state_idx, 4> &get_legstate(vertexcode v) const;
 	int vertex_count() const;
-
-	vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj);
-	void print(const site_basis &bi, const site_basis &bj) const;
+	
+	// bond_hamiltonian has dimension [dim_i;dim_j;dim_i;dim_j]
+	vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamiltonian);
+	//void print(const site_basis &bi, const site_basis &bj) const;
 
 private:
-	std::array<vertexcode, site_basis::max_size * site_basis::max_size>
-	    diagonal_vertices_; // [site_basis::max_size * statei + state_j]
+	int dim_j_{};
 	int max_worm_count_{};
-
+	std::vector<vertexcode>
+	    diagonal_vertices_; // [dim_i_; dim_j_]
+	    
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
 	std::vector<transition>
 	    transitions_; // [vertex*leg_count*worm_count + worm_in*leg_count + leg_in]
 
-	std::vector<std::array<state_idx, 4>> legstates_;
+	std::vector<std::array<state_idx, leg_count>> legstates_;
 
-	void construct_vertices(const uc_bond &b, const uc_site &si, const uc_site &sj,
-	                        double tolerance);
-
+	void construct_vertices(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamiltonian, double tolerance);
 	vertexcode wrap_vertex_idx(int vertex_idx);
-	int vertex_change_apply(const site_basis &bi, const site_basis &bj, int vertex, int leg_in,
-	                        worm_idx worm_in_idx, int leg_out, worm_idx worm_out_idx) const;
+	int vertex_change_apply(int dim_i, int dim_j, int vertex, int leg_in,
+	                        worm_idx worm_in, int leg_out, worm_idx worm_out) const;
 };
 
 inline const vertex_data::transition invalid_transition{};
@@ -63,7 +65,7 @@ inline int vertex_data::vertex_count() const {
 }
 
 inline vertexcode vertex_data::get_diagonal_vertex(state_idx state_i, state_idx state_j) const {
-	return diagonal_vertices_[state_i * site_basis::max_size + state_j];
+	return diagonal_vertices_[state_i * dim_j_ + state_j];
 }
 
 inline int vertex_data::get_sign(vertexcode v) const {

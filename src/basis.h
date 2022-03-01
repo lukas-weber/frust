@@ -6,16 +6,12 @@
 #include <vector>
 
 using state_idx = uint8_t;
-using worm_idx = int;
 
 struct worm_function {
 	const char *name;
 	int inverse_idx;
 	std::vector<state_idx> action;
 };
-
-std::vector<worm_function> generate_xor_worms(uint32_t basis_size);
-std::vector<worm_function> generate_addmod_worms(uint32_t basis_size);
 
 class site_basis {
 public:
@@ -32,10 +28,8 @@ public:
 
 	int nspinhalfs{};
 	std::vector<state> states;
-	std::vector<worm_function> worms;
 
-	site_basis(int nspinhalfs, const std::vector<state> &states, const Eigen::MatrixXd &trans,
-	           const std::vector<worm_function> &worms);
+	site_basis(int nspinhalfs, const std::vector<state> &states, const Eigen::MatrixXd &trans);
 
 	int size() const;
 	double m(state_idx st) const;
@@ -49,17 +43,16 @@ private:
 };
 
 namespace site_bases {
-const state_idx in_ = site_basis::invalid;
-const double isq_ = 1 / sqrt(2.);
-const double isq3_ = 1 / sqrt(3.);
-const double isq6_ = 1 / sqrt(6.);
 
 // clang-format off
+	const state_idx in_ = site_basis::invalid;
+	const double isq_ = 1 / sqrt(2.);
+	const double isq3_ = 1 / sqrt(3.);
+	const double isq6_ = 1 / sqrt(6.);
 	const site_basis spin = {
 		1,
 		{{'+', 0.5, 0.5}, {'-', 0.5, -0.5}},
 		init_mat(2,2, {1,0,0,1}),
-		generate_xor_worms(1<<1),
 	};
 	const site_basis dimer = {
 		2,
@@ -68,7 +61,6 @@ const double isq6_ = 1 / sqrt(6.);
 			       isq_,  0, isq_, 0,
 			       -isq_, 0, isq_, 0,
 			        0,    0, 0,    1}),
-		generate_xor_worms(1<<2)
 	};
 	const site_basis trimer = {
 		3,
@@ -83,7 +75,6 @@ const double isq6_ = 1 / sqrt(6.);
 			       0,    isq3_, isq3_,     0, isq3_,     0,	       0, 0,
 			       0,	 0,	0, isq3_,     0, isq3_,	   isq3_, 0,
 			       0,	 0,     0,     0,     0,     0,	       0, 1}).transpose(),
-		generate_xor_worms(1<<3)       
 	};
 	const site_basis trimer23 = {
 		3,
@@ -98,7 +89,6 @@ const double isq6_ = 1 / sqrt(6.);
 			       0, isq3_,  isq3_, 0,	   isq3_,    0,     0,     0,
 			       0, 0,	  0, 	 isq3_,    0,  	     isq3_, isq3_, 0,
 			       0, 0,      0,     0,        0,        0,     0,     1}).transpose(),
-		generate_xor_worms(1<<3)       
 	};
 	
 	/*const site_basis spin1 = {

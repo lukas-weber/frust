@@ -39,8 +39,8 @@ std::vector<worm_function> generate_addmod_worms(uint32_t basis_size) {
 }
 
 site_basis::site_basis(int nspinhalfs, const std::vector<state> &states,
-                       const Eigen::MatrixXd &trans, const std::vector<worm_function> &worms)
-    : nspinhalfs{nspinhalfs}, states{states}, worms{worms}, trans_{trans} {}
+                       const Eigen::MatrixXd &trans)
+    : nspinhalfs{nspinhalfs}, states{states}, trans_{trans} {}
 
 static const std::array<Eigen::Matrix2d, 3> Shalf = gen_spinhalfop();
 

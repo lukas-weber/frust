@@ -5,7 +5,8 @@
 #include <optional>
 #include <vector>
 
-#include "lattice.h"
+#include "sse_data.h"
+#include "models/model.h"
 #include "measurement_settings.h"
 #include "opercode.h"
 
@@ -24,7 +25,6 @@ public:
 	void pt_update_param(const std::string &param_name, double new_param) override;
 
 	frust(const loadl::parser &p);
-
 private:
 	static constexpr int dump_version_ = 2;
 	double T_{};
@@ -38,7 +38,8 @@ private:
 	std::vector<opercode> operators_;
 	std::vector<state_idx> spin_;
 
-	lattice lat_;
+	const std::unique_ptr<model> model_;
+	const sse_data data_;
 
 	measurement_settings settings_;
 

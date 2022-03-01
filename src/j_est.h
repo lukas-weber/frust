@@ -1,7 +1,9 @@
 #pragma once
 
-#include "lattice.h"
 #include "opercode.h"
+#include "sse_data.h"
+#include "models/model.h"
+#include "models/cluster_magnet.h"
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 
@@ -23,32 +25,32 @@ private:
 	double jstruc2_{};
 
 	const bool measure_corrlen_{};
-	const lattice &lat_;
+	const cluster_magnet &model_;
 	double sign_{};
 	const double corrq_{};
 
 public:
-	j_est(const lattice &lat, double sign, bool measure_corrlen)
-	    : measure_corrlen_(measure_corrlen), lat_{lat}, sign_{sign}, corrq_{2 * M_PI / lat.Lx} {}
+	j_est(const model &model, double sign, bool measure_corrlen)
+	    : measure_corrlen_(measure_corrlen), model_{static_cast<const cluster_magnet &>(model)}, sign_{sign}, corrq_{2 * M_PI / model_.lat.Lx} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		using namespace std::complex_literals;
 		tmpj_ = 0;
 		tmpjdim_ = 0;
 		tmpnemdiag_ = 0;
-		int uc_size = lat_.uc.sites.size();
+		int uc_size = model_.lat.uc.sites.size();
 
 		int i = 0;
 		for(auto s : spin) {
-			double j = lat_.get_uc_site(i).basis.states[s].j;
-			double jdim = lat_.get_uc_site(i).basis.states[s].jdim;
+			double j = model_.get_site(i).basis.states[s].j;
+			double jdim = model_.get_site(i).basis.states[s].jdim;
 			tmpj_ += j;
 			tmpjdim_ += jdim;
 
 			tmpnemdiag_ += (2 * jdim - 1) * (1.5 - j);
 
 			if(measure_corrlen_) {
-				double xi = (i / uc_size) % lat_.Lx;
+				double xi = (i / uc_size) % model_.lat.Lx;
 				tmpjstruc_ += std::exp(1i * corrq_ * xi) * j;
 				tmpjstruc2_ += std::exp(2i * corrq_ * xi) * j;
 			}
@@ -66,15 +68,15 @@ public:
 		}
 	}
 
-	void measure(opercode op, const std::vector<state_idx> &) {
+	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
 		using namespace std::complex_literals;
-		int uc_size = lat_.uc.sites.size();
+		int uc_size = model_.lat.uc.sites.size();
 		if(!op.diagonal()) {
-			const auto &bond = lat_.bonds[op.bond()];
-			const auto &bi = lat_.get_uc_site(bond.i).basis;
-			const auto &bj = lat_.get_uc_site(bond.j).basis;
+			const auto &bond = model_.lat.bonds[op.bond()];
+			const auto &bi = model_.get_site(bond.i).basis;
+			const auto &bj = model_.get_site(bond.j).basis;
 
-			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
 			double j20 = bi.states[leg_state[2]].j - bi.states[leg_state[0]].j;
 			double j31 = bj.states[leg_state[3]].j - bj.states[leg_state[1]].j;
@@ -96,8 +98,9 @@ public:
 			tmpnemdiag_ += nem20 + nem31;
 
 			if(measure_corrlen_) {
-				double xi = (bond.i / uc_size) % lat_.Lx;
-				double xj = (bond.j / uc_size) % lat_.Lx;
+				// FIXME: should it not be Ly?
+				double xi = (bond.i / uc_size) % model_.lat.Lx;
+				double xj = (bond.j / uc_size) % model_.lat.Lx;
 				std::complex<double> jq20 = std::exp(1i * corrq_ * xi) *
 				                            (bi.states[leg_state[2]].j - bi.states[leg_state[0]].j);
 				std::complex<double> jq31 = std::exp(1i * corrq_ * xj) *
@@ -123,7 +126,7 @@ public:
 	void result(loadl::measurements &measure) {
 		std::string p = "Sign";
 
-		double norm = 1. / lat_.sites.size();
+		double norm = 1. / model_.lat.site_count();
 		j_ *= norm;
 		jdim_ *= norm;
 		nemdiag_ *= norm;
