@@ -144,8 +144,11 @@ std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
 }
 
 int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
-	throw std::runtime_error{"not implemented"};
-/*	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore,
+	if(model_->type != model::model_type::cluster_magnet) {
+		throw std::runtime_error{"not implemented"};
+	}
+	const auto &cm_model = static_cast<cluster_magnet&>(*model_);
+	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore,
 	                            const site_basis::state &safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
 		const auto &sdown = switcheroo ? safter : sbefore;
@@ -175,8 +178,9 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	}
 	int32_t v0 = *v0opt;
 	int32_t v1 = vertices_[v0];
-	auto [uc0, x0, y0] = lat_.split_idx(site0);
+	auto [uc0, x0, y0] = cm_model.lat.split_idx(site0);
 
+	const auto &basis0 = cm_model.get_site(site0).basis;
 	int dim0 = data_.get_site_data(site0).dim;
 	int wormfunc0 = random01() * worm_count(dim0);
 
@@ -200,10 +204,11 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		const auto &bond = data_.bonds[op.bond()];
 		int site_idx = leg_out & 1 ? bond.j : bond.i;
 		const auto &site_out = data_.get_site_data(site_idx);
+		const auto &model_site_out = cm_model.get_site(site_idx);
 
 		sign *= vd.get_sign(old_op.vertex()) * vd.get_sign(op.vertex());
 
-		if(vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim) {
+		if(vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim)) {
 			break;
 		}
 
@@ -220,9 +225,8 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 			int state_after_idx = vd.get_legstate(op.vertex())[leg_out];
 			int state_before_idx = worm_action(worm_inverse(wormfunc, site_out.dim), state_after_idx, site_out.dim);
 
-			// FIXME
-			const auto &state_before = site_out.basis.states[state_before_idx];
-			const auto &state_after = site_out.basis.states[state_after_idx];
+			const auto &state_before = model_site_out.basis.states[state_before_idx];
+			const auto &state_after = model_site_out.basis.states[state_after_idx];
 			int matidx = matelem_idx(!up, state_before, state_after);
 
 			if(matidx >= 0 && site_idx != site0) {
@@ -235,22 +239,21 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 				double matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
 				if(matidx0 >= 0) {
-					auto [uc, x, y] = data_.split_idx(site_idx);
+					auto [uc, x, y] = cm_model.lat.split_idx(site_idx);
 
 					int idx =
-					    ((y - y0 + lat_.Ly) % lat_.Ly) * lat_.Lx + (x - x0 + lat_.Lx) % lat_.Lx;
+					    ((y - y0 + cm_model.lat.Ly) % cm_model.lat.Ly) * cm_model.lat.Lx + (x - x0 + cm_model.lat.Lx) % cm_model.lat.Lx;
 					if(settings_.loopcorr_as_strucfac) {
 						idx = 0;
 					}
-					corr[4 * idx + 2 * matidx0 + matidx] += basis0.worms.size() * sign;
+					corr[4 * idx + 2 * matidx0 + matidx] += worm_count(dim0) * sign;
 				}
 			}
 		}
 
 		v = vnext;
 	} while(v != v0 || wormfunc != wormfunc0);
-	return wormlength;*/
-	return 100;
+	return wormlength;
 }
 
 bool frust::worm_update() {
