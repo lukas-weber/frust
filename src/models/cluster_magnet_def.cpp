@@ -136,8 +136,9 @@ static cluster_magnet_proto make_kagome(const loadl::parser &p) {
 	if(basis == "trimer") {
 		return {unitcells::kagome_trimer,
 			{{{J3, J1, J2}, site_bases::trimer, h}},
-		    	{{{0, 0, 0, J, 0, 0, 0, 0, 0}},
-			 {{0, 0, 0, 0, 0, 0, J, 0, 0}}}
+		    	{{{0, 0, 0, 0, 0, 0, 0, J, 0}},
+			 {{0, 0, 0, 0, 0, 0, J, 0, 0}},
+			 {{0, 0, 0, J, 0, 0, 0, 0, 0}}}
 		};
 	}
 	if(basis == "dimer") {
