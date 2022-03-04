@@ -37,7 +37,7 @@ public:
 	
 	// bond_hamiltonian has dimension [dim_i;dim_j;dim_i;dim_j]
 	vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamiltonian);
-	//void print(const site_basis &bi, const site_basis &bj) const;
+	void print() const;
 
 private:
 	int dim_j_{};

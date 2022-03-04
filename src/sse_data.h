@@ -2,6 +2,7 @@
 
 #include "vertex_data.h"
 #include <vector>
+#include <iostream>
 
 class sse_data {
 public:
@@ -49,5 +50,13 @@ public:
 
 	const site& get_site_data(int site_idx) const {
 		return site_data_[site_idx % site_type_count_];
+	}
+
+	void print() const {
+		int idx{};
+		for(const auto& vd : vertex_data_) {
+			std::cout << fmt::format("\nbond {}-{}\n", bonds[idx].i, bonds[idx].j);
+			vd.print();
+		}
 	}
 };
