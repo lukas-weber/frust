@@ -16,6 +16,7 @@ parser.add_argument('mcfile', type=str, help='.results.json file from Monte Carl
 parser.add_argument('-o', '--observables', type=str, help='Regex to filter observables to be compared.')
 parser.add_argument('-c', '--cli', action='store_true', help='cli-only mode. No plots are shown.')
 parser.add_argument('-p', '--confidence', type=float, default=1e-4, help='confidence interval for the χ² test to fail.')
+parser.add_argument('-t', '--tolerance', type=float, default=1e-9, help='absolute tolerance in case there is no statistical error.')
 
 args = parser.parse_args()
 
@@ -57,7 +58,7 @@ def compare(obs_name, Ts, mean, error, edobs):
     
     missingvalue = np.isnan(mean)
     error[missingvalue] = 100
-    smallerror = error < 1e-10 # roundoff error regime
+    smallerror = np.logical_and(mean-edobs < args.tolerance, error < args.tolerance) # roundoff error regime
 
     mask = np.logical_not(np.logical_or(smallerror, missingvalue))
 
