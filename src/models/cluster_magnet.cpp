@@ -1,7 +1,7 @@
 #include "cluster_magnet.h"
 
 #include <Eigen/Dense>
-#include "util.h"
+#include "util/kronecker_product.h"
 
 static Eigen::MatrixXd onsite_term(const cluster_site &s) {
 	const auto &b = s.basis;

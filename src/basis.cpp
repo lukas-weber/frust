@@ -1,6 +1,4 @@
 #include "basis.h"
-#include "util.h"
-#include <fmt/format.h>
 
 static std::array<Eigen::Matrix2d, 3> gen_spinhalfop() {
 	std::array<Eigen::Matrix2d, 3> S;
