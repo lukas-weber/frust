@@ -95,6 +95,8 @@ int frust::worm_traverse() {
 
 		op = opercode{op.bond(), new_vertex};
 
+		std::cout << fmt::format("{} -> {}\n", op.vertex().code(), new_vertex.code());
+
 		int32_t vstep = 4 * (v / 4) + leg_out;
 		const auto &bond = data_.bonds[op.bond()];
 		const auto &site_out = data_.get_site_data(leg_out & 1 ? bond.j : bond.i);
@@ -238,8 +240,9 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 				const auto &ls1 = data_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
 				const auto &state_before0 = basis0.states[ls0[v0 % 4]];
 				const auto &state_after0 = basis0.states[ls1[v1 % 4]];
-				double matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
+				int matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
+//				std::cout << fmt::format("{}, {} {}, {}", matidx0, state_before0.name, state_after0.name, wormfunc0) << "\n";
 				if(matidx0 >= 0) {
 					auto [uc, x, y] = cm_model.lat.split_idx(site_idx);
 
