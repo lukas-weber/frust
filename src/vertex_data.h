@@ -8,7 +8,7 @@
 
 class vertex_data {
 public:
-	static const int leg_count = 4;
+	const int leg_count{};
 
 	class transition {
 	public:
@@ -29,32 +29,32 @@ public:
 	double energy_offset{};
 
 	auto scatter(vertexcode v, int leg_in, worm_idx worm_in, double random) const;
+
 	double get_weight(vertexcode v) const;
 	int get_sign(vertexcode v) const;
-	vertexcode get_diagonal_vertex(state_idx state_i, state_idx state_j) const;
-	const std::array<state_idx, 4> &get_legstate(vertexcode v) const;
+	vertexcode get_diagonal_vertex(int compound_state_idx) const; // compound_state_idx fits right into diagonal_vertices_
+	const state_idx *get_legstate(vertexcode v) const; // [leg_count] XXX: replace by std::span or something
 	int vertex_count() const;
 	
-	// bond_hamiltonian has dimension [dim_i;dim_j;dim_i;dim_j]
-	vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamiltonian);
+	// bond_hamiltonian has dimension [dim_i, dim_j, ...; dim_i, dim_j, ...]
+	vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd& bond_hamiltonian);
 	void print() const;
 
 private:
-	int dim_j_{};
+	std::vector<int> dims_;
 	int max_worm_count_{};
 	std::vector<vertexcode>
-	    diagonal_vertices_; // [dim_i_; dim_j_]
+	    diagonal_vertices_; // [dims_[0]; dims_[1]; ...]
 	    
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
 	std::vector<transition>
 	    transitions_; // [vertex*leg_count*worm_count + worm_in*leg_count + leg_in]
 
-	std::vector<std::array<state_idx, leg_count>> legstates_;
+	std::vector<state_idx> legstates_; // [vertex; leg_count]
 
-	void construct_vertices(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamiltonian, double tolerance);
 	vertexcode wrap_vertex_idx(int vertex_idx);
-	int vertex_change_apply(int dim_i, int dim_j, int vertex, int leg_in,
+	int vertex_change_apply(int vertex, int leg_in,
 	                        worm_idx worm_in, int leg_out, worm_idx worm_out) const;
 };
 
@@ -64,8 +64,8 @@ inline int vertex_data::vertex_count() const {
 	return weights_.size();
 }
 
-inline vertexcode vertex_data::get_diagonal_vertex(state_idx state_i, state_idx state_j) const {
-	return diagonal_vertices_[state_i * dim_j_ + state_j];
+inline vertexcode vertex_data::get_diagonal_vertex(int compound_state_idx) const {
+	return diagonal_vertices_[compound_state_idx];
 }
 
 inline int vertex_data::get_sign(vertexcode v) const {
@@ -101,6 +101,6 @@ inline double vertex_data::get_weight(vertexcode v) const {
 	return weights_[v.vertex_idx()];
 }
 
-inline const std::array<state_idx, 4> &vertex_data::get_legstate(vertexcode v) const {
-	return legstates_[v.vertex_idx()];
+inline const state_idx *vertex_data::get_legstate(vertexcode v) const {
+	return &legstates_[leg_count * v.vertex_idx()];
 }
