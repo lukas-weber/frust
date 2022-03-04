@@ -1,6 +1,7 @@
 test_srcs = files([
   'test_opercode.cpp',
   'test_util.cpp',
+  'test_worms.cpp',
   '../src/basis.cpp'
 ])
 

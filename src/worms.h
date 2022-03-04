@@ -1,5 +1,7 @@
 #pragma once
 
+#include "basis.h"
+
 // Implementation of the worms. Choice is largely irrelevant as long as it is bijective in a certain sense.
 using worm_idx = int;
 
