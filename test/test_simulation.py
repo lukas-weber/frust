@@ -66,7 +66,7 @@ else:
                 r = json.load(f)
             return json.dumps([{'parameters': t['parameters'],
                 'results': {name: result for name, result in t['results'].items() if not name.startswith('_ll_')},
-                'task': t['task']} for t in r], sort_keys=True)
+                'task': os.path.basename(t['task'])} for t in r], sort_keys=True)
 
         if load_without_profiling(result_file) != load_without_profiling(args.result_file):
-            raise Exception('new and old seeded result file do not match! {} != {}'.format(result_file, args.seeded_result))
+            raise Exception('new and old seeded result file do not match! {} != {}'.format(result_file, args.result_file))
