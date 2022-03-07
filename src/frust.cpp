@@ -377,8 +377,8 @@ void frust::diagonal_update() {
 			const auto &b = data_.get_bond(bond);
 			int state_idx = 0;
 			for(int s = 0; s < data_.nlegs/2; s++) {
-				state_idx += spin_[b[s]];
 				state_idx *= data_.get_site_data(b[s]).dim;
+				state_idx += spin_[b[s]];
 			}
 
 			vertexcode newvert = data_.get_vertex_data(bond).get_diagonal_vertex(state_idx);
@@ -408,6 +408,7 @@ void frust::diagonal_update() {
 			}
 		}
 	}
+
 	assert(tmpspin == spin_);
 }
 
