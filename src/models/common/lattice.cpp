@@ -26,7 +26,7 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 				int j = Lx * uc_spin_count * ((b.j.dy + y) % Ly) +
 				        uc_spin_count * ((b.j.dx + x) % Lx) + b.j.uc;
 
-				bonds.emplace_back(lat_bond{i, j});
+				bonds.push_back({i, j});
 			}
 		}
 	}

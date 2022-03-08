@@ -29,7 +29,7 @@ static const Eigen::MatrixXd Szj = init_mat(4,4, {
 })/2;
 // clang-format on
 						
-static Eigen::MatrixXd bond_hamiltonian(const cavity_magnet::mode& mode, const cavity_magnet::bond& bond, const uc_site& si, const uc_site& sj) {
+static Eigen::MatrixXd bond_hamiltonian(const cavity_magnet::mode& mode, const cavity_magnet::bond& bond, const unitcell::site& si, const unitcell::site& sj) {
 	int dim = 4 * mode.max_bosons;
 	Eigen::MatrixXd res = Eigen::MatrixXd::Zero(dim, dim);
 

@@ -1,8 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <fmt/format.h>
-
-#include "bond.h"
+#include <cassert>
 
 class vertexcode {
 public:

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "bond.h"
 #include "opercode.h"
 #include "worms.h"
 #include <Eigen/Dense>

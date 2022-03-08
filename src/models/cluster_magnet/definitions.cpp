@@ -263,7 +263,7 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 
 	// FIXME: very messy solution of the L=1 bond cutter. The current architecture is a bit
 	// clumsy in this case.
-	std::vector<uc_bond> filtered_uc_bonds;
+	std::vector<unitcell::bond> filtered_uc_bonds;
 	std::vector<cluster_bond> filtered_cluster_bonds;
 
 	assert(proto.uc.bonds.size() == proto.bonds.size());
