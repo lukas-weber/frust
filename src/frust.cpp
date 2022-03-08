@@ -368,12 +368,12 @@ void frust::diagonal_update() {
 	auto tmpspin = spin_;
 
 	double opersize = operators_.size();
-	double p_make_bond_raw = data_.bond_count() * 1. / T_;
-	double p_remove_bond_raw = T_ / data_.bond_count();
+	double p_make_bond_raw = data_.bond_count * 1. / T_;
+	double p_remove_bond_raw = T_ / data_.bond_count;
 
 	for(auto &op : operators_) {
 		if(op.identity()) {
-			uint32_t bond = random01() * data_.bond_count();
+			uint32_t bond = random01() * data_.bond_count;
 			const auto &b = data_.get_bond(bond);
 			int state_idx = 0;
 			for(int s = 0; s < data_.nlegs/2; s++) {

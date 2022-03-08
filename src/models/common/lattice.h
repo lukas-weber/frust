@@ -27,8 +27,9 @@ struct unitcell {
 
 struct lattice {
 	struct bond {
-		int i;
-		int j;
+		int type{};
+		int i{};
+		int j{};
 	};
 	unitcell uc;
 
