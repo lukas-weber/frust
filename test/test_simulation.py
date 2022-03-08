@@ -28,7 +28,6 @@ def generate_jobconfig(num_cores, mc_binary):
 
     with open('jobconfig.yml', 'w') as f:
         yaml.dump(jobconfig, f)
-    
 
 args = parser.parse_args()
 
@@ -60,13 +59,40 @@ else:
     if args.generate:
         shutil.copy(result_file, args.generate)
     else:
+        def compare_results(a, b, tolerance_digits=25):
+            mismatch = []
+            def _compare(a, b, path):
+                if type(a) == dict:
+                    for k, v in a.items():
+                        _compare(v, b, path + [k])
+                elif type(a) == list:
+                    for i, v in enumerate(a):
+                        _compare(v, b, path + [i])
+                else:      
+                    try:
+                        for p in path:
+                            b = b[p]
+                    except (IndexError, KeyError) as e:
+                        raise Exception('{}: {}'.format('/'.join(path), e))
+                    same = False
+                    if type(a) == float and type(b) == float:
+                        same = (round(a, tolerance_digits) == round(b, tolerance_digits))
+                    else:
+                        same = (a == b)
+                    if not same:
+                        mismatch.append((path, a, b))
 
-        def load_without_profiling(filename):
+            _compare(a, b, [])
+            if len(mismatch) > 0:
+                for m in mismatch:
+                    print('{}: {} != {}'.format('/'.join([str(v) for v in m[0]]), m[1], m[2]))
+                raise Exception('seeded results do not match')
+
+        def sanitize_seeded_results(filename):
             with open(filename, 'r') as f:
                 r = json.load(f)
-            return json.dumps([{'parameters': t['parameters'],
+            return [{'parameters': t['parameters'],
                 'results': {name: result for name, result in t['results'].items() if not name.startswith('_ll_')},
-                'task': os.path.basename(t['task'])} for t in r], sort_keys=True)
-
-        if load_without_profiling(result_file) != load_without_profiling(args.result_file):
-            raise Exception('new and old seeded result file do not match! {} != {}'.format(result_file, args.result_file))
+                'task': os.path.basename(t['task'])} for t in r]
+        results_new, results_old = [sanitize_seeded_results(f) for f in [result_file, args.result_file]]
+        compare_results(results_new, results_old)
