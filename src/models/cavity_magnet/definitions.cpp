@@ -1,6 +1,5 @@
-#include "cavity_magnet_def.h"
+#include "definitions.h"
 #include "cavity_magnet.h"
-#include "basis.h"
 
 struct cavity_magnet_proto {
 	unitcell uc;

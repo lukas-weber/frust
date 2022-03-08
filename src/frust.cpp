@@ -1,7 +1,7 @@
 #include "frust.h"
 #include "models/model_def.h"
-#include "j_est.h"
-#include "mag_est.h"
+#include "models/cluster_magnet/j_est.h"
+#include "models/cluster_magnet/mag_est.h"
 #include "vertex_data.h"
 #include <algorithm>
 

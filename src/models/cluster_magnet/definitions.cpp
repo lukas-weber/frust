@@ -1,4 +1,4 @@
-#include "cluster_magnet_def.h"
+#include "definitions.h"
 #include "cluster_magnet.h"
 #include "basis.h"
 

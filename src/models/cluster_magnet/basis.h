@@ -5,13 +5,7 @@
 #include <cstdint>
 #include <vector>
 
-using state_idx = uint8_t;
-
-struct worm_function {
-	const char *name;
-	int inverse_idx;
-	std::vector<state_idx> action;
-};
+#include "worms.h"
 
 class site_basis {
 public:

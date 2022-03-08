@@ -1,7 +1,7 @@
 #pragma once
 
-#include "model.h"
-#include "util/lattice.h"
+#include "../model.h"
+#include "../common/lattice.h"
 
 class cavity_magnet : public model {
 public:
