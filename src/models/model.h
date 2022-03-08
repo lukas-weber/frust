@@ -7,7 +7,8 @@
 class model {
 public:
 	enum class model_type {
-		cluster_magnet
+		cluster_magnet,
+		cavity_magnet
 	};
 
 	model_type type;

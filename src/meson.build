@@ -7,6 +7,8 @@ frust_sources = files([
   'write_lattice.cpp',
   'models/cluster_magnet.cpp',
   'models/cluster_magnet_def.cpp',
+  'models/cavity_magnet.cpp',
+  'models/cavity_magnet_def.cpp',
   'models/model_def.cpp',
   'models/util/lattice.cpp',
 ])
