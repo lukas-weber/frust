@@ -119,8 +119,6 @@ class Model:
         return ops
         
     def observables(self, params, Ts, E, psi):
-        N = sum(s.nspinhalfs for s in self.model_data.sites)
-
         ens = hamiltonian.Ensemble(E, psi, Ts)
 
         def mag_obs(prefix, M):
