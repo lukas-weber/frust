@@ -81,7 +81,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 
 void cavity_magnet::to_json(nlohmann::json& out) const {
 	out["model"] = "cavity_magnet";
-	lat.to_json(out["lattice"]);
+	lat.to_json(out);
 	for(const auto& m : modes_) {
 		out["modes"].push_back({{"omega", m.omega}, {"coupling", m.coupling}, {"max_bosons", m.max_bosons}});
 	}
