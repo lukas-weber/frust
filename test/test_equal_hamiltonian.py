@@ -2,8 +2,8 @@
 import numpy as np
 import sys
 sys.path.append('../scripts')
-import lattice
-import ed_hamiltonian
+import model
+import ed.cluster_magnet
 from loadleveller import jobfile
 import argparse
 import shutil
@@ -41,9 +41,10 @@ H = None
 first = True
 
 for task in job.tasks.keys():
-    lat = lattice.load(job, task)
+    model_data = model.load(job, task)
+    mod = ed.cluster_magnet.Model(model_data)
 
-    Hnew,_ = ed_hamiltonian.construct(lat)
+    Hnew = mod.hamiltonian()
 
     if not first:
         if not np.allclose(Hnew.todense(), H.todense()):
