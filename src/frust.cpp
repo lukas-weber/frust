@@ -248,8 +248,8 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 				const auto &state_after0 = basis0.states[ls1[v1 % data_.nlegs]];
 				int matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
-				//				std::cout << fmt::format("{}, {} {}, {}", matidx0, state_before0.name,
-				//state_after0.name, wormfunc0) << "\n";
+				//				std::cout << fmt::format("{}, {} {}, {}", matidx0,
+				// state_before0.name, state_after0.name, wormfunc0) << "\n";
 				if(matidx0 >= 0) {
 					auto [uc, x, y] = cm_model.lat.split_idx(site_idx);
 
