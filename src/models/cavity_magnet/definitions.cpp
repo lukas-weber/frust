@@ -3,13 +3,15 @@
 
 struct cavity_magnet_proto {
 	unitcell uc;
+	std::vector<cavity_magnet::site> sites;
 	std::vector<cavity_magnet::bond> bonds;
 };
 
 static cavity_magnet_proto make_square(const loadl::parser &p) {
 	double J = p.get<double>("J");
+	int spin_dim = round(2 * p.get<double>("S", 0.5) + 1);
 
-	return {unitcells::square, {{J}, {J}}};
+	return {unitcells::square, {{spin_dim}}, {{J}, {J}}};
 }
 
 std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) {
@@ -39,5 +41,6 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 		modes.push_back({freqs[i], couplings[i], max_bosons});
 	}
 
-	return std::make_unique<cavity_magnet>(lattice{proto.uc, Lx, Ly}, modes, proto.bonds);
+	return std::make_unique<cavity_magnet>(lattice{proto.uc, Lx, Ly}, modes, proto.sites,
+	                                       proto.bonds);
 }

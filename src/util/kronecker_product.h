@@ -21,11 +21,13 @@ Eigen::MatrixXd kronecker_prod(const MatType1 &a, const MatType2 &b) {
 	return res;
 }
 
+// computes the “scalar product” for two sets of spin operators {Splus, Sz}
 template<typename MatrixIn>
-Eigen::MatrixXd scalar_product(const std::array<MatrixIn, 3> &Si,
-                               const std::array<MatrixIn, 3> &Sj) {
-	return 0.5 * (kronecker_prod(Si[0], Sj[1]) + kronecker_prod(Si[1], Sj[0])) +
-	       kronecker_prod(Si[2], Sj[2]);
+Eigen::MatrixXd scalar_product(const std::array<MatrixIn, 2> &Si,
+                               const std::array<MatrixIn, 2> &Sj) {
+	return 0.5 * (kronecker_prod(Si[0], Sj[0].transpose()) +
+	              kronecker_prod(Si[0].transpose(), Sj[0])) +
+	       kronecker_prod(Si[1], Sj[1]);
 }
 
 inline Eigen::MatrixXd init_mat(int rows, int cols, std::initializer_list<double> elems) {
