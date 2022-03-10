@@ -1,8 +1,8 @@
 #pragma once
 
-#include "sse_data.h"
 #include "cluster_magnet.h"
 #include "opercode.h"
+#include "sse_data.h"
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 
@@ -17,13 +17,13 @@ private:
 	double mag2_{};
 	double mag4_{};
 
-	const cluster_magnet& model_;
+	const cluster_magnet &model_;
 	double T_{};
 	double sign_{};
-	
+
 	double stag_sign(uint32_t idx) const {
 		double sign = 1;
-		
+
 		if(SignUC < 0) {
 			sign *= model_.get_site(idx).sublattice_sign;
 		}
@@ -52,8 +52,10 @@ private:
 		}
 		return p;
 	}
+
 public:
-	mag_est(const model &model, double T, double sign) : model_{static_cast<const cluster_magnet&>(model)}, T_{T}, sign_{sign} {}
+	mag_est(const model &model, double T, double sign)
+	    : model_{static_cast<const cluster_magnet &>(model)}, T_{T}, sign_{sign} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;

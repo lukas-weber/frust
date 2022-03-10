@@ -9,15 +9,12 @@ struct cavity_magnet_proto {
 static cavity_magnet_proto make_square(const loadl::parser &p) {
 	double J = p.get<double>("J");
 
-	return {unitcells::square,
-		{{J},
-		 {J}}};
+	return {unitcells::square, {{J}, {J}}};
 }
-
 
 std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) {
 	auto lat = p.get<std::string>("lattice");
-	
+
 	cavity_magnet_proto proto;
 	int Lx = p.get<int>("Lx");
 	int Ly = p.get<int>("Ly", Lx);
@@ -32,7 +29,9 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 	auto couplings = p.get<std::vector<double>>("mode_couplings");
 
 	if(freqs.size() != couplings.size()) {
-		throw std::runtime_error{fmt::format("mode_freqs ({}) and mode_couplings ({}) do not match in length", freqs.size(), couplings.size())};
+		throw std::runtime_error{
+		    fmt::format("mode_freqs ({}) and mode_couplings ({}) do not match in length",
+		                freqs.size(), couplings.size())};
 	}
 
 	std::vector<cavity_magnet::mode> modes;

@@ -1,9 +1,9 @@
 #include "vertex_data.h"
 
+#include <Highs.h>
 #include <fmt/format.h>
 #include <iostream>
 #include <numeric>
-#include <Highs.h>
 
 static double calc_energy_offset(const Eigen::MatrixXd &H) {
 	double hmin = H.diagonal().minCoeff();
@@ -13,18 +13,15 @@ static double calc_energy_offset(const Eigen::MatrixXd &H) {
 	return hmin - epsilon;
 }
 
-static auto construct_vertices(const std::vector<int>& dims, const Eigen::MatrixXd& H, double energy_offset,
-                                     double tolerance) {
-
+static auto construct_vertices(const std::vector<int> &dims, const Eigen::MatrixXd &H,
+                               double energy_offset, double tolerance) {
 	std::vector<vertexcode> diagonal_vertices(H.cols());
 	std::vector<double> weights;
 	std::vector<state_idx> legstates;
 	std::vector<int8_t> signs;
-	
 
 	for(int i = 0; i < H.rows(); i++) {
 		for(int j = 0; j < H.cols(); j++) {
-
 			double w = -H(i, j);
 			if(i == j) {
 				w -= energy_offset;
@@ -35,12 +32,11 @@ static auto construct_vertices(const std::vector<int>& dims, const Eigen::Matrix
 					diagonal_vertices[i] = vertexcode{true, static_cast<uint32_t>(weights.size())};
 				}
 
-
 				for(int tmp : {i, j}) {
 					std::vector<state_idx> legstate;
 
 					for(int k = 0; k < static_cast<int>(dims.size()); k++) {
-						int d = dims[dims.size()-k-1];
+						int d = dims[dims.size() - k - 1];
 						legstate.push_back(tmp % d);
 						tmp /= d;
 					}
@@ -50,7 +46,7 @@ static auto construct_vertices(const std::vector<int>& dims, const Eigen::Matrix
 
 				weights.push_back(fabs(w));
 				signs.push_back(w >= 0 ? 1 : -1);
-			}		
+			}
 		}
 	}
 
@@ -64,19 +60,19 @@ vertexcode vertex_data::wrap_vertex_idx(int vertex_idx) {
 
 	const state_idx *ls = &legstates_[leg_count * vertex_idx];
 	bool diagonal = true;
-	for(int i = 0; i < leg_count/2; i++) {
-		diagonal &= ls[i] == ls[leg_count/2 + i];
+	for(int i = 0; i < leg_count / 2; i++) {
+		diagonal &= ls[i] == ls[leg_count / 2 + i];
 	}
 	return vertexcode{diagonal, static_cast<uint32_t>(vertex_idx)};
 }
 
-int vertex_data::vertex_change_apply(int vertex,
-                                     int leg_in, worm_idx worm_in, int leg_out,
+int vertex_data::vertex_change_apply(int vertex, int leg_in, worm_idx worm_in, int leg_out,
                                      worm_idx worm_out) const {
-	std::vector<state_idx> new_legstate(&legstates_[leg_count * vertex], &legstates_[leg_count * vertex] + leg_count);
+	std::vector<state_idx> new_legstate(&legstates_[leg_count * vertex],
+	                                    &legstates_[leg_count * vertex] + leg_count);
 
-	int dim_in = dims[leg_in % (leg_count/2)];
-	int dim_out = dims[leg_out % (leg_count/2)];
+	int dim_in = dims[leg_in % (leg_count / 2)];
+	int dim_out = dims[leg_out % (leg_count / 2)];
 
 	new_legstate[leg_in] = worm_action(worm_in, new_legstate[leg_in], dim_in);
 	new_legstate[leg_out] = worm_action(worm_out, new_legstate[leg_out], dim_out);
@@ -92,15 +88,17 @@ int vertex_data::vertex_change_apply(int vertex,
 	return -1;
 }
 
-vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bond_hamiltonian) 
-	: leg_count{2 * static_cast<int>(dims.size())}, dims{dims}, max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
-
-	int dim = std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) {return a*b;});
+vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bond_hamiltonian)
+    : leg_count{2 * static_cast<int>(dims.size())}, dims{dims},
+      max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
+	assert(leg_count >= 2);
+	int dim = std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) { return a * b; });
 	assert(dim == bond_hamiltonian.cols() && dim == bond_hamiltonian.rows());
 
 	const double tolerance = 1e-10;
 	energy_offset = calc_energy_offset(bond_hamiltonian);
-	std::tie(diagonal_vertices_, weights_, legstates_, signs_) = construct_vertices(dims, bond_hamiltonian, energy_offset, tolerance);
+	std::tie(diagonal_vertices_, weights_, legstates_, signs_) =
+	    construct_vertices(dims, bond_hamiltonian, energy_offset, tolerance);
 
 	assert(legstates_.size() == leg_count * weights_.size());
 	transitions_.resize(weights_.size() * max_worm_count_ * leg_count);
@@ -111,7 +109,7 @@ vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bo
 
 	for(worm_idx worm = 0; worm < max_worm_count_; worm++) {
 		for(int leg = 0; leg < leg_count; leg++) {
-			int dim = dims[leg % (leg_count/2)];
+			int dim = dims[leg % (leg_count / 2)];
 			if(worm < worm_count(dim)) {
 				steps.push_back(worm * leg_count + leg);
 				step_idx[worm * leg_count + leg] = steps.size() - 1;
@@ -175,14 +173,13 @@ vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bo
 	model.lp_.a_matrix_.format_ = MatrixFormat::kRowwise;
 	model.lp_.a_matrix_.start_ = constraints_row_starts;
 	model.lp_.a_matrix_.index_ = constraints_col_idxs;
-	model.lp_.a_matrix_.value_ = std::vector<double>(constraints_col_idxs.size(),1);
-
+	model.lp_.a_matrix_.value_ = std::vector<double>(constraints_col_idxs.size(), 1);
 
 	for(auto &t : transitions_) {
 		t.probs.resize(leg_count * max_worm_count_, 0);
 		t.targets.resize(leg_count * max_worm_count_);
 	}
-	
+
 	std::vector<double> constraints(steps.size());
 
 	Highs highs;
@@ -195,8 +192,7 @@ vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bo
 			for(int step_out : steps) {
 				int leg_in = step_in % leg_count, leg_out = step_out % leg_count;
 				worm_idx worm_in = step_in / leg_count, worm_out = step_out / leg_count;
-				int target =
-				    vertex_change_apply(v, leg_in, worm_in, leg_out, worm_out);
+				int target = vertex_change_apply(v, leg_in, worm_in, leg_out, worm_out);
 
 				targets[step_out] = target;
 				constraints[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
@@ -210,10 +206,10 @@ vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bo
 			status = highs.run();
 			assert(status == HighsStatus::kOk);
 
-			const auto& model_status = highs.getModelStatus();
+			const auto &model_status = highs.getModelStatus();
 			assert(model_status == HighsModelStatus::kOptimal);
-			const auto& solution = highs.getSolution();
-			
+			const auto &solution = highs.getSolution();
+
 			for(size_t i = 0; i < variables.size(); i++) {
 				const auto &var = variables[i];
 				int in = var.step_in;
@@ -230,8 +226,7 @@ vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bo
 				if(targets[in] >= 0) {
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
 					    wrap_vertex_idx(targets[in_inv]);
-					double norm =
-					    constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
+					double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
 					assert(norm > 0);
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
 					    prob / norm;
@@ -244,8 +239,7 @@ vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bo
 				if(targets[in] >= 0) {
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
 					    wrap_vertex_idx(targets[in_inv]);
-					double norm =
-					    constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
+					double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
 					assert(norm > 0);
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
 					    prob / norm;
@@ -309,7 +303,6 @@ void vertex_data::print() const {
 	for(const auto &idx : idxs) {
 		const auto &ls = &legstates_[leg_count * idx];
 		std::cout << fmt::format("{}({}): [{}{} {}{}] ~ {}\n", idx, signs_[idx] > 0 ? '+' : '-',
-		                         ls[0], ls[1],
-		                         ls[2], ls[3], weights_[idx]);
+		                         ls[0], ls[1], ls[2], ls[3], weights_[idx]);
 	}
 }
