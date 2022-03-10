@@ -89,6 +89,15 @@ void cavity_magnet::to_json(nlohmann::json &out) const {
 		out["bonds"][bond_idx]["J"] = get_bond(bond_idx).J;
 		bond_idx++;
 	}
+
+	int site_idx{};
+	for(int i = 0; i < lat.Lx * lat.Ly; i++) {
+		for(int uc = 0; uc < static_cast<int>(lat.uc.sites.size()); uc++) {
+			out["sites"][site_idx]["spin_dim"] = sites_[uc].spin_dim;
+			site_idx++;
+		}
+	}
+
 	for(const auto &m : modes_) {
 		out["modes"].push_back(
 		    {{"omega", m.omega}, {"coupling", m.coupling}, {"max_bosons", m.max_bosons}});

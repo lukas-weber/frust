@@ -15,6 +15,7 @@ class Model:
             for idx in range(self.Nfull)
         ]
         self.N = len(half2full)
+        self.lifter = hamiltonian.SpinLifter([2] * self.N)
 
     def chirality_operators(self):
         j = np.exp(2j * np.pi / 3)
@@ -68,17 +69,17 @@ class Model:
         ops["NematicityCrossCorr"] = nem_cross_corr
 
         C = (
-            hamiltonian.heisen_bond(0, 1, self.N)
-            + j * hamiltonian.heisen_bond(1, 2, self.N)
-            + j**2 * hamiltonian.heisen_bond(2, 0, self.N)
+            self.lifter.heisen_bond(0, 1)
+            + j * self.lifter.heisen_bond(1, 2)
+            + j**2 * self.lifter.heisen_bond(2, 0)
         )
 
         ops["NematicityCorr"] = [
             C
             @ (
-                hamiltonian.heisen_bond(3 * i + 0, 3 * i + 1, self.N)
-                + j * hamiltonian.heisen_bond(3 * i + 1, 3 * i + 2, self.N)
-                + j**2 * hamiltonian.heisen_bond(3 * i + 2, 3 * i + 0, self.N)
+                self.lifter.heisen_bond(3 * i + 0, 3 * i + 1)
+                + j * self.lifter.heisen_bond(3 * i + 1, 3 * i + 2)
+                + j**2 * self.lifter.heisen_bond(3 * i + 2, 3 * i + 0)
             ).H
             for i in range(0, self.Nfull)
         ]
@@ -101,7 +102,7 @@ class Model:
                     )
 
                     for idx in self.full2half[i]:
-                        M += sign * hamiltonian.Sz(idx, self.N)
+                        M += sign * self.lifter.Sz(idx)
         return M / self.N
 
     def hamiltonian(self):
@@ -112,10 +113,10 @@ class Model:
             res = sps.dok_matrix((dim, dim))
             idx = 0
             for i in self.full2half[site]:
-                res += hamiltonian.Sz(i, self.N) * h
+                res += self.lifter.Sz(i) * h
                 for j in self.full2half[site]:
                     if j < i:
-                        res += Jin[idx] * hamiltonian.heisen_bond(i, j, self.N)
+                        res += Jin[idx] * self.lifter.heisen_bond(i, j)
                         idx += 1
             return res
 
@@ -125,11 +126,25 @@ class Model:
                 for spinj, j in enumerate(self.full2half[b.j]):
                     H += b.J[
                         spini * len(self.full2half[b.j]) + spinj
-                    ] * hamiltonian.heisen_bond(i, j, self.N)
+                    ] * self.lifter.heisen_bond(i, j)
 
         for idx, s in enumerate(self.model_data.sites):
             H += onsite_term(s.Jin, idx, s.h)
         return H
+
+    def l_operator(n):
+        lifter = hamiltonian.SpinLifter([2] * n)
+        S2 = sum(
+            lifter.Sa(a, i) * lifter.Sa(a, j)
+            for a in range(3)
+            for i in range(n)
+            for j in range(n)
+        ).real.todense()
+
+        w, v = np.linalg.eigh(S2)
+        assert np.allclose(v @ np.diag(w) @ v.T, S2)
+
+        return v @ np.diag(np.sqrt(w + 0.25) - 0.5) @ v.T
 
     def j_operators(self):
         dim = 2**self.N
@@ -156,7 +171,7 @@ class Model:
             ops[name] = op / len(self.model_data.sites)
 
         if all(len(s) == 3 for s in self.full2half):
-            ops["JDim"] = hamiltonian.heisen_bond(0, 1, self.N) + 0.75 * Id
+            ops["JDim"] = self.lifter.heisen_bond(0, 1) + 0.75 * Id
 
         return ops
 

@@ -7,8 +7,9 @@ class Model:
     def __init__(self, model_data):
         self.model_data = model_data
         self.boson_dimension = np.prod([m.max_bosons for m in model_data.modes])
+        self.spin_dimension = np.prod([s.spin_dim for s in model_data.sites])
         self.N = len(model_data.sites)
-        self.spin_dimension = 2**self.N
+        self.lifter = hamiltonian.SpinLifter([s.spin_dim for s in model_data.sites])
 
     def hamiltonian(self):
         boson_numbers = []
@@ -33,13 +34,12 @@ class Model:
         H = sps.dok_matrix((dim, dim))
 
         for b in self.model_data.bonds:
-            H += b.J * sps.kron(
-                boson_identity, hamiltonian.heisen_bond(b.i, b.j, self.N)
-            )
+            spin_dims = [self.model_data.sites[s].spin_dim for s in [b.i, b.j]]
+            H += b.J * sps.kron(boson_identity, self.lifter.heisen_bond(b.i, b.j))
 
         for i, s in enumerate(self.model_data.sites):
             for j, m in enumerate(self.model_data.modes):
-                H += m.coupling * sps.kron(boson_numbers[j], hamiltonian.Sz(i, self.N))
+                H += m.coupling * sps.kron(boson_numbers[j], self.lifter.Sz(i))
 
         for j, m in enumerate(self.model_data.modes):
             H += m.omega * sps.kron(boson_numbers[j], spin_identity)
