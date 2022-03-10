@@ -119,17 +119,18 @@ class Model:
         return ops
         
     def observables(self, params, Ts, E, psi):
+        N = sum(s.nspinhalfs for s in self.model_data.sites)
+
         ens = hamiltonian.Ensemble(E, psi, Ts)
 
         def mag_obs(prefix, M):
-            Mdiag = M.diagonal()
-            M2 = Mdiag*Mdiag
-            M4 = M2 * M2
+            M2 = M @ M
+            M4 = M2 @ M2
 
             obs = {}
-            obs[prefix+'Mag'] = ens.diag_mean(Mdiag)
-            obs[prefix+'Mag2'] = ens.diag_mean(M2)
-            obs[prefix+'Mag4'] = ens.diag_mean(M4)
+            obs[prefix+'Mag'] = ens.mean(M)
+            obs[prefix+'Mag2'] = ens.mean(M2)
+            obs[prefix+'Mag4'] = ens.mean(M4)
             
             obs[prefix+'BinderRatio'] = obs[prefix+'Mag2']**2/obs[prefix+'Mag4']
 
