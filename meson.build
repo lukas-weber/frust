@@ -8,7 +8,7 @@ project('frust', 'cpp',
 )
 
 loadleveller_dep = dependency('loadleveller', fallback : [ 'loadleveller', 'loadleveller_dep' ])
-eigen_dep = dependency('eigen3', fallback : ['eigen', 'eigen3_dep'])
+eigen_dep = dependency('eigen3', fallback : ['eigen', 'eigen_dep'])
 highs_dep = dependency('highs', fallback : [ 'highs', 'highs_dep' ])
 
 frust_deps = [ loadleveller_dep, eigen_dep, highs_dep]
