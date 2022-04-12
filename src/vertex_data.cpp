@@ -92,10 +92,10 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
     : leg_count{2 * static_cast<int>(dims.size())}, dims{dims},
       max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
 	assert(leg_count >= 2);
-	int dim = std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) { return a * b; });
-	assert(dim == bond_hamiltonian.cols() && dim == bond_hamiltonian.rows());
+	int total_dim = std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) { return a * b; });
+	assert(total_dim == bond_hamiltonian.cols() && total_dim == bond_hamiltonian.rows());
 
-	const double tolerance = 1e-10;
+	const double tolerance = 1e-7;
 	energy_offset = calc_energy_offset(bond_hamiltonian);
 	std::tie(diagonal_vertices_, weights_, legstates_, signs_) =
 	    construct_vertices(dims, bond_hamiltonian, energy_offset, tolerance);
@@ -184,6 +184,8 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 
 	Highs highs;
 	highs.setOptionValue("log_dev_level", kHighsLogDevLevelNone);
+	highs.setOptionValue("primal_feasibility_tolerance", 1e-10);
+	highs.setOptionValue("dual_feasibility_tolerance", 1e-10);
 	highs.setOptionValue("output_flag", false);
 	for(size_t v = 0; v < weights_.size(); v++) {
 		for(int step_in : steps) {
@@ -222,6 +224,7 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 				if(prob < tolerance) {
 					prob = 0;
 				}
+
 
 				if(targets[in] >= 0) {
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
