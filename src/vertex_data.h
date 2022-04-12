@@ -76,7 +76,7 @@ inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, dou
 	int vi = v.vertex_idx();
 	const auto &t = transitions_[vi * leg_count * max_worm_count_ + worm_in * leg_count + leg_in];
 
-	assert(worm_in < worm_count(dims[leg_in%(leg_count / 2)]));
+	assert(worm_in < worm_count(dims[leg_in % (leg_count / 2)]));
 
 	assert(!t.invalid());
 	uint32_t out;
