@@ -13,7 +13,9 @@ frust::frust(const loadl::parser &p)
 	v_first_.resize(data_.site_count);
 	v_last_.resize(data_.site_count);
 
-	data_.print();
+	if(param.get<bool>("print_vertex_data", false)) {
+		data_.print();
+	}
 }
 
 void frust::print_operators() {
