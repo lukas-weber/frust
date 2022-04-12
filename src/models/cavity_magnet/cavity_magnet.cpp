@@ -1,5 +1,6 @@
 #include "cavity_magnet.h"
 #include "../common/spinop.h"
+#include "downfolded_coupling.h"
 #include "nlohmann/json.hpp"
 #include "util/kronecker_product.h"
 
@@ -31,10 +32,6 @@ sse_data cavity_magnet::generate_sse_data() const {
 			auto spinop_i = spin_operators(spin_dim_i);
 			auto spinop_j = spin_operators(spin_dim_j);
 
-			auto spinz_i =
-			    kronecker_prod(spinop_i[1], Eigen::MatrixXd::Identity(spin_dim_j, spin_dim_j));
-			auto spinz_j =
-			    kronecker_prod(Eigen::MatrixXd::Identity(spin_dim_i, spin_dim_i), spinop_j[1]);
 
 			int n = 0;
 			for(auto &d : boson_number.diagonal()) {
@@ -42,18 +39,26 @@ sse_data cavity_magnet::generate_sse_data() const {
 				n++;
 			}
 
+			Eigen::MatrixXd exchange_photon_coupling = downfolded_coupling(m.omega, m.coupling, m.max_bosons);
+
 			Eigen::MatrixXd H =
-			    m.coupling * kronecker_prod(boson_number,
-			                                spinz_i / lat.uc.sites[site_idx_i].coordination +
-			                                    spinz_j / lat.uc.sites[site_idx_j].coordination) +
 			    b.J / modes_.size() *
-			        kronecker_prod(Eigen::MatrixXd::Identity(m.max_bosons, m.max_bosons),
+			        kronecker_prod(exchange_photon_coupling,
 			                       scalar_product(spinop_i, spinop_j)) +
 			    m.omega / lat.bonds.size() *
 			        kronecker_prod(boson_number,
 			                       Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j,
 			                                                 spin_dim_i * spin_dim_j));
 
+			/*
+			auto spinz_i =
+			    kronecker_prod(spinop_i[1], Eigen::MatrixXd::Identity(spin_dim_j, spin_dim_j));
+			auto spinz_j =
+			    kronecker_prod(Eigen::MatrixXd::Identity(spin_dim_i, spin_dim_i), spinop_j[1]);
+			H += m.coupling * kronecker_prod(boson_number,
+			                                spinz_i / lat.uc.sites[site_idx_i].coordination +
+			                                    spinz_j / lat.uc.sites[site_idx_j].coordination) +
+			*/
 			vert_data.push_back({{m.max_bosons, spin_dim_i, spin_dim_j}, H});
 		}
 		bond_idx++;
