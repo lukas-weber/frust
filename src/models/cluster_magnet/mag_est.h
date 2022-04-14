@@ -99,7 +99,7 @@ public:
 		std::string p = "Sign";
 		p += prefix();
 
-		double norm = 1. / model_.spinhalf_count;
+		double norm = 1. / model_.normalization_site_count();
 		mag_ *= norm;
 		absmag_ *= norm;
 		mag2_ *= norm * norm;
@@ -110,7 +110,8 @@ public:
 		measure.add(p + "Mag2", sign_ * mag2_ / n_);
 		measure.add(p + "Mag4", sign_ * mag4_ / n_);
 
-		double chi = 1 / T_ / (n_ + 1) / n_ * (mag_ * mag_ + mag2_) * model_.spinhalf_count;
+		double chi =
+		    1 / T_ / (n_ + 1) / n_ * (mag_ * mag_ + mag2_) * model_.normalization_site_count();
 		measure.add(p + "MagChi", sign_ * chi);
 	}
 
