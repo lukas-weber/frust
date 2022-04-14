@@ -158,13 +158,13 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		throw std::runtime_error{"not implemented"};
 	}
 	const auto &cm_model = static_cast<cluster_magnet &>(*model_);
-	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore,
-	                            const site_basis::state &safter) -> double {
+	const auto matelem_idx = [](bool switcheroo, const site_basis &basis, state_idx sbefore,
+	                            state_idx safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
 		const auto &sdown = switcheroo ? safter : sbefore;
 
-		if(sdown.j == sup.j && sdown.m == sup.m) {
-			return sup.jdim;
+		if(basis.j(sdown) == basis.j(sup) && basis.m(sdown) == basis.m(sup)) {
+			return basis.jdim(sup);
 		}
 		return -1;
 	};
@@ -237,18 +237,15 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 			int state_before_idx =
 			    worm_action(worm_inverse(wormfunc, site_out.dim), state_after_idx, site_out.dim);
 
-			const auto &state_before = model_site_out.basis.states[state_before_idx];
-			const auto &state_after = model_site_out.basis.states[state_after_idx];
-			int matidx = matelem_idx(!up, state_before, state_after);
+			int matidx = matelem_idx(!up, model_site_out.basis, state_before_idx, state_after_idx);
 
 			if(matidx >= 0 && site_idx != site0) {
 				auto op0 = operators_[v0 / data_.nlegs];
 				auto op1 = operators_[v1 / data_.nlegs];
 				const auto &ls0 = data_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
 				const auto &ls1 = data_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
-				const auto &state_before0 = basis0.states[ls0[v0 % data_.nlegs]];
-				const auto &state_after0 = basis0.states[ls1[v1 % data_.nlegs]];
-				int matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
+				int matidx0 = matelem_idx(direction0 > 0, basis0, ls0[v0 % data_.nlegs],
+				                          ls1[v1 % data_.nlegs]);
 
 				//				std::cout << fmt::format("{}, {} {}, {}", matidx0,
 				// state_before0.name, state_after0.name, wormfunc0) << "\n";

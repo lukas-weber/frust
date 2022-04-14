@@ -16,19 +16,34 @@ public:
 		double jdim{};
 	};
 
+private:
+	std::vector<state> states_;
+
+public:
 	static const uint32_t state_bits = 3; // max number of bits the state occupies
 	static const uint32_t max_size = 8;
 	static const state_idx invalid = max_size;
 
 	int nspinhalfs{};
-	std::vector<state> states;
 
 	site_basis(int nspinhalfs, const std::vector<state> &states, const Eigen::MatrixXd &trans);
 
 	int size() const;
-	double m(state_idx st) const;
-	double j(state_idx st) const;
-	char name(state_idx st) const;
+	double m(state_idx st) const {
+		return states_[st].m;
+	}
+
+	double j(state_idx st) const {
+		return states_[st].j;
+	}
+
+	char name(state_idx st) const {
+		return states_[st].name;
+	}
+
+	double jdim(state_idx st) const {
+		return states_[st].jdim;
+	}
 
 	std::array<Eigen::MatrixXd, 2> spinop(int spinhalf) const;
 
@@ -97,5 +112,5 @@ namespace site_bases {
 }
 
 inline int site_basis::size() const {
-	return states.size();
+	return states_.size();
 }

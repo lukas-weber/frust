@@ -42,8 +42,8 @@ public:
 
 		int i = 0;
 		for(auto s : spin) {
-			double j = model_.get_site(i).basis.states[s].j;
-			double jdim = model_.get_site(i).basis.states[s].jdim;
+			double j = model_.get_site(i).basis.j(s);
+			double jdim = model_.get_site(i).basis.jdim(s);
 			tmpj_ += j;
 			tmpjdim_ += jdim;
 
@@ -78,22 +78,20 @@ public:
 
 			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
-			double j20 = bi.states[leg_state[2]].j - bi.states[leg_state[0]].j;
-			double j31 = bj.states[leg_state[3]].j - bj.states[leg_state[1]].j;
+			double j20 = bi.j(leg_state[2]) - bi.j(leg_state[0]);
+			double j31 = bj.j(leg_state[3]) - bj.j(leg_state[1]);
 
 			tmpj_ += j20 + j31;
 
-			double jdim20 = bi.states[leg_state[2]].jdim - bi.states[leg_state[0]].jdim;
-			double jdim31 = bj.states[leg_state[3]].jdim - bj.states[leg_state[1]].jdim;
+			double jdim20 = bi.jdim(leg_state[2]) - bi.jdim(leg_state[0]);
+			double jdim31 = bj.jdim(leg_state[3]) - bj.jdim(leg_state[1]);
 
 			tmpjdim_ += jdim20 + jdim31;
 
-			double nem20 =
-			    (2 * bi.states[leg_state[2]].jdim - 1) * (1.5 - bi.states[leg_state[2]].j) -
-			    (2 * bi.states[leg_state[0]].jdim - 1) * (1.5 - bi.states[leg_state[0]].j);
-			double nem31 =
-			    (2 * bj.states[leg_state[3]].jdim - 1) * (1.5 - bj.states[leg_state[3]].j) -
-			    (2 * bj.states[leg_state[1]].jdim - 1) * (1.5 - bj.states[leg_state[1]].j);
+			double nem20 = (2 * bi.jdim(leg_state[2]) - 1) * (1.5 - bi.j(leg_state[2])) -
+			               (2 * bi.jdim(leg_state[0]) - 1) * (1.5 - bi.j(leg_state[0]));
+			double nem31 = (2 * bj.jdim(leg_state[3]) - 1) * (1.5 - bj.j(leg_state[3])) -
+			               (2 * bj.jdim(leg_state[1]) - 1) * (1.5 - bj.j(leg_state[1]));
 
 			tmpnemdiag_ += nem20 + nem31;
 
@@ -101,10 +99,10 @@ public:
 				// FIXME: should it not be Ly?
 				double xi = (bond.i / uc_size) % model_.lat.Lx;
 				double xj = (bond.j / uc_size) % model_.lat.Lx;
-				std::complex<double> jq20 = std::exp(1i * corrq_ * xi) *
-				                            (bi.states[leg_state[2]].j - bi.states[leg_state[0]].j);
-				std::complex<double> jq31 = std::exp(1i * corrq_ * xj) *
-				                            (bj.states[leg_state[3]].j - bj.states[leg_state[1]].j);
+				std::complex<double> jq20 =
+				    std::exp(1i * corrq_ * xi) * (bi.j(leg_state[2]) - bi.j(leg_state[0]));
+				std::complex<double> jq31 =
+				    std::exp(1i * corrq_ * xj) * (bj.j(leg_state[3]) - bj.j(leg_state[1]));
 				tmpjstruc_ += jq20 + jq31;
 				tmpjstruc2_ +=
 				    std::exp(1i * corrq_ * xi) * jq20 + std::exp(1i * corrq_ * xj) * jq31;
