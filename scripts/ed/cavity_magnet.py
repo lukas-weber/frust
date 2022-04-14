@@ -13,7 +13,6 @@ class Model:
         self.lifter = hamiltonian.SpinLifter([s.spin_dim for s in model_data.sites])
         self.boson_lifter = hamiltonian.Lifter([m.max_bosons for m in model_data.modes])
 
-
     def hamiltonian(self):
         boson_numbers = []
         dim = 1
