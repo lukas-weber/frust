@@ -19,7 +19,6 @@ struct cluster_site {
 
 	// magnetic field
 	double h{};
-	int sublattice_sign{1};
 };
 
 class cluster_magnet : public model {

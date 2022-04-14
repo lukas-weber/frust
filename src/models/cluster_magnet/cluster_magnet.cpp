@@ -102,7 +102,6 @@ void cluster_magnet::to_json(nlohmann::json &out) const {
 		site["nspinhalfs"] = s.basis.nspinhalfs;
 		site["Jin"] = s.Jin;
 		site["h"] = s.h;
-		site["sublattice_sign"] = s.sublattice_sign;
 	}
 
 	for(int i = 0; i < static_cast<int>(lat.bonds.size()); i++) {

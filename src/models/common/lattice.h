@@ -15,6 +15,7 @@ struct unitcell {
 
 	struct site {
 		vec2 pos;
+		int sublattice_sign{1};
 		int coordination{}; // filled automatically
 	};
 
@@ -39,6 +40,7 @@ struct lattice {
 
 	auto split_idx(int site_idx) const;
 	vec2 site_pos(int site_idx) const;
+	double site_sublattice_sign(int site_idx) const;
 	int site_count() const;
 	void to_json(nlohmann::json &out) const;
 
@@ -59,12 +61,21 @@ inline int lattice::site_count() const {
 	return Lx * Ly * uc.sites.size();
 }
 
+inline vec2 lattice::site_pos(int site_idx) const {
+	auto [x, y, iuc] = split_idx(site_idx);
+	return (x + uc.sites[iuc].pos[0]) * uc.a1 + (y + uc.sites[iuc].pos[1]) * uc.a2;
+}
+
+inline double lattice::site_sublattice_sign(int site_idx) const {
+	return uc.sites[site_idx % uc.sites.size()].sublattice_sign;
+}
+
 namespace unitcells {
 const unitcell square{{1, 0}, {0, 1}, {{{0, 0}}}, {{0, {1, 0, 0}}, {0, {0, 1, 0}}}};
 
 const unitcell columnar_dimer{{1, 0},
                               {0, 2},
-                              {{{0, 0}}, {{0, 0.5}}},
+                              {{{0, 0}, 1}, {{0, 0.5}, -1}},
                               {{0, {0, 0, 1}}, {0, {1, 0, 0}}, {1, {1, 0, 1}}, {1, {0, 1, 0}}}};
 
 const unitcell shastry_sutherland{{1, 0},
@@ -111,7 +122,7 @@ const unitcell kagome_trimer = triangle;
 
 const unitcell lieb_lattice{{1, 0},
                             {0, 1},
-                            {{{0, 0}}, {{0.5, 0}}, {{0, 0.5}}},
+                            {{{0, 0}, 1}, {{0.5, 0}, -1}, {{0, 0.5}, -1}},
                             {{0, {0, 0, 1}}, {0, {0, 0, 2}}, {1, {1, 0, 0}}, {2, {0, 1, 0}}}};
 
 const unitcell triangle_square{{1, 0},
