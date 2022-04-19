@@ -132,7 +132,7 @@ class Model:
             H += onsite_term(s.Jin, idx, s.h)
         return H
 
-    def l_operator(n):
+    def l_operator(self, n):
         lifter = hamiltonian.SpinLifter([2] * n)
         S2 = sum(
             lifter.Sa(a, i) * lifter.Sa(a, j)
@@ -150,7 +150,7 @@ class Model:
         dim = 2**self.N
         l_opers = {}
         for nspinhalf in set(s.nspinhalfs for s in self.model_data.sites):
-            l_opers[nspinhalf] = hamiltonian.l_operator(nspinhalf)
+            l_opers[nspinhalf] = self.l_operator(nspinhalf)
 
         ops = {}
 
