@@ -6,7 +6,14 @@
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 
-template<int SignX, int SignY, int SignUC>
+namespace mag_sign {
+constexpr uint32_t none = 0;
+constexpr uint32_t x = 1;
+constexpr uint32_t y = 2;
+constexpr uint32_t uc = 4;
+};
+
+template<uint32_t Signs, typename Model>
 class mag_est {
 private:
 	double n_{1};
@@ -17,22 +24,22 @@ private:
 	double mag2_{};
 	double mag4_{};
 
-	const cluster_magnet &model_;
+	const Model &model_;
 	double T_{};
 	double sign_{};
 
 	double stag_sign(uint32_t idx) const {
 		double sign = 1;
 
-		if(SignUC < 0) {
+		if(Signs & mag_sign::uc) {
 			sign *= model_.lat.site_sublattice_sign(idx);
 		}
 
 		idx /= model_.lat.uc.sites.size();
-		if(SignX < 0) {
+		if(Signs & mag_sign::x) {
 			sign *= 2. * ((idx % model_.lat.Lx) & 1) - 1.;
 		}
-		if(SignY < 0) {
+		if(Signs & mag_sign::y) {
 			sign *= 2. * ((idx / model_.lat.Lx) & 1) - 1.;
 		}
 
@@ -41,21 +48,20 @@ private:
 
 	const std::string prefix() const {
 		std::string p;
-		if(SignX < 0) {
+		if(Signs & mag_sign::x) {
 			p += "StagX";
 		}
-		if(SignY < 0) {
+		if(Signs & mag_sign::y) {
 			p += "StagY";
 		}
-		if(SignUC < 0) {
+		if(Signs & mag_sign::uc) {
 			p += "StagUC";
 		}
 		return p;
 	}
 
 public:
-	mag_est(const model &model, double T, double sign)
-	    : model_{static_cast<const cluster_magnet &>(model)}, T_{T}, sign_{sign} {}
+	mag_est(const Model &model, double T, double sign) : model_{model}, T_{T}, sign_{sign} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;
@@ -71,7 +77,7 @@ public:
 	}
 
 	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
-		if(SignX == 1 && SignY == 1) {
+		if(Signs & mag_sign::x && Signs & mag_sign::y) {
 			return;
 		}
 
