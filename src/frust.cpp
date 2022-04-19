@@ -1,4 +1,5 @@
 #include "frust.h"
+#include "models/cavity_magnet/cavity_magnet.h"
 #include "models/cluster_magnet/j_est.h"
 #include "models/cluster_magnet/mag_est.h"
 #include "models/model_def.h"
@@ -483,11 +484,30 @@ void frust::do_measurement() {
 		    mag_est<mag_sign::x | mag_sign::uc, M>{cm_model, T_, sign},
 		};
 
-		std::array<bool, 6> flags = {
+		std::array flags = {
 		    settings_.measure_j || settings_.measure_chirality,
 		    settings_.measure_mag,
 		    settings_.measure_sxmag,
 		    settings_.measure_symag,
+		    settings_.measure_sxsymag,
+		    settings_.measure_sxsucmag,
+		};
+
+		template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
+	}
+
+	if(model_->type == model::model_type::cavity_magnet) {
+		using M = cavity_magnet;
+		const auto &cm_model = static_cast<const M &>(*model_);
+
+		auto obs = std::tuple{
+		    mag_est<mag_sign::none, M>{cm_model, T_, sign},
+		    mag_est<mag_sign::x | mag_sign::y, M>{cm_model, T_, sign},
+		    mag_est<mag_sign::x | mag_sign::uc, M>{cm_model, T_, sign},
+		};
+
+		std::array flags = {
+		    settings_.measure_mag,
 		    settings_.measure_sxsymag,
 		    settings_.measure_sxsucmag,
 		};
@@ -651,6 +671,25 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 					              return result;
 				              });
 			}
+		}
+	}
+	if(m->type == model::model_type::cavity_magnet) {
+		using M = cavity_magnet;
+		const auto &cm = static_cast<const M &>(*m);
+		if(settings.measure_mag) {
+			mag_est<mag_sign::none, M>{cm, T, 0}.register_evalables(eval);
+		}
+
+		if(settings.measure_sxsymag) {
+			mag_est<mag_sign::x | mag_sign::y, M>{cm, T, 0}.register_evalables(eval);
+		}
+
+		if(settings.measure_sxsymag) {
+			mag_est<mag_sign::x, M>{cm, T, 0}.register_evalables(eval);
+		}
+
+		if(settings.measure_sxsucmag) {
+			mag_est<mag_sign::x | mag_sign::uc, M>{cm, T, 0}.register_evalables(eval);
 		}
 	}
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
