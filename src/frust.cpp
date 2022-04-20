@@ -1,5 +1,6 @@
 #include "frust.h"
 #include "models/cavity_magnet/cavity_magnet.h"
+#include "models/cavity_magnet/photon_est.h"
 #include "models/cluster_magnet/j_est.h"
 #include "models/common/mag_est.h"
 #include "models/model_def.h"
@@ -512,7 +513,11 @@ void frust::do_measurement() {
 		    settings_.measure_sxsucmag,
 		};
 
-		template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
+		template_select(
+		    [&](auto... vals) {
+			    opstring_measurement(photon_est{cm_model, sign}, vals...);
+		    },
+		    obs, flags);
 	}
 
 	measure.add("Sign", sign);
@@ -691,6 +696,8 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 		if(settings.measure_sxsucmag) {
 			mag_est<mag_sign::x | mag_sign::uc, M>{cm, T, 0}.register_evalables(eval);
 		}
+
+		photon_est{cm, 0}.register_evalables(eval);
 	}
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
 	eval.evaluate("SpecificHeat", {"SignNOper2", "SignNOper", "Sign"},

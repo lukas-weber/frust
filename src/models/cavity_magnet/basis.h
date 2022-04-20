@@ -28,7 +28,7 @@ public:
 	}
 
 	static cavity_basis make_mode_basis() {
-		return cavity_basis{site_type::spin, 0};
+		return cavity_basis{site_type::mode, 0};
 	}
 
 private:

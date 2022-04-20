@@ -22,6 +22,7 @@ public:
 	};
 
 	lattice lat;
+	std::vector<mode> modes;
 
 	cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
 	              const std::vector<site> &sites, const std::vector<bond> &bonds);
@@ -35,10 +36,10 @@ public:
 	}
 
 	std::optional<lattice::site_idx> get_lattice_site_idx(int abstract_site_idx) const {
-		if(abstract_site_idx < static_cast<int>(modes_.size())) {
+		if(abstract_site_idx < static_cast<int>(modes.size())) {
 			return std::nullopt;
 		}
-		return abstract_site_idx - modes_.size();
+		return abstract_site_idx - modes.size();
 	}
 
 	sse_data generate_sse_data() const override;
@@ -48,7 +49,6 @@ public:
 	}
 
 private:
-	std::vector<mode> modes_;
 	std::vector<site> sites_;
 	std::vector<bond> bonds_;
 	std::vector<cavity_basis> bases_;
