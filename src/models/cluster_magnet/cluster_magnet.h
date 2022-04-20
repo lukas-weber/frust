@@ -4,6 +4,7 @@
 #include "../model.h"
 #include "basis.h"
 #include <nlohmann/json.hpp>
+#include <optional>
 
 struct cluster_bond {
 	// bonds between individual constituent spins
@@ -33,6 +34,7 @@ public:
 	const cluster_site &get_site(int site_idx) const;
 
 	const site_basis &get_basis(int site_idx) const;
+	std::optional<lattice::site_idx> get_lattice_site_idx(int site_idx) const;
 
 	sse_data generate_sse_data() const override;
 	void to_json(nlohmann::json &out) const override;
@@ -53,6 +55,10 @@ inline const cluster_site &cluster_magnet::get_site(int site_idx) const {
 
 inline const site_basis &cluster_magnet::get_basis(int site_idx) const {
 	return sites_[site_idx % sites_.size()].basis;
+}
+
+inline std::optional<lattice::site_idx> cluster_magnet::get_lattice_site_idx(int site_idx) const {
+	return site_idx;
 }
 
 inline int cluster_magnet::normalization_site_count() const {

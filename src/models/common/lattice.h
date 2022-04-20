@@ -27,6 +27,8 @@ struct unitcell {
 };
 
 struct lattice {
+	using site_idx = int;
+
 	struct bond {
 		int type{};
 		int i{};
@@ -38,21 +40,21 @@ struct lattice {
 
 	std::vector<bond> bonds;
 
-	auto split_idx(int site_idx) const;
-	vec2 site_pos(int site_idx) const;
-	double site_sublattice_sign(int site_idx) const;
+	auto split_idx(site_idx) const;
+	vec2 site_pos(site_idx) const;
+	double site_sublattice_sign(site_idx) const;
 	int site_count() const;
 	void to_json(nlohmann::json &out) const;
 
 	lattice(const unitcell &uc, int Lx, int Ly);
 };
 
-inline auto lattice::split_idx(int site_idx) const {
-	int iuc = site_idx % uc.sites.size();
-	site_idx /= uc.sites.size();
+inline auto lattice::split_idx(site_idx i) const {
+	int iuc = i % uc.sites.size();
+	i /= uc.sites.size();
 
-	int x = site_idx % Lx;
-	int y = site_idx / Lx;
+	int x = i % Lx;
+	int y = i / Lx;
 
 	return std::tuple{iuc, x, y};
 }
@@ -61,13 +63,13 @@ inline int lattice::site_count() const {
 	return Lx * Ly * uc.sites.size();
 }
 
-inline vec2 lattice::site_pos(int site_idx) const {
-	auto [x, y, iuc] = split_idx(site_idx);
+inline vec2 lattice::site_pos(site_idx i) const {
+	auto [x, y, iuc] = split_idx(i);
 	return (x + uc.sites[iuc].pos[0]) * uc.a1 + (y + uc.sites[iuc].pos[1]) * uc.a2;
 }
 
-inline double lattice::site_sublattice_sign(int site_idx) const {
-	return uc.sites[site_idx % uc.sites.size()].sublattice_sign;
+inline double lattice::site_sublattice_sign(site_idx i) const {
+	return uc.sites[i % uc.sites.size()].sublattice_sign;
 }
 
 namespace unitcells {

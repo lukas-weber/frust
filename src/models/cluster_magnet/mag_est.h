@@ -28,7 +28,7 @@ private:
 	double T_{};
 	double sign_{};
 
-	double stag_sign(uint32_t idx) const {
+	double stag_sign(lattice::site_idx idx) const {
 		double sign = 1;
 
 		if(Signs & mag_sign::uc) {
@@ -66,8 +66,10 @@ public:
 	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;
 
-		for(uint32_t i = 0; i < spin.size(); i++) {
-			tmpmag_ += stag_sign(i) * model_.get_basis(i).m(spin[i]);
+		for(int i = 0; i < static_cast<int>(spin.size()); i++) {
+			if(auto site = model_.get_lattice_site_idx(i)) {
+				tmpmag_ += stag_sign(*site) * model_.get_basis(i).m(spin[i]);
+			}
 		}
 
 		mag_ = tmpmag_;
@@ -82,16 +84,18 @@ public:
 		}
 
 		if(!op.diagonal()) {
-			const auto &bond = model_.lat.bonds[op.bond()];
-			const auto &bi = model_.get_basis(bond.i);
-			const auto &bj = model_.get_basis(bond.j);
+			const auto &bond = data.get_bond(op.bond());
 
 			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
-			double m20 = bi.m(leg_state[2]) - bi.m(leg_state[0]);
-			double m31 = bj.m(leg_state[3]) - bj.m(leg_state[1]);
-
-			tmpmag_ += stag_sign(bond.i) * m20 + stag_sign(bond.j) * m31;
+			int leg_count = data.get_vertex_data(op.bond()).leg_count;
+			double mdiff = 0;
+			for(int l = 0; l < leg_count / 2; l++) {
+				const auto &b = model_.get_basis(bond[l]);
+				if(auto site = model_.get_lattice_site_idx(bond[l])) {
+					mdiff += stag_sign(*site) * b.m(leg_state[leg_count / 2 + l]) - b.m(l);
+				}
+			}
 		}
 
 		mag_ += tmpmag_;
