@@ -18,7 +18,7 @@ public:
 	struct mode {
 		double omega{};
 		double coupling{};
-		int max_bosons{};
+		int max_photons{};
 	};
 
 	lattice lat;

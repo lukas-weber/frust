@@ -29,7 +29,7 @@ def elem(n, m, omega, g):
     return 0.5 * (1 - 2 * ((n - m) // 2 % 2)) * np.exp(-(g**2)) * s
 
 
-def matrix(max_bosons, omega, g):
+def matrix(max_photons, omega, g):
     return np.array(
-        [[elem(n, m, omega, g) for n in range(max_bosons)] for m in range(max_bosons)]
+        [[elem(n, m, omega, g) for n in range(max_photons)] for m in range(max_photons)]
     )

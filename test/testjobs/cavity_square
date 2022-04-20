@@ -14,7 +14,7 @@ tm.Ly = 2
 tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag']
 
 tm.J = 0.1
-tm.max_bosons = 4
+tm.max_photons = 4
 tm.mode_freqs = [0.4]
 tm.mode_couplings = [0.3]
 
