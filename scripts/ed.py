@@ -61,7 +61,9 @@ def solve_task(H, num_states=0):
 
 def to_list(a):
     if type(a) == np.ndarray:
-        return a.tolist()
+        if len(a) > 1:
+            return a.tolist()
+        return a[0]
     return a
 
 
