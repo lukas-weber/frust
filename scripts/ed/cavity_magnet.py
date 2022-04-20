@@ -2,9 +2,11 @@ from . import hamiltonian
 import numpy as np
 import math
 import scipy.sparse as sps
+from . import downfolded_coupling
+from . import model_common
 
 
-class Model:
+class Model(model_common.Magnet):
     def __init__(self, model_data):
         self.model_data = model_data
         self.boson_dimension = np.prod([m.max_bosons for m in model_data.modes])
@@ -42,7 +44,10 @@ class Model:
             coupling = self.model_data.modes[0].coupling
             H += b.J * sps.kron(
                 downfolded_coupling.matrix(max_bosons, omega, coupling),
-                self.lifter.heisen_bond(b.i, b.j),
+                (
+                    self.lifter.heisen_bond(b.i, b.j)
+                    - 0.25 * sps.eye(self.spin_dimension)
+                ),
             )
 
         # for i, s in enumerate(self.model_data.sites):
@@ -61,5 +66,18 @@ class Model:
         obs["SpecificHeat"] = (
             Ts ** (-2) * (ens.diag_mean(E**2) - ens.diag_mean(E) ** 2) / self.N
         )
+
+        for name, op in self.mag_sign_cfgs.items():
+            if name in params["measure"]:
+                M = sps.kron(
+                    sps.eye(self.boson_dimension),
+                    self.signed_magnetization(lambda i: self.lifter.Sz(i), *op[1]),
+                )
+                obs.update(
+                    {
+                        op[0] + k: v
+                        for k, v in self.observables_magnetization(ens, M).items()
+                    }
+                )
 
         return obs
