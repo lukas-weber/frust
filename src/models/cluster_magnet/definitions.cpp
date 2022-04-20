@@ -230,5 +230,6 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 	proto.uc.bonds = filtered_uc_bonds;
 	proto.bonds = filtered_cluster_bonds;
 
-	return std::make_unique<cluster_magnet>(lattice{proto.uc, Lx, Ly}, proto.sites, proto.bonds);
+	return std::make_unique<cluster_magnet>(lattice{proto.uc, Lx, Ly}, proto.sites, proto.bonds,
+	                                        cluster_magnet_measurement_settings{p});
 }

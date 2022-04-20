@@ -1,8 +1,7 @@
 #include "frust.h"
 #include "models/cavity_magnet/cavity_magnet.h"
-#include "models/cavity_magnet/photon_est.h"
-#include "models/cluster_magnet/j_est.h"
-#include "models/common/mag_est.h"
+#include "models/cavity_magnet/opstring_estimators.h"
+#include "models/cluster_magnet/opstring_estimators.h"
 #include "models/model_def.h"
 #include "vertex_data.h"
 #include <algorithm>
@@ -10,7 +9,7 @@
 #include "template_selector.h"
 
 frust::frust(const loadl::parser &p)
-    : loadl::mc(p), model_{model_from_param(p)}, data_{model_->generate_sse_data()}, settings_{p} {
+    : loadl::mc(p), model_{model_from_param(p)}, data_{model_->generate_sse_data()} {
 	T_ = param.get<double>("T");
 	v_first_.resize(data_.site_count);
 	v_last_.resize(data_.site_count);
@@ -256,7 +255,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 					int idx = ((y - y0 + cm_model.lat.Ly) % cm_model.lat.Ly) * cm_model.lat.Lx +
 					          (x - x0 + cm_model.lat.Lx) % cm_model.lat.Lx;
-					if(settings_.loopcorr_as_strucfac) {
+					if(cm_model.settings.loopcorr_as_strucfac) {
 						idx = 0;
 					}
 					corr[4 * idx + 2 * matidx0 + matidx] += worm_count(dim0) * sign;
@@ -274,7 +273,9 @@ bool frust::worm_update() {
 	if(maxwormlen_ != 0) {
 		old_operators = operators_;
 	}
-	if(!is_thermalized() || !settings_.measure_chirality) {
+	if(!is_thermalized() || model_->type != model::model_type::cluster_magnet ||
+	   (model_->type == model::model_type::cluster_magnet &&
+	    !static_cast<const cluster_magnet &>(*model_).settings.measure_chirality)) {
 		double totalwormlength = 1;
 		for(int i = 0; i < nworm_; i++) {
 			int wormlength{};
@@ -300,7 +301,8 @@ bool frust::worm_update() {
 			nworm_ = std::clamp(nworm_, 1., 1. + noper_ / 2.);
 		}
 	} else {
-		int size = settings_.loopcorr_as_strucfac ? 1 : data_.site_count;
+		auto cm_model = static_cast<const cluster_magnet &>(*model_);
+		int size = cm_model.settings.loopcorr_as_strucfac ? 1 : data_.site_count;
 		std::vector<double> corr(4 * size);
 		double sign = measure_sign();
 
@@ -474,50 +476,15 @@ void frust::do_measurement() {
 	double sign = measure_sign();
 
 	if(model_->type == model::model_type::cluster_magnet) {
-		using M = cluster_magnet;
-		const auto &cm_model = static_cast<const M &>(*model_);
-		auto obs = std::tuple{
-		    j_est{*model_, sign, settings_.measure_jcorrlen},
-		    mag_est<mag_sign::none, M>{cm_model, T_, sign},
-		    mag_est<mag_sign::x, M>{cm_model, T_, sign},
-		    mag_est<mag_sign::y, M>{cm_model, T_, sign},
-		    mag_est<mag_sign::x | mag_sign::y, M>{cm_model, T_, sign},
-		    mag_est<mag_sign::x | mag_sign::uc, M>{cm_model, T_, sign},
-		};
-
-		std::array flags = {
-		    settings_.measure_j || settings_.measure_chirality,
-		    settings_.measure_mag,
-		    settings_.measure_sxmag,
-		    settings_.measure_symag,
-		    settings_.measure_sxsymag,
-		    settings_.measure_sxsucmag,
-		};
-
+		const auto &cm_model = static_cast<const cluster_magnet &>(*model_);
+		auto [obs, flags] = cluster_magnet_opstring_estimators(cm_model, T_, sign);
 		template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
 	}
 
 	if(model_->type == model::model_type::cavity_magnet) {
-		using M = cavity_magnet;
-		const auto &cm_model = static_cast<const M &>(*model_);
-
-		auto obs = std::tuple{
-		    mag_est<mag_sign::none, M>{cm_model, T_, sign},
-		    mag_est<mag_sign::x | mag_sign::y, M>{cm_model, T_, sign},
-		    mag_est<mag_sign::x | mag_sign::uc, M>{cm_model, T_, sign},
-		};
-
-		std::array flags = {
-		    settings_.measure_mag,
-		    settings_.measure_sxsymag,
-		    settings_.measure_sxsucmag,
-		};
-
-		template_select(
-		    [&](auto... vals) {
-			    opstring_measurement(photon_est{cm_model, sign}, vals...);
-		    },
-		    obs, flags);
+		const auto &cm_model = static_cast<const cavity_magnet &>(*model_);
+		auto [obs, flags] = cavity_magnet_opstring_estimators(cm_model, T_, sign);
+		template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
 	}
 
 	measure.add("Sign", sign);
@@ -563,20 +530,6 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	}
 }
 
-template<int CoeffDim0, int CoeffDim1, int CoeffM>
-static double corrfunc_matrix(const std::vector<double> &corr, int idx) {
-	double result = 0;
-	for(int jdimi = 0; jdimi < 2; jdimi++) {
-		for(int jdimj = 0; jdimj < 2; jdimj++) {
-			int matidx = 2 * jdimi + jdimj;
-			double coeff = (CoeffDim0 + (CoeffDim1 - CoeffDim0) * jdimi) *
-			               (CoeffDim0 + (CoeffDim1 - CoeffDim0) * jdimj);
-			result += coeff * corr[4 * idx + matidx];
-		}
-	}
-	return result;
-}
-
 void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	auto unsign = [](const std::vector<std::vector<double>> &obs) {
 		std::vector<double> result = obs[0];
@@ -588,117 +541,10 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	};
 
 	double T = p.get<double>("T");
-	measurement_settings settings{p};
 	std::unique_ptr<model> m = model_from_param(p);
 
-	if(m->type == model::model_type::cluster_magnet) {
-		using M = cluster_magnet;
-		const auto &cm = static_cast<const M &>(*m);
-		if(settings.measure_j || settings.measure_chirality) {
-			j_est{cm, 0, settings.measure_jcorrlen}.register_evalables(eval);
-		}
+	m->register_evalables(eval, T);
 
-		if(settings.measure_mag) {
-			mag_est<mag_sign::none, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_sxmag) {
-			mag_est<mag_sign::x, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_symag) {
-			mag_est<mag_sign::y, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_sxsymag) {
-			mag_est<mag_sign::x | mag_sign::y, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_sxsucmag) {
-			mag_est<mag_sign::x | mag_sign::uc, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_chirality) {
-			if(settings.loopcorr_as_strucfac) {
-				eval.evaluate(
-				    "NematicityStruc",
-				    {"SignJDimOffCorr", "SignChiralityOnsite", "Sign", "SignNematicityDiagStruc"},
-				    [](const std::vector<std::vector<double>> &obs) {
-					    double result =
-					        9.0 / 16.0 *
-					        (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0) + obs[3][0]) /
-					        obs[2][0];
-					    return std::vector<double>{result};
-				    });
-				eval.evaluate("TauZStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-				              [](const std::vector<std::vector<double>> &obs) {
-					              double result =
-					                  (obs[1][0] + corrfunc_matrix<-1, 1, 1>(obs[0], 0)) /
-					                  obs[2][0];
-					              return std::vector<double>{result};
-				              });
-				eval.evaluate("TauYStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-				              [](const std::vector<std::vector<double>> &obs) {
-					              double result =
-					                  (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0)) / obs[2][0];
-
-					              return std::vector<double>{result};
-				              });
-			} else {
-				eval.evaluate("NematicityOffCorr",
-				              {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-				              [](const std::vector<std::vector<double>> &obs) {
-					              std::vector<double> result(obs[0].size() / 4, 0);
-					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-						              result[i] = 9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) /
-						                          obs[2][0];
-					              }
-					              result[0] += 9.0 / 16.0 * obs[1][0] / obs[2][0];
-					              return result;
-				              });
-				eval.evaluate("TauZ", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-				              [](const std::vector<std::vector<double>> &obs) {
-					              std::vector<double> result(obs[0].size() / 4, 0);
-					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-						              result[i] = corrfunc_matrix<-1, 1, 1>(obs[0], i) / obs[2][0];
-					              }
-					              result[0] += obs[1][0] / obs[2][0];
-					              return result;
-				              });
-				eval.evaluate("TauY", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-				              [](const std::vector<std::vector<double>> &obs) {
-					              std::vector<double> result(obs[0].size() / 4, 0);
-					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-						              result[i] = corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
-					              }
-					              result[0] += obs[1][0] / obs[2][0];
-
-					              return result;
-				              });
-			}
-		}
-	}
-	if(m->type == model::model_type::cavity_magnet) {
-		using M = cavity_magnet;
-		const auto &cm = static_cast<const M &>(*m);
-		if(settings.measure_mag) {
-			mag_est<mag_sign::none, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_sxsymag) {
-			mag_est<mag_sign::x | mag_sign::y, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_sxsymag) {
-			mag_est<mag_sign::x, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		if(settings.measure_sxsucmag) {
-			mag_est<mag_sign::x | mag_sign::uc, M>{cm, T, 0}.register_evalables(eval);
-		}
-
-		photon_est{cm, 0}.register_evalables(eval);
-	}
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
 	eval.evaluate("SpecificHeat", {"SignNOper2", "SignNOper", "Sign"},
 	              [&](const std::vector<std::vector<double>> &obs) {

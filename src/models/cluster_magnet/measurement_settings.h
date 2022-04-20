@@ -3,8 +3,8 @@
 #include <fmt/format.h>
 #include <loadleveller/parser.h>
 
-struct measurement_settings {
-	measurement_settings(const loadl::parser &p) {
+struct cluster_magnet_measurement_settings {
+	cluster_magnet_measurement_settings(const loadl::parser &p) {
 		for(const auto &obs : p.get<std::vector<std::string>>("measure")) {
 			if(obs == "j") {
 				measure_j = true;

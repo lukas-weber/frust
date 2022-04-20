@@ -1,6 +1,6 @@
 #pragma once
 
-#include "models/cavity_magnet/cavity_magnet.h"
+#include "cavity_magnet.h"
 #include "opercode.h"
 #include "sse_data.h"
 #include <loadleveller/evalable.h>

@@ -1,12 +1,16 @@
 #include "cavity_magnet.h"
+#include "../common/mag_est.h"
 #include "../common/spinop.h"
 #include "downfolded_coupling.h"
 #include "nlohmann/json.hpp"
+#include "photon_est.h"
 #include "util/kronecker_product.h"
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
-                             const std::vector<site> &sites, const std::vector<bond> &bonds)
-    : model{model_type::cavity_magnet}, lat{lat}, modes{modes}, sites_{sites}, bonds_{bonds} {
+                             const std::vector<site> &sites, const std::vector<bond> &bonds,
+                             const cavity_magnet_measurement_settings &settings)
+    : model{model_type::cavity_magnet}, lat{lat}, modes{modes}, settings{settings}, sites_{sites},
+      bonds_{bonds} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
 	for(const auto &m : modes) {
@@ -115,4 +119,25 @@ void cavity_magnet::to_json(nlohmann::json &out) const {
 		out["modes"].push_back(
 		    {{"omega", m.omega}, {"coupling", m.coupling}, {"max_photons", m.max_photons}});
 	}
+}
+
+void cavity_magnet::register_evalables(loadl::evaluator &eval, double T) const {
+	using M = cavity_magnet;
+	if(settings.measure_mag) {
+		mag_est<mag_sign::none, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxsymag) {
+		mag_est<mag_sign::x | mag_sign::y, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxsymag) {
+		mag_est<mag_sign::x, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxsucmag) {
+		mag_est<mag_sign::x | mag_sign::uc, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	photon_est{*this, 0}.register_evalables(eval);
 }

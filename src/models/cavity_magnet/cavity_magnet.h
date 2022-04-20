@@ -3,6 +3,7 @@
 #include "../common/lattice.h"
 #include "../model.h"
 #include "basis.h"
+#include "measurement_settings.h"
 #include <optional>
 
 class cavity_magnet : public model {
@@ -23,9 +24,11 @@ public:
 
 	lattice lat;
 	std::vector<mode> modes;
+	cavity_magnet_measurement_settings settings;
 
 	cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
-	              const std::vector<site> &sites, const std::vector<bond> &bonds);
+	              const std::vector<site> &sites, const std::vector<bond> &bonds,
+	              const cavity_magnet_measurement_settings &settings);
 
 	const bond &get_bond(int bond_idx) const {
 		return bonds_[bond_idx % bonds_.size()];
@@ -41,6 +44,8 @@ public:
 		}
 		return abstract_site_idx - modes.size();
 	}
+
+	void register_evalables(loadl::evaluator &eval, double T) const override;
 
 	sse_data generate_sse_data() const override;
 	void to_json(nlohmann::json &out) const override;
