@@ -8,15 +8,18 @@ tm.sweeps = 50000
 tm.thermalization = 10000
 tm.binsize = 1000
 tm.lattice = 'square'
+tm.cavity = 'polarized'
 tm.Lx = 4
 tm.Ly = 2
 
 tm.measure = ['mag', 'sxsymag']
 
 tm.J = 0.9
+
 tm.max_photons = 4
-tm.mode_freqs = [0.4]
-tm.mode_couplings = [0.3]
+tm.omega = 0.4
+tm.g = 0.3
+tm.phi = 0.3
 
 tm.ed_compare = 1
 tm.ed_num_states = 0

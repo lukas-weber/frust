@@ -14,11 +14,11 @@ public:
 
 	struct bond {
 		double J{1};
+		std::vector<double> mode_couplings;
 	};
 
 	struct mode {
 		double omega{};
-		double coupling{};
 		int max_photons{};
 	};
 

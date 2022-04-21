@@ -32,6 +32,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 
 	int bond_idx{};
 	for(const auto &b : bonds_) {
+		int mode_idx{};
 		for(const auto &m : modes) {
 			Eigen::MatrixXd photon_number = Eigen::MatrixXd::Zero(m.max_photons, m.max_photons);
 
@@ -51,7 +52,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 			}
 
 			Eigen::MatrixXd exchange_photon_coupling =
-			    downfolded_coupling(m.omega, m.coupling, m.max_photons);
+			    downfolded_coupling(m.omega, b.mode_couplings[mode_idx], m.max_photons);
 
 			Eigen::MatrixXd spin_identity =
 			    Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
@@ -72,6 +73,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 			                                    spinz_j / lat.uc.sites[site_idx_j].coordination) +
 			*/
 			vert_data.push_back({{m.max_photons, spin_dim_i, spin_dim_j}, H});
+			mode_idx++;
 		}
 		bond_idx++;
 	}
@@ -104,6 +106,7 @@ void cavity_magnet::to_json(nlohmann::json &out) const {
 	for(const auto &b : lat.bonds) {
 		(void)b;
 		out["bonds"][bond_idx]["J"] = get_bond(bond_idx).J;
+		out["bonds"][bond_idx]["mode_couplings"] = get_bond(bond_idx).mode_couplings;
 		bond_idx++;
 	}
 
@@ -116,8 +119,7 @@ void cavity_magnet::to_json(nlohmann::json &out) const {
 	}
 
 	for(const auto &m : modes) {
-		out["modes"].push_back(
-		    {{"omega", m.omega}, {"coupling", m.coupling}, {"max_photons", m.max_photons}});
+		out["modes"].push_back({{"omega", m.omega}, {"max_photons", m.max_photons}});
 	}
 }
 
