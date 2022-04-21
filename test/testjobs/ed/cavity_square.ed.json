@@ -1,218 +1,248 @@
 [
  {
   "parameters": {
-   "T": 0.1,
+   "T": 0.05,
    "model": "cavity_magnet",
    "sweeps": 50000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.5499947546498632,
-   "SpecificHeat": 0.0006222752382711859
+   "Energy": -1.2362833208030082,
+   "SpecificHeat": 0.0542668824969894,
+   "Mag": 2.8838230845624547e-25,
+   "Mag2": 5.384015170467157e-13,
+   "Mag4": 8.412523703854933e-15,
+   "BinderRatio": 3.445769709098981e-11,
+   "MagChi": 8.614424272747454e-11,
+   "PhotonNum": 0.447097164709858,
+   "PhotonNum2": 0.9012169545790113,
+   "PhotonNumVar": 0.7013210798874174,
+   "StagXStagYMag": 7.66886049968349e-17,
+   "StagXStagYMag2": 0.10518579030336857,
+   "StagXStagYMag4": 0.021102295683683697,
+   "StagXStagYBinderRatio": 0.5243055375391671,
+   "StagXStagYMagChi": 1.353458251498408
   }
  },
  {
   "parameters": {
-   "T": 0.25,
+   "T": 0.20833333333333331,
    "model": "cavity_magnet",
    "sweeps": 50000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.5418550151037053,
-   "SpecificHeat": 0.1672529730929142
+   "Energy": -1.2290036319727753,
+   "SpecificHeat": 0.07457862306892367,
+   "Mag": 8.176196551204065e-18,
+   "Mag2": 8.055704407823026e-05,
+   "Mag4": 1.259401052687709e-06,
+   "BinderRatio": 0.005152796511304097,
+   "MagChi": 0.0030933904926040436,
+   "PhotonNum": 0.792484848268197,
+   "PhotonNum2": 1.624348030720749,
+   "PhotonNumVar": 0.9963157959860818,
+   "StagXStagYMag": 4.7668437418565116e-17,
+   "StagXStagYMag2": 0.1057232456785824,
+   "StagXStagYMag4": 0.021240215572812908,
+   "StagXStagYBinderRatio": 0.5262378170549629,
+   "StagXStagYMagChi": 1.347946841381676
   }
  },
  {
   "parameters": {
-   "T": 0.4,
+   "T": 0.36666666666666664,
    "model": "cavity_magnet",
    "sweeps": 50000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.488903791340298,
-   "SpecificHeat": 0.5541608756543595
+   "Energy": -1.2048911427469273,
+   "SpecificHeat": 0.2338928285161014,
+   "Mag": 4.657390756444281e-17,
+   "Mag2": 0.0010538755685819269,
+   "Mag4": 1.7139878598261442e-05,
+   "BinderRatio": 0.06479939211276194,
+   "MagChi": 0.022993648769060255,
+   "PhotonNum": 0.9290766425336239,
+   "PhotonNum2": 1.9351130591428205,
+   "PhotonNumVar": 1.0719296514412693,
+   "StagXStagYMag": 3.182705931646899e-17,
+   "StagXStagYMag2": 0.10520797791514534,
+   "StagXStagYMag4": 0.020988726492160752,
+   "StagXStagYBinderRatio": 0.5273649461832691,
+   "StagXStagYMagChi": 1.2338875276852777
   }
  },
  {
   "parameters": {
-   "T": 0.5499999999999999,
+   "T": 0.525,
    "model": "cavity_magnet",
    "sweeps": 50000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.3794064543484465,
-   "SpecificHeat": 0.8489987732536372
+   "Energy": -1.1546831297361273,
+   "SpecificHeat": 0.39677353951434885,
+   "Mag": 6.497441507621968e-17,
+   "Mag2": 0.0030247129686879312,
+   "Mag4": 5.767841207379536e-05,
+   "BinderRatio": 0.15861893928778095,
+   "MagChi": 0.04609086428476848,
+   "PhotonNum": 1.0250036429689995,
+   "PhotonNum2": 2.173487782577033,
+   "PhotonNumVar": 1.122855314477313,
+   "StagXStagYMag": 1.8691346143637606e-17,
+   "StagXStagYMag2": 0.1019726641906176,
+   "StagXStagYMag4": 0.019876417242329646,
+   "StagXStagYBinderRatio": 0.5231538518917557,
+   "StagXStagYMagChi": 1.0331824095620061
   }
  },
  {
   "parameters": {
-   "T": 0.7,
+   "T": 0.6833333333333333,
    "model": "cavity_magnet",
    "sweeps": 50000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.25592251652735815,
-   "SpecificHeat": 0.7440898008697048
+   "Energy": -1.0827334583688235,
+   "SpecificHeat": 0.4956226670634778,
+   "Mag": 5.276718799862752e-17,
+   "Mag2": 0.005470548110321025,
+   "Mag4": 0.00013033571385683606,
+   "BinderRatio": 0.22961393881809997,
+   "MagChi": 0.0640454412915632,
+   "PhotonNum": 1.0919510751580335,
+   "PhotonNum2": 2.3471076845449055,
+   "PhotonNumVar": 1.1547505340061202,
+   "StagXStagYMag": 1.0644328962046034e-17,
+   "StagXStagYMag2": 0.09523258973409492,
+   "StagXStagYMag4": 0.017790781145934915,
+   "StagXStagYBinderRatio": 0.5097722282719839,
+   "StagXStagYMagChi": 0.8269513622419473
   }
  },
  {
   "parameters": {
-   "T": 0.85,
+   "T": 0.8416666666666667,
    "model": "cavity_magnet",
    "sweeps": 50000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.16211903711844738,
-   "SpecificHeat": 0.5103564055613221
+   "Energy": -1.0029358449825072,
+   "SpecificHeat": 0.4987258465659842,
+   "Mag": 3.8284195149999867e-17,
+   "Mag2": 0.007948239175323002,
+   "Mag4": 0.00023276159240096048,
+   "BinderRatio": 0.2714129308726906,
+   "MagChi": 0.07554761988425826,
+   "PhotonNum": 1.1413034962644373,
+   "PhotonNum2": 2.478286339303504,
+   "PhotonNumVar": 1.1757126687180757,
+   "StagXStagYMag": 6.525163579443264e-18,
+   "StagXStagYMag2": 0.0868618972587904,
+   "StagXStagYMag4": 0.015356457936843523,
+   "StagXStagYBinderRatio": 0.4913235347908302,
+   "StagXStagYMagChi": 0.6538850146041827
   }
  },
  {
@@ -223,32 +253,37 @@
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "square",
+   "cavity": "polarized",
    "Lx": 4,
    "Ly": 2,
    "measure": [
-    "j",
-    "jcorrlen",
     "mag",
-    "sxmag",
-    "symag",
     "sxsymag"
    ],
-   "J": 0.1,
-   "max_bosons": 4,
-   "mode_freqs": [
-    0.4,
-    0.4
-   ],
-   "mode_couplings": [
-    0.5,
-    -0.5
-   ],
+   "J": 0.9,
+   "max_photons": 4,
+   "omega": 0.4,
+   "g": 0.3,
+   "phi": 0.3,
    "ed_compare": 1,
    "ed_num_states": 0
   },
   "results": {
-   "Energy": -0.09940564929296541,
-   "SpecificHeat": 0.3388176302497573
+   "Energy": -0.9277505162090809,
+   "SpecificHeat": 0.44570580123710535,
+   "Mag": 2.4387772617345815e-17,
+   "Mag2": 0.010208032953628168,
+   "Mag4": 0.0003529981581777243,
+   "BinderRatio": 0.2951968285621903,
+   "MagChi": 0.0816642636290254,
+   "PhotonNum": 1.1801362600527903,
+   "PhotonNum2": 2.5833273169645428,
+   "PhotonNumVar": 1.1906057246731558,
+   "StagXStagYMag": 4.5177999145672106e-18,
+   "StagXStagYMag2": 0.07880515045350817,
+   "StagXStagYMag4": 0.013133345058584323,
+   "StagXStagYBinderRatio": 0.47286138529809385,
+   "StagXStagYMagChi": 0.5218710185297579
   }
  }
 ]
