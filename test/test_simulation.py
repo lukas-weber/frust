@@ -49,7 +49,7 @@ if not args.seeded:
     if args.generate:
         subprocess.run(['../../scripts/ed.py', jobname, '-o', args.generate], check=True) 
     else:
-        subprocess.run(['loadl', 'run', jobname, '-r'], check=True)
+        subprocess.run(['loadl', 'run', jobname, '-rs'], check=True)
         subprocess.run(['../../scripts/ed_compare.py', args.result_file, jobname + '.results.json', '--cli'], check=True)
 else:
     seeded_job = args.testjob + '_seeded'
