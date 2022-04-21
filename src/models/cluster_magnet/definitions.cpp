@@ -10,8 +10,9 @@ struct cluster_magnet_proto {
 
 static cluster_magnet_proto make_square(const loadl::parser &p) {
 	double J = p.get<double>("J");
+	double Jy = p.get<double>("Jy", J);
 
-	return {unitcells::square, {{{}, site_bases::spin}}, {{{J}}, {{J}}}};
+	return {unitcells::square, {{{}, site_bases::spin}}, {{{J}}, {{Jy}}}};
 }
 
 static cluster_magnet_proto make_bilayer(const loadl::parser &p) {
