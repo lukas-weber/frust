@@ -47,7 +47,7 @@ private:
 
 	bool worm_too_long(int wormlen) const;
 	int worm_traverse();
-	std::optional<int32_t> find_worm_measure_start(int site0, int32_t &p0, int direction0) const;
+	std::optional<int> find_worm_measure_start(int site0, int &p0, int direction0) const;
 	int worm_traverse_measure(double &sign, std::vector<double> &corr);
 	bool worm_update();
 
@@ -59,7 +59,7 @@ private:
 	void print_operators();
 
 	// temporary vertex list stuff
-	std::vector<int32_t> vertices_;
+	std::vector<int> vertices_;
 	std::vector<int> v_first_;
 	std::vector<int> v_last_;
 };

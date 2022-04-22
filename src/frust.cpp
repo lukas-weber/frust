@@ -74,53 +74,65 @@ bool frust::worm_too_long(int wormlen) const {
 		return false;
 }
 
+// trick 17: avoid idivs by pulling this kind of hinting trick. These were significant in
+// benchmarks.
+inline void hint_leg_count(int nlegs, const std::function<void(int)> &func) {
+	if(nlegs == 4) {
+		func(4);
+	} else if(nlegs == 6) {
+		func(6);
+	} else {
+		assert(false);
+		__builtin_unreachable();
+	}
+}
+
 int frust::worm_traverse() {
 	if(noper_ == 0) {
 		return 0;
 	}
 
 	int wormlength{1};
+	hint_leg_count(data_.nlegs, [&](int nlegs) {
+		int v0{};
+		do {
+			v0 = vertices_.size() * random01();
+		} while(vertices_[v0] < 0);
 
-	int32_t v0{};
-	do {
-		v0 = vertices_.size() * random01();
-	} while(vertices_[v0] < 0);
+		auto op0 = operators_[v0 / nlegs];
+		int site0 = data_.get_bond(op0.bond())[v0 % (nlegs / 2)];
+		int wormfunc0 = random01() * worm_count(data_.get_site_data(site0).dim);
 
-	auto op0 = operators_[v0 / data_.nlegs];
-	int site0 = data_.get_bond(op0.bond())[v0 % (data_.nlegs / 2)];
-	int wormfunc0 = random01() * worm_count(data_.get_site_data(site0).dim);
+		int v = v0;
+		int wormfunc = wormfunc0;
 
-	int32_t v = v0;
-	int wormfunc = wormfunc0;
+		do {
+			auto &op = operators_[v / nlegs];
+			assert(!op.vertex().invalid());
+			int leg_in = v % nlegs;
+			const auto [leg_out, wormfunc_out, new_vertex] =
+			    data_.get_vertex_data(op.bond()).scatter(op.vertex(), leg_in, wormfunc, random01());
 
-	do {
-		auto &op = operators_[v / data_.nlegs];
-		assert(!op.vertex().invalid());
-		int leg_in = v % data_.nlegs;
-		const auto [leg_out, wormfunc_out, new_vertex] =
-		    data_.get_vertex_data(op.bond()).scatter(op.vertex(), leg_in, wormfunc, random01());
+			op = opercode{op.bond(), new_vertex};
 
-		op = opercode{op.bond(), new_vertex};
+			int vstep = nlegs * (v / nlegs) + leg_out;
+			const auto &site_out =
+			    data_.get_site_data(data_.get_bond(op.bond())[leg_out % (nlegs / 2)]);
+			if((vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim)) ||
+			   worm_too_long(wormlength)) {
+				break;
+			}
+			wormlength++;
 
-		int32_t vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
-		const auto &site_out =
-		    data_.get_site_data(data_.get_bond(op.bond())[leg_out % (data_.nlegs / 2)]);
-		if((vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim)) ||
-		   worm_too_long(wormlength)) {
-			break;
-		}
-		wormlength++;
-
-		wormfunc = wormfunc_out;
-		v = vertices_[vstep];
-		assert(vertices_[vstep] != -1);
-	} while((v != v0 || wormfunc != wormfunc0) && !(worm_too_long(wormlength)));
-
+			wormfunc = wormfunc_out;
+			v = vertices_[vstep];
+			assert(vertices_[vstep] != -1);
+		} while((v != v0 || wormfunc != wormfunc0) && !(worm_too_long(wormlength)));
+	});
 	return wormlength;
 }
 
-std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
-                                                      int direction0) const {
+std::optional<int> frust::find_worm_measure_start(int site0, int &p0, int direction0) const {
 	int opsize = operators_.size();
 
 	if(v_first_[site0] < 0) {
@@ -178,7 +190,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		return wormlength;
 	}
 
-	int32_t p0 = operators_.size() * random01();
+	int p0 = operators_.size() * random01();
 	int site0 = data_.site_count * random01();
 	int direction0 = 1 - 2 * (random01() > 0.5);
 
@@ -186,15 +198,15 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	if(!v0opt) {
 		return wormlength;
 	}
-	int32_t v0 = *v0opt;
-	int32_t v1 = vertices_[v0];
+	int v0 = *v0opt;
+	int v1 = vertices_[v0];
 	auto [uc0, x0, y0] = cm_model.lat.split_idx(site0);
 
 	const auto &basis0 = cm_model.get_site(site0).basis;
 	int dim0 = data_.get_site_data(site0).dim;
 	int wormfunc0 = random01() * worm_count(dim0);
 
-	int32_t v = v0;
+	int v = v0;
 	int wormfunc = wormfunc0;
 
 	do {
@@ -210,7 +222,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		op = opercode{op.bond(), new_vertex};
 
-		int32_t vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
+		int vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
 		int site_idx = data_.get_bond(op.bond())[leg_out % (data_.nlegs / 2)];
 
 		const auto &site_out = data_.get_site_data(site_idx);
@@ -223,7 +235,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		}
 
 		wormfunc = wormfunc_out;
-		int32_t vnext = vertices_[vstep];
+		int vnext = vertices_[vstep];
 
 		assert(vnext != -1);
 
@@ -320,7 +332,7 @@ bool frust::worm_update() {
 		if(v_first_[i] < 0) {
 			spin_[i] = data_.get_site_data(i).dim * random01();
 		} else {
-			int32_t v = v_first_[i];
+			int v = v_first_[i];
 			auto op = operators_[v / data_.nlegs];
 			int leg = v % data_.nlegs;
 			const auto &leg_state = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());

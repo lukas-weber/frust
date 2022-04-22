@@ -88,12 +88,20 @@ inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, dou
 
 	assert(out < t.probs.size());
 
-	int leg = out % leg_count;
-	worm_idx worm_out = out / leg_count;
-
 	assert(!t.targets[out].invalid());
 
-	return std::tuple{leg, worm_out, t.targets[out]};
+	if(leg_count == 4) {
+		int leg = out % leg_count;
+		worm_idx worm_out = out / leg_count;
+		return std::tuple{leg, worm_out, t.targets[out]};
+	}
+	if(leg_count == 6) {
+		int leg = out % leg_count;
+		worm_idx worm_out = out / leg_count;
+		return std::tuple{leg, worm_out, t.targets[out]};
+	}
+	assert(false);
+	__builtin_unreachable();
 }
 
 inline double vertex_data::get_weight(vertexcode v) const {
