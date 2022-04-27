@@ -27,7 +27,7 @@ public:
 	cavity_magnet_measurement_settings settings;
 
 	cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
-	              const std::vector<site> &sites, const std::vector<bond> &bonds,
+	              const std::vector<site> &sites, const std::vector<bond> &bonds, double U,
 	              const cavity_magnet_measurement_settings &settings);
 
 	const bond &get_bond(int bond_idx) const {
@@ -57,4 +57,6 @@ private:
 	std::vector<site> sites_;
 	std::vector<bond> bonds_;
 	std::vector<cavity_basis> bases_;
+
+	double U_{}; // Hubbard interaction
 };

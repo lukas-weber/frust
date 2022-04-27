@@ -20,12 +20,15 @@ def disp_op(n, m, g):
 
 @numba.jit(nopython=True, parallel=True)
 def elem(n, m, omega, g):
+    if (n + m) % 2 != 0:
+        return 0
     s = 0
 
-    for l in prange(2 * min(n, m) + 20):
+    for l in prange(2 * min(n, m) + 40):
         s += (disp_op(n, l, g) * np.conj(disp_op(l, m, g))).real * (
             1 / (1 + omega * (l - m)) + 1 / (1 + omega * (l - n))
         )
+
     return 0.5 * (1 - 2 * ((n - m) // 2 % 2)) * np.exp(-(g**2)) * s
 
 

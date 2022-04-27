@@ -62,10 +62,12 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 	int Lx = p.get<int>("Lx");
 	int Ly = p.get<int>("Ly", Lx);
 
+	double U = p.get<double>("U");
+
 	if(lat == "square") {
 		proto = make_square(p);
 	}
 
 	return std::make_unique<cavity_magnet>(lattice{proto.uc, Lx, Ly}, modes, proto.sites,
-	                                       proto.bonds, cavity_magnet_measurement_settings{p});
+	                                       proto.bonds, U, cavity_magnet_measurement_settings{p});
 }
