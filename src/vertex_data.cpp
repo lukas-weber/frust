@@ -88,6 +88,21 @@ int vertex_data::vertex_change_apply(int vertex, int leg_in, worm_idx worm_in, i
 	return -1;
 }
 
+void print_lp_proplem(const HighsModel &model) {
+	std::cout << fmt::format("constraints = [{}]\n", fmt::join(model.lp_.row_lower_.begin(),
+	                                                           model.lp_.row_lower_.end(), ", "));
+	std::cout << fmt::format(
+	    "cost = [{}]\n", fmt::join(model.lp_.col_cost_.begin(), model.lp_.col_cost_.end(), ", "));
+	std::cout << fmt::format(
+	    "row_starts = [{}]\n",
+	    fmt::join(model.lp_.a_matrix_.start_.begin(), model.lp_.a_matrix_.start_.end(), ", "));
+	std::cout << fmt::format(
+	    "col_index = [{}]\n",
+	    fmt::join(model.lp_.a_matrix_.index_.begin(), model.lp_.a_matrix_.index_.end(), ", "));
+	std::cout << fmt::format("values = [{}]\n", fmt::join(model.lp_.a_matrix_.value_.begin(),
+	                                                      model.lp_.a_matrix_.value_.end(), ", "));
+}
+
 vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bond_hamiltonian)
     : leg_count{2 * static_cast<int>(dims.size())}, dims{dims},
       max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
