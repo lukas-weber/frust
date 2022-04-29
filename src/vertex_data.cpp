@@ -188,65 +188,82 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 	highs.setOptionValue("primal_feasibility_tolerance", 1e-10);
 	highs.setOptionValue("dual_feasibility_tolerance", 1e-10);
 	highs.setOptionValue("output_flag", false);
-	for(size_t v = 0; v < weights_.size(); v++) {
-		for(int step_in : steps) {
-			std::vector<int> targets(leg_count * max_worm_count_);
+	while(true) {
+		int v = -1;
+		int step_in = -1;
 
-			for(int step_out : steps) {
-				int leg_in = step_in % leg_count, leg_out = step_out % leg_count;
-				worm_idx worm_in = step_in / leg_count, worm_out = step_out / leg_count;
-				int target = vertex_change_apply(v, leg_in, worm_in, leg_out, worm_out);
+		for(int empty_v = 0; v == -1 && empty_v < static_cast<int>(weights_.size()); empty_v++) {
+			for(int empty_step_in : steps) {
+				if(transitions_[empty_v * leg_count * max_worm_count_ + empty_step_in]
+				       .targets[empty_step_in]
+				       .invalid()) {
+					v = empty_v;
+					step_in = empty_step_in;
+					break;
+				}
+			}
+		}
 
-				targets[step_out] = target;
-				constraints[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
+		if(v == -1) { // all transitions calculated
+			break;
+		}
+
+		std::vector<int> targets(leg_count * max_worm_count_);
+
+		for(int step_out : steps) {
+			int leg_in = step_in % leg_count, leg_out = step_out % leg_count;
+			worm_idx worm_in = step_in / leg_count, worm_out = step_out / leg_count;
+			int target = vertex_change_apply(v, leg_in, worm_in, leg_out, worm_out);
+
+			targets[step_out] = target;
+			constraints[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
+		}
+
+		model.lp_.row_lower_ = constraints;
+		model.lp_.row_upper_ = constraints;
+
+		HighsStatus status = highs.passModel(model);
+		assert(status == HighsStatus::kOk);
+		status = highs.run();
+		assert(status == HighsStatus::kOk);
+
+		const auto &model_status = highs.getModelStatus();
+		assert(model_status == HighsModelStatus::kOptimal);
+		const auto &solution = highs.getSolution();
+
+		for(size_t i = 0; i < variables.size(); i++) {
+			const auto &var = variables[i];
+			int in = var.step_in;
+			int out = var.step_out;
+			int in_inv = var.inverse().step_in;
+
+			double prob = solution.col_value[i];
+
+			assert(prob >= -tolerance);
+			if(prob < tolerance) {
+				prob = 0;
 			}
 
-			model.lp_.row_lower_ = constraints;
-			model.lp_.row_upper_ = constraints;
+			if(targets[in] >= 0) {
+				transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
+				    wrap_vertex_idx(targets[in_inv]);
+				double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
+				assert(norm > 0);
+				transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
+				    prob / norm;
+			}
 
-			HighsStatus status = highs.passModel(model);
-			assert(status == HighsStatus::kOk);
-			status = highs.run();
-			assert(status == HighsStatus::kOk);
+			in = var.inverse().step_in;
+			out = var.inverse().step_out;
+			in_inv = var.step_in;
 
-			const auto &model_status = highs.getModelStatus();
-			assert(model_status == HighsModelStatus::kOptimal);
-			const auto &solution = highs.getSolution();
-
-			for(size_t i = 0; i < variables.size(); i++) {
-				const auto &var = variables[i];
-				int in = var.step_in;
-				int out = var.step_out;
-				int in_inv = var.inverse().step_in;
-
-				double prob = solution.col_value[i];
-
-				assert(prob >= -tolerance);
-				if(prob < tolerance) {
-					prob = 0;
-				}
-
-				if(targets[in] >= 0) {
-					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
-					    wrap_vertex_idx(targets[in_inv]);
-					double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
-					assert(norm > 0);
-					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
-					    prob / norm;
-				}
-
-				in = var.inverse().step_in;
-				out = var.inverse().step_out;
-				in_inv = var.step_in;
-
-				if(targets[in] >= 0) {
-					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
-					    wrap_vertex_idx(targets[in_inv]);
-					double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
-					assert(norm > 0);
-					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
-					    prob / norm;
-				}
+			if(targets[in] >= 0) {
+				transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
+				    wrap_vertex_idx(targets[in_inv]);
+				double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
+				assert(norm > 0);
+				transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
+				    prob / norm;
 			}
 		}
 	}
