@@ -178,9 +178,9 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 	model.lp_.col_upper_ = std::vector<double>(variables.size(), 1e30);
 	std::vector<int> constraints_row_starts = {0};
 	std::vector<int> constraints_col_idxs;
-	for(int step_out : steps) {
+	for(int step : steps) {
 		for(size_t i = 0; i < variables.size(); i++) {
-			if(variables[i].step_in == step_out || variables[i].inverse().step_in == step_out) {
+			if(variables[i].step_in == step || variables[i].inverse().step_in == step) {
 				constraints_col_idxs.push_back(i);
 			}
 		}
