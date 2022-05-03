@@ -255,9 +255,6 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 			double prob = solution.col_value[i];
 
 			assert(prob >= -tolerance);
-			if(prob < tolerance) {
-				prob = 0;
-			}
 
 			if(targets[in] >= 0) {
 				transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
@@ -285,22 +282,13 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 
 	for(auto &t : transitions_) {
 		int idx{};
-		double norm{};
 		for(auto &p : t.probs) {
 			if(p > 0 && t.targets[idx].invalid()) {
 				t.print();
 				throw std::runtime_error{
 				    fmt::format("it is possible to reach an invalid vertex with p={}", p)};
 			}
-			norm += p;
 			idx++;
-		}
-		if(norm > 0) {
-			assert(fabs(norm - 1) <
-			       1e-7); // as long as the norm is not completely off, renormalize.
-			for(auto &p : t.probs) {
-				p /= norm;
-			}
 		}
 
 		std::partial_sum(t.probs.begin(), t.probs.end(), t.probs.begin());
