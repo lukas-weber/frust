@@ -39,10 +39,10 @@ public:
 	}
 
 	std::optional<lattice::site_idx> get_lattice_site_idx(int abstract_site_idx) const {
-		if(abstract_site_idx < static_cast<int>(modes.size())) {
+		if(abstract_site_idx == 0) {
 			return std::nullopt;
 		}
-		return abstract_site_idx - modes.size();
+		return abstract_site_idx - 1;
 	}
 
 	void register_evalables(loadl::evaluator &eval, double T) const override;

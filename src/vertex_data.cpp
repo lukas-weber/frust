@@ -332,7 +332,8 @@ void vertex_data::print() const {
 
 	for(const auto &idx : idxs) {
 		const auto &ls = &legstates_[leg_count * idx];
-		std::cout << fmt::format("{}({}): [{}{} {}{}] ~ {}\n", idx, signs_[idx] > 0 ? '+' : '-',
-		                         ls[0], ls[1], ls[2], ls[3], weights_[idx]);
+		std::cout << fmt::format("{}({}): [{} {}] ~ {}\n", idx, signs_[idx] > 0 ? '+' : '-',
+		                         fmt::join(ls, ls + leg_count / 2, ","),
+		                         fmt::join(ls + leg_count / 2, ls + leg_count, ","), weights_[idx]);
 	}
 }

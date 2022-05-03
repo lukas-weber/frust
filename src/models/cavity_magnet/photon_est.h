@@ -6,7 +6,6 @@
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 
-#include <iostream>
 class photon_est {
 private:
 	double n_{1};
@@ -24,34 +23,33 @@ public:
 	      num2_(model.modes.size()), sign_{sign}, model_{model} {}
 
 	void init(const std::vector<state_idx> &state) {
-		std::fill(tmpnum_.begin(), tmpnum_.end(), 0);
-
 		for(int m = 0; m < static_cast<int>(model_.modes.size()); m++) {
-			tmpnum_[m] = model_.get_basis(m).n(state[m]);
+			tmpnum_[m] = model_.get_basis(0).n(state[0], m);
 			num_[m] = tmpnum_[m];
 			num2_[m] = tmpnum_[m] * tmpnum_[m];
 		}
 	}
 
 	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
-		if(!op.diagonal()) {
-			const auto &bond = data.get_bond(op.bond());
+		const auto &bond = data.get_bond(op.bond());
+		if(false && !op.diagonal() && bond[0] == 0) {
 			int leg_count = data.get_vertex_data(op.bond()).leg_count;
+			// photon spin coupling. assumed to be the only offdiagonal photon operator now.
+			assert(leg_count == 6);
 
 			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
-			// photon spin coupling. assumed to be the only offdiagonal photon operator now.
-			if(leg_count == 6) {
-				const auto &b = model_.get_basis(bond[0]);
-				tmpnum_[bond[0]] += b.n(leg_state[leg_count / 2]) - b.n(leg_state[0]);
+			const auto &b = model_.get_basis(bond[0]);
+			for(int m = 0; m < static_cast<int>(model_.modes.size()); m++) {
+				tmpnum_[m] += b.n(leg_state[leg_count / 2], m) - b.n(leg_state[0], m);
 			}
 		}
 
 		for(int m = 0; m < static_cast<int>(model_.modes.size()); m++) {
 			num_[m] += tmpnum_[m];
 			num2_[m] += tmpnum_[m] * tmpnum_[m];
-			n_++;
 		}
+		n_++;
 	}
 
 	void result(loadl::measurements &measure) {
@@ -73,7 +71,7 @@ public:
 			std::vector<double> res(obs[0].size());
 			int i{};
 			for(auto &r : res) {
-				r = obs[0][i] / obs[1][i];
+				r = obs[0][i] / obs[1][0];
 				i++;
 			}
 			return res;

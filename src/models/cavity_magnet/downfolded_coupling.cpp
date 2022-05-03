@@ -62,8 +62,8 @@ double J(int n, int m, const std::vector<downfolded_coupling_params> &modes,
 }
 
 Eigen::MatrixXd downfolded_coupling(const std::vector<downfolded_coupling_params> &modes) {
-	int photon_dim = std::accumulate(modes.begin(), modes.end(), 1,
-	                                 [](int a, const auto &m) { return a * m.max_photons; });
+	int photon_dim = std::transform_reduce(modes.begin(), modes.end(), 1, std::multiplies(),
+	                                       [](const auto &m) { return m.max_photons; });
 
 	Eigen::MatrixXd coupling(photon_dim, photon_dim);
 	for(int m = 0; m < photon_dim; m++) {
