@@ -12,6 +12,7 @@ auto cavity_magnet_opstring_estimators(const cavity_magnet &cm, double T, double
 	    mag_est<mag_sign::none, M>{cm, T, sign},
 	    mag_est<mag_sign::x | mag_sign::y, M>{cm, T, sign},
 	    mag_est<mag_sign::x | mag_sign::uc, M>{cm, T, sign},
+	    mag_est<mag_sign::uc, M>{cm, T, sign},
 	};
 
 	std::array flags = {
@@ -19,6 +20,7 @@ auto cavity_magnet_opstring_estimators(const cavity_magnet &cm, double T, double
 	    cm.settings.measure_mag,
 	    cm.settings.measure_sxsymag,
 	    cm.settings.measure_sxsucmag,
+	    cm.settings.measure_sucmag,
 	};
 
 	return std::make_tuple(obs, flags);

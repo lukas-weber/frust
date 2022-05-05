@@ -139,5 +139,9 @@ void cavity_magnet::register_evalables(loadl::evaluator &eval, double T) const {
 		mag_est<mag_sign::x | mag_sign::uc, M>{*this, T, 0}.register_evalables(eval);
 	}
 
+	if(settings.measure_sucmag) {
+		mag_est<mag_sign::uc, M>{*this, T, 0}.register_evalables(eval);
+	}
+
 	photon_est{*this, 0}.register_evalables(eval);
 }
