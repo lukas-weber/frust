@@ -4,7 +4,7 @@ import numpy as np
 
 tm = taskmaker.TaskMaker(__file__, 'jobconfig.yml')
 tm.model = 'cavity_magnet'
-tm.sweeps = 50000
+tm.sweeps = 200000
 tm.thermalization = 10000
 tm.binsize = 1000
 tm.lattice = 'honeycomb'
@@ -12,7 +12,7 @@ tm.cavity = 'polarized'
 tm.Lx = 2
 tm.Ly = 2
 
-tm.measure = ['mag', 'sxsymag']
+tm.measure = ['mag', 'sucmag', 'sxsymag']
 
 tm.J = 0.9
 tm.U = 10*tm.J
