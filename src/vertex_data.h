@@ -9,21 +9,14 @@ class vertex_data {
 public:
 	const int leg_count{};
 
-	class transition {
-	public:
+	struct transition {
 		bool invalid() const {
-			return probs[probs.size() - 1] < 1 - 1e-7;
-		}
-		void print() const;
+			return offset < 0;
+		};
 
-	private:
-		std::vector<double> probs;
-		std::vector<vertexcode> targets;
-
-		friend vertex_data;
+		int offset{-1};
+		int length{0};
 	};
-
-	static const transition invalid_transition;
 
 	double energy_offset{};
 	const std::vector<int> dims;
@@ -48,8 +41,13 @@ private:
 
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
+
 	std::vector<transition>
 	    transitions_; // [vertex*leg_count*worm_count + worm_in*leg_count + leg_in]
+	// the transition probabilities are stored in a dense array indexed by transition::offset
+	std::vector<double> transition_cumprobs_;
+	std::vector<vertexcode> transition_targets_;
+	std::vector<std::pair<int, int>> transition_step_outs_; // (leg, worm)
 
 	std::vector<state_idx> legstates_; // [vertex; leg_count]
 
@@ -57,8 +55,6 @@ private:
 	int vertex_change_apply(int vertex, int leg_in, worm_idx worm_in, int leg_out,
 	                        worm_idx worm_out) const;
 };
-
-inline const vertex_data::transition invalid_transition{};
 
 inline int vertex_data::vertex_count() const {
 	return weights_.size();
@@ -79,29 +75,17 @@ inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, dou
 	assert(worm_in < worm_count(dims[leg_in % (leg_count / 2)]));
 
 	assert(!t.invalid());
-	uint32_t out;
-	for(out = 0; out < t.probs.size(); out++) {
-		if(random < t.probs[out]) {
+	int out;
+	for(out = 0; out < t.length; out++) {
+		if(random < transition_cumprobs_[t.offset + out]) {
 			break;
 		}
 	}
 
-	assert(out < t.probs.size());
+	assert(out < t.length);
 
-	assert(!t.targets[out].invalid());
-
-	if(leg_count == 4) {
-		int leg = out % leg_count;
-		worm_idx worm_out = out / leg_count;
-		return std::tuple{leg, worm_out, t.targets[out]};
-	}
-	if(leg_count == 6) {
-		int leg = out % leg_count;
-		worm_idx worm_out = out / leg_count;
-		return std::tuple{leg, worm_out, t.targets[out]};
-	}
-	assert(false);
-	__builtin_unreachable();
+	auto [leg_out, worm_out] = transition_step_outs_[t.offset + out];
+	return std::tuple{leg_out, worm_out, transition_targets_[t.offset + out]};
 }
 
 inline double vertex_data::get_weight(vertexcode v) const {

@@ -118,6 +118,9 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 
 	assert(legstates_.size() == leg_count * weights_.size());
 	transitions_.resize(weights_.size() * max_worm_count_ * leg_count);
+	transition_cumprobs_.reserve(transitions_.size() * 5); // assume sparseness
+	transition_targets_.reserve(transition_cumprobs_.size());
+	transition_step_outs_.reserve(transition_cumprobs_.size());
 
 	std::vector<int> steps;
 	std::vector<int> inv_steps(leg_count * max_worm_count_);
@@ -191,11 +194,6 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 	model.lp_.a_matrix_.index_ = constraints_col_idxs;
 	model.lp_.a_matrix_.value_ = std::vector<double>(constraints_col_idxs.size(), 1);
 
-	for(auto &t : transitions_) {
-		t.probs.resize(leg_count * max_worm_count_, 0);
-		t.targets.resize(leg_count * max_worm_count_);
-	}
-
 	std::vector<double> constraints(steps.size());
 
 	Highs highs;
@@ -209,9 +207,7 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 
 		for(int empty_v = 0; v == -1 && empty_v < static_cast<int>(weights_.size()); empty_v++) {
 			for(int empty_step_in : steps) {
-				if(transitions_[empty_v * leg_count * max_worm_count_ + empty_step_in]
-				       .targets[empty_step_in]
-				       .invalid()) {
+				if(transitions_[empty_v * leg_count * max_worm_count_ + empty_step_in].invalid()) {
 					v = empty_v;
 					step_in = empty_step_in;
 					break;
@@ -246,76 +242,57 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 		assert(model_status == HighsModelStatus::kOptimal);
 		const auto &solution = highs.getSolution();
 
-		for(size_t i = 0; i < variables.size(); i++) {
-			const auto &var = variables[i];
-			int in = var.step_in;
-			int out = var.step_out;
-			int in_inv = var.inverse().step_in;
-
-			double prob = solution.col_value[i];
-
-			assert(prob >= -tolerance);
-
+		for(int in : steps) {
 			if(targets[in] >= 0) {
-				transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
-				    wrap_vertex_idx(targets[in_inv]);
 				double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
-				assert(norm > 0);
-				transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
-				    prob / norm;
-			}
+				auto &trans = transitions_[targets[in] * leg_count * max_worm_count_ + in];
+				trans.offset = transition_cumprobs_.size();
+				for(int out : steps) {
+					auto var = std::find_if(variables.begin(), variables.end(), [&](const auto &v) {
+						return (v.step_in == in && v.step_out == out) ||
+						       (v.inverse().step_in == in && v.inverse().step_out == out);
+					});
+					assert(var != variables.end());
+					int i = var - variables.begin();
 
-			in = var.inverse().step_in;
-			out = var.inverse().step_out;
-			in_inv = var.step_in;
-
-			if(targets[in] >= 0) {
-				transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
-				    wrap_vertex_idx(targets[in_inv]);
-				double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
-				assert(norm > 0);
-				transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
-				    prob / norm;
+					double prob = solution.col_value[i] / norm;
+					assert(prob >= -tolerance);
+					if(prob > tolerance) {
+						transition_cumprobs_.push_back(prob);
+						int in_inv = var->step_in == in ? var->inverse().step_in : var->step_in;
+						transition_targets_.push_back(wrap_vertex_idx(targets[in_inv]));
+						transition_step_outs_.push_back(
+						    std::pair{out % leg_count, out / leg_count});
+						assert(!transition_targets_.back().invalid());
+						trans.length++;
+					}
+				}
 			}
 		}
 	}
 
 	for(auto &t : transitions_) {
-		int idx{};
-		for(auto &p : t.probs) {
-			if(p > 0 && t.targets[idx].invalid()) {
-				t.print();
-				throw std::runtime_error{
-				    fmt::format("it is possible to reach an invalid vertex with p={}", p)};
-			}
-			idx++;
-		}
-
-		std::partial_sum(t.probs.begin(), t.probs.end(), t.probs.begin());
+		auto prob_begin = transition_cumprobs_.begin() + t.offset;
+		std::partial_sum(prob_begin, prob_begin + t.length, prob_begin);
 	}
-}
-
-void vertex_data::transition::print() const {
-	auto tmp = probs;
-	for(size_t i = 1; i < probs.size(); i++) {
-		tmp[i] = probs[i] - probs[i - 1];
-		if(tmp[i] > -1e-8) {
-			tmp[i] = fabs(tmp[i]);
-		}
-	}
-	std::vector<int> codes;
-	for(const auto &t : targets) {
-		codes.push_back(t.invalid() ? -1 : t.vertex_idx());
-	}
-	std::cout << fmt::format("{:.2f}|{:2d}\n", fmt::join(probs.begin(), probs.end(), " "),
-	                         fmt::join(codes.begin(), codes.end(), " "));
 }
 
 void vertex_data::print() const {
 	for(size_t v = 0; v < weights_.size(); v++) {
 		for(int in = 0; in < max_worm_count_ * leg_count; in++) {
 			const auto &trans = transitions_[v * max_worm_count_ * leg_count + in];
-			trans.print();
+			std::vector<double> probs(trans.length);
+			std::vector<int> targets(trans.length);
+
+			std::adjacent_difference(transition_cumprobs_.begin() + trans.offset,
+			                         transition_cumprobs_.begin() + trans.offset + trans.length,
+			                         probs.begin());
+			std::transform(transition_targets_.begin() + trans.offset,
+			               transition_targets_.begin() + trans.offset + trans.length,
+			               targets.begin(), [](const auto &vc) { return vc.vertex_idx(); });
+
+			std::cout << fmt::format("{:.2f}|{:2d}\n", fmt::join(probs.begin(), probs.end(), " "),
+			                         fmt::join(targets.begin(), targets.end(), " "));
 		}
 		std::cout << "\n";
 	}
