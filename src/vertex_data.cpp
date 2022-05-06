@@ -88,7 +88,7 @@ int vertex_data::vertex_change_apply(int vertex, int leg_in, worm_idx worm_in, i
 	return -1;
 }
 
-void print_lp_proplem(const HighsModel &model) {
+void print_lp_problem(const HighsModel &model) {
 	std::cout << fmt::format("constraints = [{}]\n", fmt::join(model.lp_.row_lower_.begin(),
 	                                                           model.lp_.row_lower_.end(), ", "));
 	std::cout << fmt::format(
