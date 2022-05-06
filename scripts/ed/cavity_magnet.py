@@ -80,23 +80,20 @@ class Model(model_common.Magnet):
                     }
                 )
 
-                photon_numbers = [
-                    sps.kron(op, sps.eye(self.spin_dimension))
-                    for op in self.photon_number_ops()
-                ]
+        photon_numbers = [
+            sps.kron(op, sps.eye(self.spin_dimension))
+            for op in self.photon_number_ops()
+        ]
 
-                obs["PhotonNum"] = np.array(
-                    [
-                        ens.mean(photon_numbers[m])
-                        for m in range(len(self.model_data.modes))
-                    ]
-                ).T
-                obs["PhotonNum2"] = np.array(
-                    [
-                        ens.mean(photon_numbers[m] @ photon_numbers[m])
-                        for m in range(len(self.model_data.modes))
-                    ]
-                ).T
-                obs["PhotonNumVar"] = obs["PhotonNum2"] - obs["PhotonNum"] ** 2
+        obs["PhotonNum"] = np.array(
+            [ens.mean(photon_numbers[m]) for m in range(len(self.model_data.modes))]
+        ).T
+        obs["PhotonNum2"] = np.array(
+            [
+                ens.mean(photon_numbers[m] @ photon_numbers[m])
+                for m in range(len(self.model_data.modes))
+            ]
+        ).T
+        obs["PhotonNumVar"] = obs["PhotonNum2"] - obs["PhotonNum"] ** 2
 
         return obs
