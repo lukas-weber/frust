@@ -76,13 +76,11 @@ inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, dou
 
 	assert(!t.invalid());
 	int out;
-	for(out = 0; out < t.length; out++) {
+	for(out = 0; out < t.length - 1; out++) {
 		if(random < transition_cumprobs_[t.offset + out]) {
 			break;
 		}
 	}
-
-	assert(out < t.length);
 
 	auto [leg_out, worm_out] = transition_step_outs_[t.offset + out];
 	return std::tuple{leg_out, worm_out, transition_targets_[t.offset + out]};
