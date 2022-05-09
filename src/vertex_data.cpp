@@ -111,7 +111,9 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 	    std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) { return a * b; });
 	assert(total_dim == bond_hamiltonian.cols() && total_dim == bond_hamiltonian.rows());
 
+	bool used_inaccurate_truncations = false;
 	const double tolerance = 1e-7;
+	const double lp_tolerance = 1e-10;
 	energy_offset = calc_energy_offset(bond_hamiltonian);
 	std::tie(diagonal_vertices_, weights_, legstates_, signs_) =
 	    construct_vertices(dims, bond_hamiltonian, energy_offset, tolerance);
@@ -198,8 +200,8 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 
 	Highs highs;
 	highs.setOptionValue("log_dev_level", kHighsLogDevLevelNone);
-	highs.setOptionValue("primal_feasibility_tolerance", 1e-10);
-	highs.setOptionValue("dual_feasibility_tolerance", 1e-10);
+	highs.setOptionValue("primal_feasibility_tolerance", lp_tolerance);
+	highs.setOptionValue("dual_feasibility_tolerance", lp_tolerance);
 	highs.setOptionValue("output_flag", false);
 	while(true) {
 		int v = -1;
@@ -229,6 +231,8 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 			targets[step_out] = target;
 			constraints[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
 		}
+		model.lp_.col_upper_ = std::vector<double>(
+		    variables.size(), *std::max_element(constraints.begin(), constraints.end()));
 
 		model.lp_.row_lower_ = constraints;
 		model.lp_.row_upper_ = constraints;
@@ -256,8 +260,17 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 					int i = var - variables.begin();
 
 					double prob = solution.col_value[i] / norm;
-					assert(prob >= -tolerance);
-					assert(prob <= 1 + tolerance);
+
+					assert(solution.col_value[i] >= -lp_tolerance);
+					if(prob < 0) {
+						used_inaccurate_truncations = prob < -tolerance;
+						prob = 0;
+					}
+					assert(solution.col_value[i] <= norm + lp_tolerance);
+					if(prob > 1) {
+						used_inaccurate_truncations = prob > 1 + tolerance;
+						prob = 1;
+					}
 					if(prob > tolerance / steps.size()) {
 						transition_cumprobs_.push_back(prob);
 						int in_inv = var->step_in == in ? var->inverse().step_in : var->step_in;
@@ -277,6 +290,10 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 				}
 			}
 		}
+	}
+
+	if(used_inaccurate_truncations) {
+		std::cout << "WARNING: had to truncate some probabilities in a possibly inaccurate way!\n";
 	}
 }
 
