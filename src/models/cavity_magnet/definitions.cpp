@@ -52,23 +52,20 @@ struct cavity_magnet_proto {
 
 static cavity_magnet_proto make_square(const loadl::parser &p) {
 	double J = p.get<double>("J");
+	double Jx = p.get<double>("Jx", J);
 	int spin_dim = round(2 * p.get<double>("S", 0.5) + 1);
-
-	std::vector<double> mode_coupling_x;
-	std::vector<double> mode_coupling_y;
 
 	const unitcell uc = unitcells::square;
 	auto mode_couplings = make_cavity(uc, p);
 
-	return {unitcells::square, {{spin_dim}}, {{J, mode_couplings[0]}, {J, mode_couplings[1]}}};
+	return {unitcells::square, {{spin_dim}}, {{Jx, mode_couplings[0]}, {J, mode_couplings[1]}}};
 }
 
 static cavity_magnet_proto make_honeycomb(const loadl::parser &p) {
 	double J = p.get<double>("J");
+	double Jx = p.get<double>("Jx", J);
 	int spin_dim = round(2 * p.get<double>("S", 0.5) + 1);
 
-	std::vector<double> mode_coupling_x;
-	std::vector<double> mode_coupling_y;
 	const auto &uc = unitcells::honeycomb;
 
 	std::vector<std::vector<double>> mode_couplings = make_cavity(uc, p);
@@ -78,6 +75,7 @@ static cavity_magnet_proto make_honeycomb(const loadl::parser &p) {
 	               [J](const auto &mc) {
 		               return cavity_magnet::bond{J, mc};
 	               });
+	bonds[0].J = Jx;
 
 	return {unitcells::honeycomb, {{spin_dim}, {spin_dim}}, bonds};
 }
