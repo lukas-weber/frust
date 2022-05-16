@@ -26,7 +26,7 @@ public:
 	frust(const loadl::parser &p);
 
 private:
-	static constexpr int dump_version_ = 2;
+	static constexpr int dump_version_ = 3;
 	double T_{};
 
 	int maxwormlen_{0};

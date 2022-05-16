@@ -509,7 +509,7 @@ void frust::do_measurement() {
 }
 
 void frust::checkpoint_write(const loadl::iodump::group &out) {
-	std::vector<unsigned int> saveops(operators_.size());
+	std::vector<opercode_uint> saveops(operators_.size());
 	std::transform(operators_.begin(), operators_.end(), saveops.begin(),
 	               [](opercode op) { return op.code(); });
 
@@ -522,7 +522,7 @@ void frust::checkpoint_write(const loadl::iodump::group &out) {
 }
 
 void frust::checkpoint_read(const loadl::iodump::group &in) {
-	std::vector<unsigned int> saveops;
+	std::vector<opercode_uint> saveops;
 
 	in.read("noper", noper_);
 	in.read("avgwormlen", avgwormlen_);

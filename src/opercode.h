@@ -3,26 +3,29 @@
 #include <cstdint>
 #include <fmt/format.h>
 
+using opercode_uint = uint64_t;
+
 class vertexcode {
 public:
-	static const uint64_t maxbits = 8 * 3 + 1;
+	static const opercode_uint maxbits = 8 * 3 + 1;
 	bool diagonal() const {
 		return code_ & 1L;
 	}
 
 	vertexcode() = default;
 
-	explicit vertexcode(bool diagonal, uint64_t vertex_idx) : code_{diagonal | (vertex_idx << 1)} {
+	explicit vertexcode(bool diagonal, opercode_uint vertex_idx)
+	    : code_{diagonal | (vertex_idx << 1)} {
 		assert(!invalid());
 	}
 
-	explicit vertexcode(uint64_t code) : code_{code} {}
+	explicit vertexcode(opercode_uint code) : code_{code} {}
 
-	uint64_t vertex_idx() const {
+	opercode_uint vertex_idx() const {
 		return code_ >> 1L;
 	}
 
-	uint64_t code() const {
+	opercode_uint code() const {
 		return code_;
 	}
 
@@ -31,34 +34,34 @@ public:
 	}
 
 private:
-	uint64_t code_{(1L << maxbits) + 1L};
+	opercode_uint code_{(1L << maxbits) + 1L};
 };
 
 class opercode {
 public:
 	static opercode make_identity();
 
-	uint64_t code() const;
+	opercode_uint code() const;
 	vertexcode vertex() const;
-	uint64_t bond() const;
+	opercode_uint bond() const;
 
 	bool identity() const;
 	bool diagonal() const;
 
 	opercode() = default;
-	explicit opercode(uint64_t code) : code_{code} {}
-	explicit opercode(uint64_t bond, vertexcode vertex);
+	explicit opercode(opercode_uint code) : code_{code} {}
+	explicit opercode(opercode_uint bond, vertexcode vertex);
 
 private:
-	uint64_t code_{};
+	opercode_uint code_{};
 };
 
 inline opercode opercode::make_identity() {
 	return opercode{0};
 }
 
-inline opercode::opercode(uint64_t bond, vertexcode vertex) {
-	uint64_t v = vertex.code();
+inline opercode::opercode(opercode_uint bond, vertexcode vertex) {
+	opercode_uint v = vertex.code();
 
 	assert(v < (1L << vertexcode::maxbits));
 	assert(bond < (1L << (8L * sizeof(code_) - vertexcode::maxbits - 1L)));
@@ -66,11 +69,11 @@ inline opercode::opercode(uint64_t bond, vertexcode vertex) {
 	code_ = 1L | v << 1L | bond << (1L + vertexcode::maxbits);
 }
 
-inline uint64_t opercode::code() const {
+inline opercode_uint opercode::code() const {
 	return code_;
 }
 
-inline uint64_t opercode::bond() const {
+inline opercode_uint opercode::bond() const {
 	return code_ >> (1L + vertexcode::maxbits);
 }
 
