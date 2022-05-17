@@ -1,11 +1,8 @@
 import math
 import numpy as np
-import numba
-from numba import prange
 import itertools
 
 
-@numba.jit(nopython=True)
 def disp_op(n, m, g) -> float:
     s = 0
     for k in range(min(n, m) + 1):
