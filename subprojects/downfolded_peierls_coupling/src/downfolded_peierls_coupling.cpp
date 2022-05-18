@@ -1,4 +1,4 @@
-#include "downfolded_coupling.h"
+#include "downfolded_peierls_coupling.h"
 #include "occupation_numbers.h"
 #include <Eigen/Dense>
 #include <cmath>
@@ -6,9 +6,9 @@
 #include <numeric>
 
 using cmplx = std::complex<double>;
-using namespace std::complex_literals;
 
 static cmplx dispOp(int n, int l, double g) {
+	using namespace std::complex_literals;
 	if(g == 0) {
 		return n == l;
 	}
@@ -28,7 +28,7 @@ double J(int n, int m, const std::vector<downfolded_coupling_params> &modes,
          double tolerance = 1e-12) {
 	double sum = 0;
 	double term = 0;
-	int lmax = -log(tolerance); // convergence should be exponential, at least for g < 1
+	int lmax = 1.1 * std::max(n, m) - log(tolerance);
 
 	std::vector<int> mode_dims(modes.size());
 	std::transform(modes.begin(), modes.end(), mode_dims.begin(),

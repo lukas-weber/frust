@@ -1,0 +1,29 @@
+[build-system]
+requires  = [
+    "meson",
+    "mesonpep517",
+]
+
+build-backend = "mesonpep517.buildapi"
+
+[tool.mesonpep517.metadata]
+author="Lukas Weber"
+author-email="lukas.weber@mpsd.mpg.de"
+#home-page="https://github.com/..."
+#module="mc_lib"
+summary = "Calculate the downfolded Peierls coupling in the Heisenberg model."
+requires-python="py3"
+description-file="README.md"
+platforms="any"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires = [
+    "numpy",
+    "cppyy",
+]
+meson-options = [
+    "-Doptimization=3",
+]
