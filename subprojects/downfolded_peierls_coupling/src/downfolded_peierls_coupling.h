@@ -1,4 +1,5 @@
 #pragma once
+#include <complex>
 #include <vector>
 
 namespace downfolded_peierls_coupling {
@@ -14,7 +15,21 @@ struct mode_params {
 	mode_params() = default;
 };
 
-double elem(int n, int m, const std::vector<mode_params> &modes, double tolerance);
-std::vector<double> matrix(const std::vector<mode_params> &modes);
+class generator {
+public:
+	generator(const std::vector<mode_params> &modes, double tolerance = 1e-10);
 
+	double elem(int n, int m) const;
+	std::vector<double> matrix() const;
+
+private:
+	std::complex<double> disp_op(int n, int l, double g) const;
+
+	double tolerance_{};
+	int lmax_{};
+
+	std::vector<mode_params> modes_;
+	std::vector<double> lgamma_cache_;
 };
+
+}

@@ -26,4 +26,5 @@ requires = [
 ]
 meson-options = [
     "-Doptimization=3",
+    "-Dcpp_args=['-ffast-math', '-march=native']",
 ]
