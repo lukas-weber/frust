@@ -1,7 +1,8 @@
 #include "downfolded_peierls_coupling.h"
 #include "occupation_numbers.h"
-#include <Eigen/Dense>
+#include <algorithm>
 #include <array>
+#include <cassert>
 #include <cmath>
 #include <complex>
 #include <numeric>
