@@ -26,6 +26,7 @@ private:
 	std::complex<double> disp_op(int n, int l, double g) const;
 
 	double tolerance_{};
+	double logtolerance_{};
 	int lmax_{};
 
 	std::vector<mode_params> modes_;

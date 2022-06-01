@@ -12,7 +12,7 @@ namespace downfolded_peierls_coupling {
 using cmplx = std::complex<double>;
 
 generator::generator(const std::vector<mode_params> &modes, double tolerance)
-    : tolerance_{tolerance}, modes_(modes) {
+    : tolerance_{tolerance}, logtolerance_{std::log(tolerance)}, modes_(modes) {
 	int max_max_photons = std::transform_reduce(
 	    modes.begin(), modes.end(), 0, [](int a, int b) { return std::max(a, b); },
 	    [](const mode_params &m) { return m.max_photons; });
@@ -34,16 +34,22 @@ cmplx generator::disp_op(int n, int l, double g) const {
 
 	double sum = 0;
 	double logg = log(g);
+	double lgamma_ln = 0.5 * lgamma_cache_[l] + 0.5 * lgamma_cache_[n];
 
 	std::array<cmplx, 4> sign = {1, 1i, -1, -1i};
 
-	for(int a = 0; a <= std::min(n, l); a++) {
-		double pow_exp = n + l - 2 * a;
-		double term = std::exp(logg * pow_exp + 0.5 * lgamma_cache_[l] + 0.5 * lgamma_cache_[n] -
-		                       lgamma_cache_[a] - lgamma_cache_[n - a] - lgamma_cache_[l - a]);
-		sum += (1 - 2 * (a & 1)) * term;
+	int m = std::min(n, l);
+	int d = std::abs(n - l);
+
+	for(int a = 0; a <= m; a++) {
+		double exponent = logg * (2 * a + d) + lgamma_ln - lgamma_cache_[a] - lgamma_cache_[m - a] -
+		                  lgamma_cache_[d + a];
+		if(exponent > logtolerance_) {
+			double term = std::exp(exponent);
+			sum += (1 - 2 * (a & 1)) * term;
+		}
 	}
-	return sign[(n + l) % sign.size()] * sum;
+	return sign[d % sign.size()] * sum;
 }
 
 double generator::elem(int n, int m) const {
