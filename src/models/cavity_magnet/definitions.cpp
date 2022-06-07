@@ -63,6 +63,13 @@ static cavity_magnet_proto make_honeycomb(const loadl::parser &p) {
 	return {unitcells::honeycomb, {Jx, J, J}};
 }
 
+static cavity_magnet_proto make_honeycomb_bilayer(const loadl::parser &p) {
+	double J = p.get<double>("J");
+	double JD = p.get<double>("JD");
+
+	return {unitcells::honeycomb_bilayer, {J, J, J, J, J, J, JD, JD}};
+}
+
 static cavity_magnet_proto make_columnar_dimer(const loadl::parser &p) {
 	double J = p.get<double>("J");
 	double JD = p.get<double>("JD", J);
@@ -95,6 +102,8 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 		proto = make_square(p);
 	} else if(lat == "honeycomb") {
 		proto = make_honeycomb(p);
+	} else if(lat == "honeycomb_bilayer") {
+		proto = make_honeycomb_bilayer(p);
 	} else if(lat == "columnar_dimer") {
 		proto = make_columnar_dimer(p);
 	} else {
