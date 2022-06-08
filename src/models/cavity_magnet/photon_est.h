@@ -10,17 +10,21 @@ class photon_est {
 private:
 	double n_{1};
 	std::vector<double> tmpnum_;
+	std::vector<double> tmphistogram_;
 
 	std::vector<double> num_;
 	std::vector<double> num2_;
+
+	std::vector<double> histogram_;
 
 	const double sign_{};
 	const cavity_magnet &model_;
 
 public:
 	photon_est(const cavity_magnet &model, double sign)
-	    : tmpnum_(model.modes.size()), num_(model.modes.size()),
-	      num2_(model.modes.size()), sign_{sign}, model_{model} {}
+	    : tmpnum_(model.modes.size()), tmphistogram_(model.photon_dimension),
+	      num_(model.modes.size()), num2_(model.modes.size()),
+	      histogram_(model.photon_dimension), sign_{sign}, model_{model} {}
 
 	void init(const std::vector<state_idx> &state) {
 		for(int m = 0; m < static_cast<int>(model_.modes.size()); m++) {
@@ -28,6 +32,10 @@ public:
 			num_[m] = tmpnum_[m];
 			num2_[m] = tmpnum_[m] * tmpnum_[m];
 		}
+		auto nstate = model_.get_basis(0).nstate(state[0]);
+		assert(nstate);
+		tmphistogram_[*nstate] = 1;
+		histogram_[*nstate] = 1;
 	}
 
 	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
@@ -43,12 +51,17 @@ public:
 			for(int m = 0; m < static_cast<int>(model_.modes.size()); m++) {
 				tmpnum_[m] += b.n(leg_state[leg_count / 2], m) - b.n(leg_state[0], m);
 			}
+			tmphistogram_[*b.nstate(leg_state[leg_count / 2])]++;
+			tmphistogram_[*b.nstate(leg_state[0])]--;
 		}
 
 		for(int m = 0; m < static_cast<int>(model_.modes.size()); m++) {
 			num_[m] += tmpnum_[m];
 			num2_[m] += tmpnum_[m] * tmpnum_[m];
 		}
+		std::transform(histogram_.begin(), histogram_.end(), tmphistogram_.begin(),
+		               histogram_.begin(), std::plus());
+
 		n_++;
 	}
 
@@ -60,6 +73,11 @@ public:
 			num2_[m] *= sign_ / n_;
 		}
 
+		for(auto &h : histogram_) {
+			h *= sign_ / n_;
+		}
+
+		measure.add(p + "PhotonHist", histogram_);
 		measure.add(p + "PhotonNum", num_);
 		measure.add(p + "PhotonNum2", num2_);
 	}
@@ -77,7 +95,7 @@ public:
 			return res;
 		};
 
-		for(const auto &obs : {"PhotonNum", "PhotonNum2"}) {
+		for(const auto &obs : {"PhotonNum", "PhotonNum2", "PhotonHist"}) {
 			eval.evaluate(obs, {p + obs, "Sign"}, unsign);
 		}
 

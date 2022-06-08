@@ -82,9 +82,21 @@ class Model(model_common.Magnet):
 
         photon_numbers = [
             sps.kron(op, sps.eye(self.spin_dimension))
-            for op in self.photon_number_ops()
+            for op in reversed(self.photon_number_ops()) # XXX: expose occupation number ordering in downfolded_peierls_coupling to make this less ad-hoc
         ]
 
+        projectors = np.eye(self.photon_dimension)
+
+        obs["PhotonHist"] = np.array(
+            [
+                ens.mean(
+                    sps.kron(
+                        sps.diags([projectors[n]], [0]), sps.eye(self.spin_dimension)
+                    )
+                )
+                for n in range(self.photon_dimension)
+            ]
+        ).T
         obs["PhotonNum"] = np.array(
             [ens.mean(photon_numbers[m]) for m in range(len(self.model_data.modes))]
         ).T
