@@ -29,7 +29,7 @@ public:
 
 	cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
 	              const std::vector<site> &sites, const std::vector<bond> &bonds, double U,
-	              const cavity_magnet_measurement_settings &settings);
+	              double heisenberg_offset, const cavity_magnet_measurement_settings &settings);
 
 	const bond &get_bond(int bond_idx) const {
 		return bonds_[bond_idx % bonds_.size()];
@@ -59,5 +59,7 @@ private:
 	std::vector<bond> bonds_;
 	std::vector<cavity_basis> bases_;
 
-	double U_{}; // Hubbard interaction
+	double U_{};                 // Hubbard interaction
+	double heisenberg_offset_{}; // modify the energy offset that usually enters the Heisenberg
+	                             // Hamiltonian when derived from the Hubbard model.
 };

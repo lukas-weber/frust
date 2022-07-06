@@ -9,9 +9,10 @@
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
                              const std::vector<site> &sites, const std::vector<bond> &bonds,
-                             double U, const cavity_magnet_measurement_settings &settings)
+                             double U, double heisenberg_offset,
+                             const cavity_magnet_measurement_settings &settings)
     : model{model_type::cavity_magnet}, lat{lat}, modes{modes}, settings{settings}, sites_{sites},
-      bonds_{bonds}, U_{U} {
+      bonds_{bonds}, U_{U}, heisenberg_offset_{heisenberg_offset} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
 	std::vector<int> mode_dims(modes.size());
@@ -72,10 +73,10 @@ sse_data cavity_magnet::generate_sse_data() const {
 		auto mapped_exchange_photon_coupling = Eigen::Map<Eigen::MatrixXd>(
 		    exchange_photon_coupling.data(), photon_dimension, photon_dimension);
 
-		Eigen::MatrixXd H =
-		    b.J * kronecker_prod(mapped_exchange_photon_coupling,
-		                         -0.25 * spin_identity + scalar_product(spinop_i, spinop_j)) +
-		    1.0 / lat.bonds.size() * kronecker_prod(Hphot, spin_identity);
+		Eigen::MatrixXd H = b.J * kronecker_prod(mapped_exchange_photon_coupling,
+		                                         -heisenberg_offset_ * spin_identity +
+		                                             scalar_product(spinop_i, spinop_j)) +
+		                    1.0 / lat.bonds.size() * kronecker_prod(Hphot, spin_identity);
 
 		if(photon_dimension > 1) {
 			vert_data.push_back({{photon_dimension, spin_dim_i, spin_dim_j}, H});
@@ -113,6 +114,7 @@ void cavity_magnet::to_json(nlohmann::json &out) const {
 	lat.to_json(out);
 
 	out["U"] = U_;
+	out["heisenberg_offset"] = heisenberg_offset_;
 
 	int bond_idx{};
 	for(const auto &b : lat.bonds) {
