@@ -246,6 +246,7 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 		assert(model_status == HighsModelStatus::kOptimal);
 		const auto &solution = highs.getSolution();
 
+		// TODO: This implicitly assumes that step_in == step_inv. otherwise, the same transition is visited multiple times for some reason, which breaks everything!!!
 		for(int in : steps) {
 			if(targets[in] >= 0) {
 				double norm = constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];

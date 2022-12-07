@@ -5,6 +5,7 @@
 // sense.
 using worm_idx = int;
 using state_idx = uint_fast8_t;
+
 /*
 inline state_idx worm_action(worm_idx worm, state_idx state, int basis_size) {
     return (state + worm + 1) % basis_size;
