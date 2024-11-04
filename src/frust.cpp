@@ -14,6 +14,8 @@ frust::frust(const loadl::parser &p)
 	v_first_.resize(data_.site_count);
 	v_last_.resize(data_.site_count);
 
+	nworm_ = param.get<double>("init_num_worms", 5);
+
 	maxwormlen_ = param.get<int>("maxwormlen", 0);
 	if(maxwormlen_ != 0) {
 		std::cout << "Warning: maxwormlen set: this feature is not tested!\n";
@@ -306,11 +308,14 @@ bool frust::worm_update() {
 		totalwormlength /= ceil(nworm_);
 
 		if(!is_thermalized()) {
-			avgwormlen_ += 0.01 * (totalwormlength - avgwormlen_);
+			double num_worms_attenuation_factor = param.get<double>("num_worms_attenuation_factor");
+			avgwormlen_ += num_worms_attenuation_factor * (totalwormlength - avgwormlen_);
 			double target_worms =
 			    param.get<double>("wormlength_fraction", 2.0) * noper_ / avgwormlen_;
-			nworm_ += 0.01 * (target_worms - nworm_) + tanh(target_worms - nworm_);
-			nworm_ = std::clamp(nworm_, 1., 1. + noper_ / 2.);
+			nworm_ += num_worms_attenuation_factor * (target_worms - nworm_ + 100*tanh(target_worms - nworm_));
+			if(num_worms_attenuation_factor != 0) {
+				nworm_ = std::clamp(nworm_, 1., 1. + noper_ / 2.);
+			}
 		}
 	} else {
 		auto cm_model = static_cast<const cluster_magnet &>(*model_);
