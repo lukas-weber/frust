@@ -3,4 +3,6 @@ subprojects/*
 !subprojects/*.wrap
 !subprojects/packagefiles
 !subprojects/downfolded_peierls_coupling
+.cache
+dist
 __pycache__
