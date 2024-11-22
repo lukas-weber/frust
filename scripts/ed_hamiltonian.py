@@ -33,12 +33,20 @@ def chirality(Nfull):
     dL = 1/3**0.5*np.matrix([0,0,0,j*j,0,j,1,0])
     dR = 1/3**0.5*np.matrix([0,0,0,j,0,j*j,1,0])
 
-    tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
+    us = 1/2**0.5 * np.matrix([0,0,1,0,-1,0,0,0])
+    ut = 1/6**0.5 * np.matrix([0,-2,1,0,1,0,0,0])
+    ds = 1/2**0.5 * np.matrix([0,0,0,1,0,-1,0,0])
+    dt = 1/6**0.5 * np.matrix([0,0,0,1,0,1,-2,0])
+
+    #tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
+    #tauz = -1j*(uL.H@uR + dL.H@dR - uR.H@uL - dR.H@dL)
+    tauz = us.H@ut + ds.H@dt + ut.H@us + dt.H@ds
 
     def lift_tauz(i):
         return sps.kron(sps.kron(sps.identity(8**i), tauz), sps.identity(8**(Nfull-i-1)))
         
     meantauz = sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
+    meantauz = lift_tauz(0)@lift_tauz(1)
 
     return meantauz
 
@@ -97,6 +105,7 @@ def construct(lat):
     obs_ops['syM'] = signed_mag(1,-1)
     obs_ops['sxsyM'] = signed_mag(-1,-1)
 
-    obs_ops['chirality_tauz'] = chirality(Nfull)
+    if all(len(s)==3 for s in full2half):
+        obs_ops['chirality_tauz'] = chirality(Nfull)
     
     return H, obs_ops
