@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import lattice
-import numpy as np
+import model
 import argparse
 import svgwrite
 from loadleveller import jobfile
@@ -23,7 +22,7 @@ parser.add_argument("-o", "--outfile", type=str, help="file to save results to")
 args = parser.parse_args()
 
 job = jobfile.JobFile(args.jobfile)
-lat = lattice.load(job, args.taskname)
+lat = model.load(job, args.taskname)
 
 d = svgwrite.Drawing(args.outfile, size=(100, 100), profile="full")
 
