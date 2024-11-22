@@ -325,6 +325,7 @@ void frust::checkpoint_write(const loadl::iodump::group &out) {
 	out.write("nworm", nworm_);
 	out.write("operators", saveops);
 	out.write("spin", spin_);
+	out.write("version", dump_version_);
 }
 
 void frust::checkpoint_read(const loadl::iodump::group &in) {
@@ -339,6 +340,12 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	std::transform(saveops.begin(), saveops.end(), operators_.begin(), [](uint32_t c) { return opercode{c}; });
 	
 	in.read("spin", spin_);
+
+	int version;
+	in.read("version", version);
+	if(version != dump_version_) {
+		throw std::runtime_error("dump file does not fit program version");
+	}
 }
 
 void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
