@@ -2,6 +2,7 @@
 
 #include <array>
 #include <vector>
+#include "basis.h"
 
 using vec2 = std::array<double,2>;
 
@@ -22,20 +23,34 @@ inline const vec2 operator*(double a, const vec2 &b) {
 	return r;
 }
 
-struct bond {
-	int i{0};
-	int j{0};
+struct uc_bond {
+	int i{};
+	struct {
+		int dx{};
+		int dy{};
+		int uc{};
+	} j;
 	
 	// bonds between individual constituent spins
 	// shape should be [spin_i * site_j.nspinhalfs + spin_j]
 	std::vector<double> J;
 };
 
-struct site {
+struct uc_site {
 	vec2 pos;
 
-	int nspinhalfs{}; // S=1/2 spins contained in this site
 	double Jin{};
-	
+	site_basis basis;
+
+	int coordination{}; // filled in automatically
+};
+
+struct lat_bond {
+	int i;
+	int j;
+};
+
+struct lat_site {
+	vec2 pos;
 	int8_t sublattice{};
 };

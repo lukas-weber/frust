@@ -1,6 +1,5 @@
 #include "lattice.h"
 #include <tuple>
-
 	
 void lattice::init_sublattice() {
 	if(sites.size() == 0) {
@@ -15,7 +14,7 @@ void lattice::init_sublattice() {
 		(void)site;
 		for(const auto &b : bonds) {
 			if(sites[b.i].sublattice != 0 && sites[b.j].sublattice == sites[b.i].sublattice) {
-				throw std::runtime_error("lattice not bipartite!");
+				return;
 			}
 
 			if(sites[b.i].sublattice != 0) {
@@ -34,31 +33,32 @@ void lattice::init_sublattice() {
 	}
 }
 
-lattice::lattice(const unitcell &uc, int Lx, int Ly)
-    : Lx{Lx}, Ly{Ly}  {
+lattice::lattice(const unitcell &ucell, int Lx, int Ly)
+    : uc{ucell}, Lx{Lx}, Ly{Ly}  {
 	int uc_spin_count = uc.sites.size();
 
-	auto split_idx = [&](int i) { 
-		return std::tuple{i%uc_spin_count, (i/uc_spin_count)%Lx, (i/uc_spin_count)/Lx};
-	};
+	for(const auto &b : uc.bonds) {
+		uc.sites[b.i].coordination++;
+		uc.sites[b.j.uc].coordination++;
+	}
 
 	for(int y = 0; y < Ly; y++) {
 		for(int x = 0; x < Lx; x++) {
 			for(auto &s : uc.sites) {
-				sites.emplace_back(site{(x + s.pos[0]) * uc.a1 + (y + s.pos[1]) * uc.a2, s.nspinhalfs, s.Jin});
-				spinhalf_count += s.nspinhalfs;
+				sites.emplace_back(lat_site{(x + s.pos[0]) * uc.a1 + (y + s.pos[1]) * uc.a2});
+				spinhalf_count += s.basis.nspinhalfs;
 			}
 
 			for(auto b : uc.bonds) {
-				auto [iuc, ix, iy] = split_idx(b.i);
-				auto [juc, jx, jy] = split_idx(b.j);
+				assert(b.i < uc_spin_count);
+				assert(b.j.uc < uc_spin_count);
 
 				int i =
-				    Lx * uc_spin_count * ((iy + y) % Ly) + uc_spin_count * ((ix + x) % Lx) + iuc;
+				    Lx * uc_spin_count * (y % Ly) + uc_spin_count * (x % Lx) + b.i;
 				int j =
-				    Lx * uc_spin_count * ((jy + y) % Ly) + uc_spin_count * ((jx + x) % Lx) + juc;
+				    Lx * uc_spin_count * ((b.j.dy + y) % Ly) + uc_spin_count * ((b.j.dx + x) % Lx) + b.j.uc;
 
-				bonds.emplace_back(bond{i, j, b.J});
+				bonds.emplace_back(lat_bond{i, j});
 			}
 		}
 	}
@@ -68,8 +68,8 @@ lattice::lattice(const unitcell &uc, int Lx, int Ly)
 }
 
 void lattice::init_vertex_data(const unitcell &uc) {
-	std::transform(uc.bonds.begin(), uc.bonds.end(), std::back_inserter(vertices_), [&](const bond &b) {
-		return vertex_data{b, sites[b.i], sites[b.j]};
+	std::transform(uc.bonds.begin(), uc.bonds.end(), std::back_inserter(vertices_), [&](const uc_bond &b) {
+		return vertex_data{b, uc.sites[b.i], uc.sites[b.j.uc]};
 	});
 	energy_offset = 0;
 	for(const auto &vd : vertices_) {
@@ -82,26 +82,31 @@ void lattice::vertex_print() const {
 	int idx{};
 	for(const auto &vd : vertices_) {
 		const auto &b = bonds[idx];
-		vd.print(sites[b.i], sites[b.j]);
+		vd.print(get_uc_site(b.i).basis, get_uc_site(b.j).basis);
 		idx++;
 	}
 }
 
 void lattice::to_json(nlohmann::json &out) {
+	int idx{};
 	for(const auto &site : sites) {
+		const auto &uc_st = uc.sites[idx%uc.sites.size()];
 		out["sites"].push_back({
 			{"pos", site.pos},
 			{"sublattice", site.sublattice},
-			{"nspinhalfs", site.nspinhalfs},
-			{"Jin", site.Jin},
+			{"nspinhalfs", uc_st.basis.nspinhalfs},
+			{"Jin", uc_st.Jin},
 		});
+		idx++;
 	}
-
+	
+	idx = 0;
 	for(const auto &bond : bonds) {
 		out["bonds"].push_back({
 		    {"i", bond.i},
 		    {"j", bond.j},
-		    {"J", bond.J},
+		    {"J", uc.bonds[idx%uc.bonds.size()].J},
 		});
+		idx++;
 	}
 }

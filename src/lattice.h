@@ -10,24 +10,26 @@ struct unitcell {
 	vec2 a1;
 	vec2 a2;
 
-	std::vector<site> sites;
-	std::vector<bond> bonds;
+	std::vector<uc_site> sites;
+	std::vector<uc_bond> bonds;
 };
 
 
 class lattice {
 public:
+	unitcell uc;
+
 	int Lx{}, Ly{};
 	int spinhalf_count{};
 	double energy_offset{};
 
-	std::vector<site> sites;
-	std::vector<bond> bonds;
+	std::vector<lat_site> sites;
+	std::vector<lat_bond> bonds;
 
-	const vertex_data::transition &vertex_transition(opercode op, int leg_in, jm_action action_in) const;
-	double vertex_weight(opercode op) const;
-	int vertex_sign(opercode op) const;
+	const vertex_data &get_vertex_data(int bond) const;
+	const uc_site &get_uc_site(int site) const;
 	opercode vertex_idx_opercode(int bond, int vertex_idx) const;
+
 	void vertex_print() const;
 
 	lattice(const unitcell &uc, int Lx, int Ly);
@@ -41,16 +43,11 @@ private:
 	void init_vertex_data(const unitcell &uc);
 };
 
-inline const vertex_data::transition &lattice::vertex_transition(opercode op, int leg_in, jm_action action_in) const {
-	return vertices_[op.bond()%vertices_.size()].get_transition(op, leg_in, action_in);
+inline const vertex_data &lattice::get_vertex_data(int bond) const {
+	return vertices_[bond % vertices_.size()];
 }
-
-inline int lattice::vertex_sign(opercode op) const {
-	return vertices_[op.bond()%vertices_.size()].get_sign(op);
-}
-
-inline double lattice::vertex_weight(opercode op) const {
-	return vertices_[op.bond()%vertices_.size()].get_weight(op);
+inline const uc_site &lattice::get_uc_site(int site) const {
+	return uc.sites[site%uc.sites.size()];
 }
 
 inline opercode lattice::vertex_idx_opercode(int bond, int vertex_idx) const {

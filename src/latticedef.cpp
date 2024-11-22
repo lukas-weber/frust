@@ -1,6 +1,6 @@
 #include "latticedef.h"
 
-static unitcell make_square(int Lx, const loadl::parser &p) {
+static unitcell make_square(const loadl::parser &p) {
 	unitcell uc;
 
 	uc.a1 = {1,0};
@@ -17,27 +17,51 @@ static unitcell make_square(int Lx, const loadl::parser &p) {
 	}
 
 	double J = p.get<double>("J");
+	double Jin = p.get<double>("Jin");
 
-	uc.sites = {
-		{{0,0}, nspinhalf, 0}
-	};
 
 	if(nspinhalf == 1) {
+		uc.sites = {
+			{{0,0}, 0, site_bases::spin}
+		};
 		uc.bonds = {
-			{0,1,{J}},
-			{0,Lx,{J}}
+			{0,{1,0,0},{J}},
+			{0,{0,1,0},{J}}
 		};
 	} else {
+		uc.sites = {
+			{{0,0}, Jin, site_bases::dimer}
+		};
 		uc.bonds = {
-			{0,1,{J,J,J,J}},
-			{0,Lx,{J,J,J,J}}
+			{0,{1,0,0},{J,J,J,J}},
+			{0,{0,1,0},{J,J,J,J}}
 		};
 	}
 
 	return uc;
 }
 
-static unitcell make_triangle_square(int Lx, const loadl::parser &p) {
+static unitcell make_triangle(const loadl::parser &p) {
+	unitcell uc;
+	double J = p.get<double>("J");
+
+	uc.a1 = {1,0};
+	uc.a2 = {0,1};
+	
+	uc.sites = {
+		{{0,0}, 0, site_bases::spin},
+	};
+
+	uc.bonds = {
+		{0,{0,1,0}, {J}},
+		{0,{1,0,0}, {J}},
+		{0,{1,1,0}, {J}},
+	};
+	
+	return uc;
+}
+
+static unitcell make_triangle_square(const loadl::parser &p) {
 	unitcell uc;
 
 	uc.a1 = {1,0};
@@ -52,14 +76,14 @@ static unitcell make_triangle_square(int Lx, const loadl::parser &p) {
 	double Jindirect = p.get<double>("Jindirect");
 
 	uc.sites = {
-		{{0,0}, 2, Jin},
-		{{0,0.5}, 1, 0},
+		{{0,0}, Jin, site_bases::dimer},
+		{{0,0.5}, 0, site_bases::spin},
 	};
 
 	uc.bonds = {
-		{0,1,{Jtri, Jtri}},
-		{0,2,{Jindirect, Jindirect, Jdirect, Jindirect}},
-		{1,2*Lx,{Jup, Jup}},
+		{0,{0,0,1},{Jtri, Jtri}},
+		{0,{1,0,0},{Jindirect, Jindirect, Jdirect, Jindirect}},
+		{1,{0,1,0},{Jup, Jup}},
 	};
 
 	return uc;
@@ -74,9 +98,11 @@ lattice lattice_from_param(const loadl::parser &p) {
 	int Ly = p.get<int>("Ly", Lx);
 
 	if(name == "triangle_square") {
-		uc = make_triangle_square(Lx, p);
+		uc = make_triangle_square(p);
 	} else if(name == "square") {
-		uc = make_square(Lx, p);
+		uc = make_square(p);
+	} else if(name == "triangle") {
+		uc = make_triangle(p);
 	} else {
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}

@@ -3,6 +3,7 @@
 #include "vertex_data.h"
 #include "latticedef.h"
 #include "mag_est.h"
+#include "j_est.h"
 
 frust::frust(const loadl::parser &p)
 	: loadl::mc(p),
@@ -20,20 +21,20 @@ void frust::print_operators() {
 			continue;
 		}
 		const auto &b = lat_.bonds[op.bond()];
-		std::cout << fmt::format("{}-{}: {}\n", b.i, b.j, op.name(lat_.sites[b.i], lat_.sites[b.j]));
+		std::cout << fmt::format("{}-{}: {}\n", b.i, b.j, op.name(lat_.get_uc_site(b.i).basis, lat_.get_uc_site(b.j).basis));
 	}
 	int idx{};
 	for(auto s : spin_) {
-		std::cout << s.name(lat_.sites[idx]) << ", ";
+		std::cout << lat_.get_uc_site(idx).basis.states[s].name << ", ";
 	}
 	std::cout << "\n";
 }
 
 void frust::init() {
 	spin_.resize(lat_.sites.size());
-	std::transform(lat_.sites.begin(), lat_.sites.end(), spin_.begin(), [&](const auto& st) {
-		return jm{static_cast<uint8_t>(jm::local_basis_size(st)*random01())};
-	});
+	for(size_t i = 0; i < spin_.size(); i++) {
+		spin_[i] = lat_.get_uc_site(i).basis.size()*random01();
+	}
 
 	const int warmup = 5;
 	for(int i = 0; i < warmup; i++) {
@@ -54,9 +55,9 @@ int frust::worm_traverse() {
 	} while(vertices_[v0] < 0);
 
 	auto op0 = operators_[v0/4];
-	int wormfunc0 = random01()*vertex_data::wormfunc_count;
+	int wormfunc0 = random01()*site_basis::worm_count;
 
-	if(lat_.vertex_transition(op0, v0%4, wormfunc0).invalid()) {
+	if(lat_.get_vertex_data(op0.bond()).get_transition(op0, v0%4, wormfunc0).invalid()) {
 		return 0;
 	}
 
@@ -70,22 +71,26 @@ int frust::worm_traverse() {
 		wormlength++;
 
 		auto &op = operators_[v/4];
-		auto oldop = op;
+		//auto oldop = op;
 		int leg_in = v%4;
-		const auto &trans = lat_.vertex_transition(op, leg_in, wormfunc);
+		const auto &trans = lat_.get_vertex_data(op.bond()).get_transition(op, leg_in, wormfunc);
 
+		/*if(random01()<1e-4) { // abort long loop
+			return -1;
+		}*/
 
 		auto [leg_out, wormfunc_out, new_vertex_idx] = trans.scatter(random01());
 		op = lat_.vertex_idx_opercode(op.bond(), new_vertex_idx);
-		if(wormlength >= noper_) {
-			const auto &bond = lat_.bonds[op.bond()];
+		/*if(wormlength >= noper_) {
 			const auto &si = lat_.sites[bond.i];
 			const auto &sj = lat_.sites[bond.j];
 			//std::cout << fmt::format("{}-{}-{} {}: {} {} -> {} {}: {}\n", v/4, idx, oldop.bond(), oldop.name(si, sj), leg_in, vertex_data::wormfuncs[wormfunc].name, leg_out, vertex_data::wormfuncs[wormfunc_out].name, op.name(si,sj));
-		}
+		}*/
 
 		uint32_t vstep = 4*(v/4)+leg_out;
-		if(vstep == v0 && wormfunc_out == vertex_data::wormfuncs[wormfunc0].inverse_idx) {
+		const auto &bond = lat_.bonds[op.bond()];
+		const auto &site_out = lat_.get_uc_site(leg_out&1 ? bond.j : bond.i);
+		if(vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) {
 			break;
 		}
 		wormfunc = wormfunc_out;
@@ -99,8 +104,15 @@ int frust::worm_traverse() {
 void frust::worm_update() {
 	//std::cout << fmt::format("nworm : {}\n", nworm_);
 	double wormlength = 1;
+	auto tmpoperators = operators_;
 	for(int i = 0; i < nworm_; i++) {
-		wormlength += worm_traverse();
+		tmpoperators = operators_;
+		int wl = worm_traverse();
+		if(wl < 0) {
+			operators_ = tmpoperators;
+		} else {
+			wormlength += wl;
+		}
 	}
 	if(is_thermalized()) {
 		measure.add("wormlength_fraction", wormlength/noper_);
@@ -110,14 +122,14 @@ void frust::worm_update() {
 
 	if(!is_thermalized()) {
 		avgwormlen_ += 0.01*(wormlength-avgwormlen_);
-		double target_worms = param.get<double>("wormlength_fraction", 1.8)*noper_/avgwormlen_;
+		double target_worms = param.get<double>("wormlength_fraction", 1.0)*noper_/avgwormlen_;
 		nworm_ += 0.01*(target_worms-nworm_)+tanh(target_worms-nworm_);
 		nworm_ = std::clamp(nworm_, 1., 1.+noper_/2.);
 	}
 
 	for(size_t i = 0; i < spin_.size(); i++) {
 		if(v_first_[i] < 0) {
-			spin_[i] = jm{static_cast<uint8_t>(jm::local_basis_size(lat_.sites[i]) * random01())};
+			spin_[i] = lat_.get_uc_site(i).basis.size() * random01();
 		} else {
 			uint32_t v = v_first_[i];
 			auto op = operators_[v/4];
@@ -187,12 +199,12 @@ void frust::diagonal_update() {
 		if(op.identity()) {
 			int bond = random01() * lat_.bonds.size();
 			const auto &b = lat_.bonds[bond];
-			jm si = spin_[b.i];
-			jm sj = spin_[b.j];
+			state_idx si = spin_[b.i];
+			state_idx sj = spin_[b.j];
 
 			auto newop = opercode::make_vertex(bond, si, sj, si, sj);
 			
-			double weight = lat_.vertex_weight(newop);
+			double weight = lat_.get_vertex_data(bond).get_weight(newop);
 
 			if(random01() < p_make_bond * weight) {
 				op = newop;
@@ -202,14 +214,14 @@ void frust::diagonal_update() {
 			int bond = op.bond();
 			const auto &b = lat_.bonds[bond];
 			if(op.diagonal()) {
-				double weight = lat_.vertex_weight(op);
+				double weight = lat_.get_vertex_data(bond).get_weight(op);
 				if(random01()*weight < p_remove_bond) {
 					op = opercode::make_identity();
 					noper_--;
 				}
 			} else {
-				spin_[b.i].apply(op.action(0));
-				spin_[b.j].apply(op.action(1));
+				spin_[b.i] = op.leg_state(2);
+				spin_[b.j] = op.leg_state(3);
 			}
 		}
 	}
@@ -235,8 +247,8 @@ void frust::opstring_measurement(Ests... ests) {
 
 		if(!op.diagonal()) {
 			const auto &bond = lat_.bonds[op.bond()];
-			spin_[bond.i].apply(op.action(0));
-			spin_[bond.j].apply(op.action(1));
+			spin_[bond.i] = op.leg_state(2);
+			spin_[bond.j] = op.leg_state(3);
 		}
 
 		if(n < noper_) {
@@ -255,7 +267,7 @@ double frust::measure_sign() const {
 
 	for(auto op : operators_) {
 		if(!op.identity()) {
-			sign += lat_.vertex_sign(op) < 0;
+			sign += lat_.get_vertex_data(op.bond()).get_sign(op) < 0;
 		}
 	}
 	return (sign&1) ? -1 : 1;
@@ -264,7 +276,9 @@ double frust::measure_sign() const {
 void frust::do_measurement() {
 	double sign = measure_sign();
 
-	opstring_measurement(mag_est<true>{lat_,T_,sign},mag_est<false>{lat_, T_, sign});
+	opstring_measurement(mag_est<true>{lat_,T_,sign},
+			     mag_est<false>{lat_, T_, sign},
+			     j_est{lat_, sign});
 	measure.add("Sign", sign);
 	measure.add("nOper", static_cast<double>(noper_));
 
@@ -277,22 +291,16 @@ void frust::checkpoint_write(const loadl::iodump::group &out) {
 		return op.code();
 	});
 	
-	std::vector<unsigned int> savespins(spin_.size());
-	std::transform(spin_.begin(), spin_.end(), savespins.begin(), [](jm s) {
-		return s.code();
-	});
-	
 	out.write("noper", noper_);
 	out.write("avgwormlen_", avgwormlen_);
 	out.write("avgwormlen", avgwormlen_);
 	out.write("nworm", nworm_);
 	out.write("operators", saveops);
-	out.write("spin", savespins);
+	out.write("spin", spin_);
 }
 
 void frust::checkpoint_read(const loadl::iodump::group &in) {
 	std::vector<unsigned int> saveops;
-	std::vector<unsigned int> savespins;
 
 	in.read("noper", noper_);
 	in.read("avgwormlen_", avgwormlen_);
@@ -302,10 +310,7 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	operators_.resize(saveops.size());
 	std::transform(saveops.begin(), saveops.end(), operators_.begin(), [](uint32_t c) { return opercode{c}; });
 	
-
-	in.read("spin", savespins);
-	spin_.resize(savespins.size());
-	std::transform(savespins.begin(), savespins.end(), spin_.begin(), [](uint8_t c) { return jm{c}; });
+	in.read("spin", spin_);
 }
 
 void frust::register_evalables(loadl::evaluator &eval) {
@@ -315,6 +320,7 @@ void frust::register_evalables(loadl::evaluator &eval) {
 	
 	mag_est<true>{lat_, T_, 0}.register_evalables(eval);
 	mag_est<false>{lat_, T_, 0}.register_evalables(eval);
+	j_est{lat_,0}.register_evalables(eval);
 
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
 }

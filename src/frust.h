@@ -29,7 +29,7 @@ private:
 	int64_t noper_{};
 	
 	std::vector<opercode> operators_;
-	std::vector<jm> spin_;
+	std::vector<state_idx> spin_;
 
 	lattice lat_;
 

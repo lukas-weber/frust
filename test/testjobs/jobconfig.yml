@@ -1,0 +1,15 @@
+# This file controls all bookkeeping aspects of the job.
+# Multiple jobs can share the same jobconfig.
+
+mpirun: mpirun # mpirun binary (needs to fit the one you build loadleveller with, but usually this can just be omitted)
+num_cores: 8 # number of ranks in mpi
+mem_per_cpu: 2G # memory per cpu
+#project:  # name of the batch accounting project (TODO)
+
+
+merge_sample_skip: 0
+
+mc_runtime: '4:00' # job will stop after this time
+mc_checkpoint_time: '3:00' # checkpoint writing interval
+mc_binary: ../frust/build/src/frust # change this to the location of your mc binary
+

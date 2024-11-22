@@ -22,7 +22,7 @@ class Lattice:
 def load(job, taskname):
     mc_binary = job.jobconfig['mc_binary']
 
-    job_input_filename = job.write_job_input_file()
+    job_input_filename = job.write_job_input_file(force_overwrite=False)
     res = subprocess.run([mc_binary, 'lattice', job_input_filename, taskname], stdout=subprocess.PIPE)
 
     return Lattice(res.stdout.decode('utf-8'))
