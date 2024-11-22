@@ -2,8 +2,7 @@
 
 #include "opercode.h"
 #include "sse_data.h"
-#include "models/model.h"
-#include "models/cluster_magnet.h"
+#include "cluster_magnet.h"
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 

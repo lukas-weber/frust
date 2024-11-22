@@ -2,7 +2,7 @@ test_srcs = files([
   'test_opercode.cpp',
   'test_util.cpp',
   'test_worms.cpp',
-  '../src/basis.cpp'
+  '../src/models/cluster_magnet/basis.cpp'
 ])
 
 catch2_dep = dependency('catch2', fallback : [ 'catch2', 'catch2_dep' ])

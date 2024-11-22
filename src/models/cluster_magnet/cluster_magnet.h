@@ -1,8 +1,9 @@
 #pragma once
 
-#include "model.h"
-#include "util/lattice.h"
 #include <nlohmann/json.hpp>
+#include "../model.h"
+#include "../common/lattice.h"
+#include "basis.h"
 
 struct cluster_bond {
 	// bonds between individual constituent spins

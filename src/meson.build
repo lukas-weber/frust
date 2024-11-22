@@ -2,16 +2,11 @@
 frust_sources = files([
   'main.cpp',
   'frust.cpp',
-  'basis.cpp',
   'vertex_data.cpp',
   'write_lattice.cpp',
-  'models/cluster_magnet.cpp',
-  'models/cluster_magnet_def.cpp',
-  'models/cavity_magnet.cpp',
-  'models/cavity_magnet_def.cpp',
-  'models/model_def.cpp',
-  'models/util/lattice.cpp',
 ])
+
+subdir('models')
 
 frust = executable('frust',
   frust_sources,

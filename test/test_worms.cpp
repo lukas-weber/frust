@@ -1,5 +1,4 @@
 #include "worms.h"
-#include "basis.h"
 #include <catch2/catch.hpp>
 
 TEST_CASE("worms") {

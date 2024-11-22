@@ -2,12 +2,11 @@
 #include <cstdint>
 #include <fmt/format.h>
 
-#include "basis.h"
 #include "bond.h"
 
 class vertexcode {
 public:
-	static const uint32_t maxbits = 4 * site_basis::state_bits + 1;
+	static const uint32_t maxbits = 4 * 3 + 1;
 	bool diagonal() const {
 		return code_ & 1;
 	}
@@ -75,7 +74,7 @@ inline uint32_t opercode::bond() const {
 }
 
 inline vertexcode opercode::vertex() const {
-	return vertexcode{(code_ & ((1 << (1 + 4 * site_basis::state_bits)) - 1)) >> 1};
+	return vertexcode{(code_ & ((1 << (1 + 4 * 3)) - 1)) >> 1};
 }
 
 inline bool opercode::identity() const {

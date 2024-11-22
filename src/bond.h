@@ -1,6 +1,5 @@
 #pragma once
 
-#include "basis.h"
 #include <Eigen/Dense>
 
 using vec2 = Eigen::Vector2d;

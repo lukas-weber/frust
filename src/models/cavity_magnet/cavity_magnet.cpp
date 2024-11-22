@@ -1,5 +1,6 @@
 #include "cavity_magnet.h"
 #include "nlohmann/json.hpp"
+#include "util/kronecker_product.h"
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode>& modes, const std::vector<bond>& bonds) : model{model_type::cavity_magnet}, lat{lat}, modes_{modes}, bonds_{bonds} {
 	assert(bonds_.size() == lat.uc.bonds.size());
