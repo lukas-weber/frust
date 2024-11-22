@@ -30,7 +30,7 @@ public:
 	double j(state_idx st) const;
 	char name(state_idx st) const;
 
-	std::array<Eigen::MatrixXd, 3> spinop(int spinhalf) const;
+	std::array<Eigen::MatrixXd, 2> spinop(int spinhalf) const;
 
 private:
 	Eigen::MatrixXd trans_; // trans.col(st) is the sz-basis vector of state st.

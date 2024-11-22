@@ -15,11 +15,12 @@ static Eigen::MatrixXd onsite_term(const cluster_site &s) {
 	int idx = 0;
 	for(int i = 0; i < b.nspinhalfs; i++) {
 		auto spini = b.spinop(i);
-		res += spini[2] * s.h;
+		res += spini[1] * s.h;
 		for(int j = 0; j < i; j++) {
 			auto spinj = b.spinop(j);
 			res += s.Jin[idx] *
-			       (0.5 * (spini[0] * spinj[1] + spini[1] * spinj[0]) + spini[2] * spinj[2]);
+			       (0.5 * (spini[0] * spinj[0].transpose() + spini[0].transpose() * spinj[0]) +
+			        spini[1] * spinj[1]);
 			idx++;
 		}
 	}

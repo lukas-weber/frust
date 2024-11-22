@@ -1,55 +1,13 @@
 #include "cavity_magnet.h"
+#include "../common/spinop.h"
 #include "nlohmann/json.hpp"
 #include "util/kronecker_product.h"
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
-                             const std::vector<bond> &bonds)
-    : model{model_type::cavity_magnet}, lat{lat}, modes_{modes}, bonds_{bonds} {
+                             const std::vector<site> &sites, const std::vector<bond> &bonds)
+    : model{model_type::cavity_magnet}, lat{lat}, modes_{modes}, sites_{sites}, bonds_{bonds} {
 	assert(bonds_.size() == lat.uc.bonds.size());
-}
-
-// clang-format off
-static const Eigen::MatrixXd heisenberg_exchange = init_mat(4,4, {
-	1, 0, 0, 0,
-	0,-1, 2, 0,
-	0, 2,-1, 0,
-	0, 0, 0, 1,
-})/4;
-
-static const Eigen::MatrixXd Szi = init_mat(4,4, {
-	1, 0, 0, 0,
-	0, 1, 0, 0,
-	0, 0,-1, 0,
-	0, 0, 0,-1,
-})/2;
-
-static const Eigen::MatrixXd Szj = init_mat(4,4, {
-	1, 0, 0, 0,
-	0,-1, 0, 0,
-	0, 0, 1, 0,
-	0, 0, 0,-1,
-})/2;
-// clang-format on
-
-static Eigen::MatrixXd bond_hamiltonian(const cavity_magnet::mode &mode,
-                                        const cavity_magnet::bond &bond, const unitcell::site &si,
-                                        const unitcell::site &sj, int mode_count, int bond_count) {
-	int dim = 4 * mode.max_bosons;
-	Eigen::MatrixXd res = Eigen::MatrixXd::Zero(dim, dim);
-
-	Eigen::MatrixXd boson_number = res.Zero(mode.max_bosons, mode.max_bosons);
-	int n = 0;
-	for(auto &d : boson_number.diagonal()) {
-		d = n;
-		n++;
-	}
-
-	return mode.coupling *
-	           kronecker_prod(boson_number, Szi / si.coordination + Szj / sj.coordination) +
-	       bond.J / mode_count *
-	           kronecker_prod(Eigen::MatrixXd::Identity(mode.max_bosons, mode.max_bosons),
-	                          heisenberg_exchange) +
-	       mode.omega / bond_count * kronecker_prod(boson_number, Eigen::MatrixXd::Identity(4, 4));
+	assert(sites_.size() == lat.uc.sites.size());
 }
 
 sse_data cavity_magnet::generate_sse_data() const {
@@ -62,10 +20,41 @@ sse_data cavity_magnet::generate_sse_data() const {
 	int bond_idx{};
 	for(const auto &b : bonds_) {
 		for(const auto &m : modes_) {
-			auto H = bond_hamiltonian(m, b, lat.uc.sites[lat.uc.bonds[bond_idx].i],
-			                          lat.uc.sites[lat.uc.bonds[bond_idx].j.uc], modes_.size(),
-			                          lat.bonds.size());
-			vert_data.push_back({{m.max_bosons, 2, 2}, H});
+			Eigen::MatrixXd boson_number = Eigen::MatrixXd::Zero(m.max_bosons, m.max_bosons);
+
+			int site_idx_i = lat.uc.bonds[bond_idx].i;
+			int site_idx_j = lat.uc.bonds[bond_idx].j.uc;
+
+			int spin_dim_i = sites_[site_idx_i].spin_dim;
+			int spin_dim_j = sites_[site_idx_j].spin_dim;
+
+			auto spinop_i = spin_operators(spin_dim_i);
+			auto spinop_j = spin_operators(spin_dim_j);
+
+			auto spinz_i =
+			    kronecker_prod(spinop_i[1], Eigen::MatrixXd::Identity(spin_dim_j, spin_dim_j));
+			auto spinz_j =
+			    kronecker_prod(Eigen::MatrixXd::Identity(spin_dim_i, spin_dim_i), spinop_j[1]);
+
+			int n = 0;
+			for(auto &d : boson_number.diagonal()) {
+				d = n;
+				n++;
+			}
+
+			Eigen::MatrixXd H =
+			    m.coupling * kronecker_prod(boson_number,
+			                                spinz_i / lat.uc.sites[site_idx_i].coordination +
+			                                    spinz_j / lat.uc.sites[site_idx_j].coordination) +
+			    b.J / modes_.size() *
+			        kronecker_prod(Eigen::MatrixXd::Identity(m.max_bosons, m.max_bosons),
+			                       scalar_product(spinop_i, spinop_j)) +
+			    m.omega / lat.bonds.size() *
+			        kronecker_prod(boson_number,
+			                       Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j,
+			                                                 spin_dim_i * spin_dim_j));
+
+			vert_data.push_back({{m.max_bosons, spin_dim_i, spin_dim_j}, H});
 		}
 		bond_idx++;
 	}
@@ -81,8 +70,11 @@ sse_data cavity_magnet::generate_sse_data() const {
 
 	std::transform(modes_.begin(), modes_.end(), std::back_inserter(sse_sites),
 	               [](const auto &m) { return sse_data::site{m.max_bosons}; });
-
-	sse_sites.insert(sse_sites.end(), lat.Lx * lat.Ly * lat.uc.sites.size(), {2});
+	for(int i = 0; i < lat.Lx * lat.Ly; i++) {
+		for(int uc = 0; uc < static_cast<int>(lat.uc.sites.size()); uc++) {
+			sse_sites.push_back({sites_[uc].spin_dim});
+		}
+	}
 
 	return sse_data{vert_data, sse_sites, sse_bonds};
 }
