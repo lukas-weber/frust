@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cluster_magnet.h"
+#include "lattice.h"
 #include "opercode.h"
 #include "sse_data.h"
 #include <loadleveller/evalable.h>
