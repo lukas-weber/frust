@@ -1,6 +1,7 @@
+#define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
 
-#include "models/cavity_magnet/downfolded_coupling.cpp"
+#include "../src/downfolded_peierls_coupling.cpp"
 
 TEST_CASE("coupling evaluation") {
 	REQUIRE(dispOp(0, 4, 0.2).real() == Approx(0.0003201315461539436));
@@ -19,4 +20,10 @@ TEST_CASE("coupling evaluation") {
 
 	CHECK(J(33, 11, {{0.54, 0.14, 10}, {0.54, 0.14, 10}}) == Approx(-0.0198192171961849));
 	CHECK(J(33, 15, {{0.54, 0.14, 10}, {0.54, 0.14, 10}}) == Approx(-0.015138320606728406));
+}
+
+TEST_CASE("stability") {
+	for(int n = 1; n < 100; n += 10) {
+		CHECK_NOTHROW(downfolded_coupling({{0.49, 1, n}}));
+	}
 }

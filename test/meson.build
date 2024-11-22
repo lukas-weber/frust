@@ -3,7 +3,6 @@ test_srcs = files([
   'test_util.cpp',
   'test_worms.cpp',
   'test_spinop.cpp',
-  'test_cavity_magnet.cpp',
   '../src/models/cluster_magnet/basis.cpp',
   '../src/models/common/spinop.cpp',
 ])

@@ -1,7 +1,7 @@
 #include "cavity_magnet.h"
 #include "../common/mag_est.h"
 #include "../common/spinop.h"
-#include "downfolded_coupling.h"
+#include "downfolded_peierls_coupling.h"
 #include "nlohmann/json.hpp"
 #include "photon_est.h"
 #include "util/kronecker_product.h"
