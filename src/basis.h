@@ -12,13 +12,10 @@ struct worm_function {
 	const char *name;
 	int inverse_idx;
 	std::vector<state_idx> action;
-
-	state_idx operator()(state_idx state) const {
-		return action[state];
-	}
 };
 
 std::vector<worm_function> generate_xor_worms(uint32_t basis_size);
+std::vector<worm_function> generate_addmod_worms(uint32_t basis_size);
 
 class site_basis {
 public:
@@ -102,16 +99,15 @@ namespace site_bases {
 			       0, 0,      0,     0,        0,        0,     0,     1}).transpose(),
 		generate_xor_worms(1<<3)       
 	};
-	const site_basis trimer_proj = {
-		3,
-		{{'a', 0.5, 0.5, 0}, {'b', 0.5, -0.5, 0},
-		 {'x', 0.5, 0.5, 1}, {'y', 0.5, -0.5, 1}},
-		init_mat(4,8, {0,	 0,  isq_,     0, -isq_,     0,	       0, 0,
-			       0,	 0,     0,  -isq_,     0, isq_,	       0, 0,
-			       0, -2*isq6_, isq6_,     0, isq6_,     0,	       0, 0,
-			       0,	 0,	0, isq6_,     0, isq6_, -2*isq6_, 0}).transpose(),
-		generate_xor_worms(4)
-	};
+	
+	/*const site_basis spin1 = {
+		1,
+		{{'+', 1, -1}, {'0', 1, 0}, {'-', 1, -1}},
+		init_mat(3,3, {1,0,0,
+			       0,1,0,
+			       0,0,1}),
+		generate_addmod_worms(3),
+	};*/
 }	
 
 
