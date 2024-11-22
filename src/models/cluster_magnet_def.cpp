@@ -237,7 +237,6 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 	auto name = p.get<std::string>("lattice");
 
 	cluster_magnet_proto proto;
-
 	int Lx = p.get<int>("Lx");
 	int Ly = p.get<int>("Ly", Lx);
 
@@ -261,5 +260,25 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}
 
+
+	// FIXME: very messy solution of the L=1 bond cutter. The current architecture is a bit
+	// clumsy in this case.
+	std::vector<uc_bond> filtered_uc_bonds;
+	std::vector<cluster_bond> filtered_cluster_bonds;
+
+	assert(proto.uc.bonds.size() == proto.bonds.size());
+	for(int i = 0; i < static_cast<int>(proto.uc.bonds.size()); i++) {
+		const auto& b = proto.uc.bonds[i];
+		// FIXME: only cut bonds that actually connect the same spins!
+		if((Ly == 1 && b.j.dy != 0) || (Lx == 1 && b.j.dx != 0)) {
+			continue;
+		}
+		filtered_uc_bonds.emplace_back(b);
+		filtered_cluster_bonds.emplace_back(proto.bonds[i]);
+	}
+
+	proto.uc.bonds = filtered_uc_bonds;
+	proto.bonds = filtered_cluster_bonds;
+	
 	return std::make_unique<cluster_magnet>(lattice{proto.uc, Lx, Ly}, proto.sites, proto.bonds);
 }

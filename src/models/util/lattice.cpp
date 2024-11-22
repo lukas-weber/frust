@@ -9,17 +9,6 @@ vec2 lattice::site_pos(int site_idx) const {
 lattice::lattice(const unitcell &ucell, int Lx, int Ly)
     : uc{ucell}, Lx{Lx}, Ly{Ly}  {
 	int uc_spin_count = uc.sites.size();
-	// FIXME: replace by something more sensible
-	/*if(Ly == 1) {
-		auto it = std::remove_if(uc.bonds.begin(), uc.bonds.end(),
-		                         [](const auto &b) { return b.j.dy != 0; });
-		uc.bonds.erase(it, uc.bonds.end());
-	}
-	if(Lx == 1) {
-		auto it = std::remove_if(uc.bonds.begin(), uc.bonds.end(),
-		                         [](const auto &b) { return b.j.dx != 0; });
-		uc.bonds.erase(it, uc.bonds.end());
-	}*/
 
 	for(const auto &b : uc.bonds) {
 		uc.sites[b.i].coordination++;
