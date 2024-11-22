@@ -170,6 +170,18 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 			{0,{1,0,0},{Jnn, Jn, Jnn, Jnn}},
 			{1,{0,1,0},{Jn, Jn}},
 		};
+	} else if(basis == 5) {
+		uc.sites = {
+			{{0.5,0.5}, {J2}, site_bases::dimer},
+			{{0,0}, {}, site_bases::spin},
+		};
+
+		uc.bonds = {
+			{0,{0,0,1},{J3, J1}},
+			{0,{1,0,1},{0, Jn}},
+			{0,{0,1,0},{0, Jn, 0, 0}},
+			{0,{0,1,1},{Jn, 0}},
+		};
 	} else if(basis == 3 || basis == 4) {
 		uc.sites = {{{0,0}, {J3, J1, J2}, basis == 3 ? site_bases::trimer : site_bases::trimer23}};
 
