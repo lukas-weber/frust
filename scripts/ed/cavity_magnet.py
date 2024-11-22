@@ -2,7 +2,7 @@ from . import hamiltonian
 import numpy as np
 import math
 import scipy.sparse as sps
-from . import downfolded_coupling
+import downfolded_peierls_coupling
 from . import model_common
 
 
@@ -41,8 +41,8 @@ class Model(model_common.Magnet):
 
         for b in self.model_data.bonds:
             H += b.J * sps.kron(
-                downfolded_coupling.matrix(
-                    max_photons, omegas / self.model_data.U, b.mode_couplings
+                downfolded_peierls_coupling.matrix(
+                    omegas / self.model_data.U, b.mode_couplings, int(max(max_photons))
                 ),
                 (
                     self.lifter.heisen_bond(b.i, b.j)
