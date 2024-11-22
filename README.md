@@ -1,5 +1,7 @@
 # frust
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14205558.svg)](https://doi.org/10.5281/zenodo.14205558)
+
 A C++ implementation of the stochastic series expansion quantum Monte Carlo method [[1]](#1) with abstract loop updates, which was used in the works
 
 - J. L. Jiménez, S. P. G. Crone, E. Fogh, M. E. Zayed, R. Lortz, E. Pomjakushina, K. Conder, A. M. Läuchli, L. Weber, S. Wessel, A. Honecker, B. Normand, C. Rüegg, P. Corboz, H. M. Rønnow, and F. Mila,
