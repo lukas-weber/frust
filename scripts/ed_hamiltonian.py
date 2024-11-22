@@ -41,12 +41,10 @@ def chirality(Nfull):
     #tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
     #tauz = -1j*(uL.H@uR + dL.H@dR - uR.H@uL - dR.H@dL)
     tauz = us.H@ut + ds.H@dt + ut.H@us + dt.H@ds
-
     def lift_tauz(i):
         return sps.kron(sps.kron(sps.identity(8**i), tauz), sps.identity(8**(Nfull-i-1)))
         
     meantauz = sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
-    meantauz = lift_tauz(0)@lift_tauz(1)
 
     return meantauz
 
