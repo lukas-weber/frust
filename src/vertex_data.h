@@ -12,7 +12,7 @@ public:
 	class transition {
 	public:
 		bool invalid() const {
-			return probs[probs.size() - 1] < 1 - 1e-8;
+			return probs[probs.size() - 1] < 1 - 1e-7;
 		}
 		void print() const;
 
@@ -75,6 +75,8 @@ inline int vertex_data::get_sign(vertexcode v) const {
 inline auto vertex_data::scatter(vertexcode v, int leg_in, worm_idx worm_in, double random) const {
 	int vi = v.vertex_idx();
 	const auto &t = transitions_[vi * leg_count * max_worm_count_ + worm_in * leg_count + leg_in];
+
+	assert(worm_in < worm_count(dims[leg_in%(leg_count / 2)]));
 
 	assert(!t.invalid());
 	uint32_t out;
