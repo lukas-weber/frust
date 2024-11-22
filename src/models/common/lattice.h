@@ -64,8 +64,11 @@ inline int lattice::site_count() const {
 }
 
 inline vec2 lattice::site_pos(site_idx i) const {
-	auto [x, y, iuc] = split_idx(i);
-	return (x + uc.sites[iuc].pos[0]) * uc.a1 + (y + uc.sites[iuc].pos[1]) * uc.a2;
+	auto [iuc, x, y] = split_idx(i);
+	Eigen::Matrix2d A;
+	A.col(0) = uc.a1;
+	A.col(1) = uc.a2;
+	return A * (vec2{x, y} + uc.sites[iuc].pos);
 }
 
 inline double lattice::site_sublattice_sign(site_idx i) const {
