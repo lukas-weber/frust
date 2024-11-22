@@ -19,6 +19,7 @@ test_jobfiles_cluster_magnet = files([
 test_jobfiles_cavity_magnet = files([
   'cavity_square',
   'cavity_degenerate',
+  'cavity_honeycomb',
 ])
 
 test_jobfiles = test_jobfiles_cluster_magnet + test_jobfiles_cavity_magnet
