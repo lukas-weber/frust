@@ -46,7 +46,7 @@ class Model(model_common.Magnet):
                 ).matrix(),
                 (
                     self.lifter.heisen_bond(b.i, b.j)
-                    - 0.25 * sps.eye(self.spin_dimension)
+                    - self.model_data.heisenberg_offset * sps.eye(self.spin_dimension)
                 ),
             )
 
@@ -82,7 +82,9 @@ class Model(model_common.Magnet):
 
         photon_numbers = [
             sps.kron(op, sps.eye(self.spin_dimension))
-            for op in reversed(self.photon_number_ops()) # XXX: expose occupation number ordering in downfolded_peierls_coupling to make this less ad-hoc
+            for op in reversed(
+                self.photon_number_ops()
+            )  # XXX: expose occupation number ordering in downfolded_peierls_coupling to make this less ad-hoc
         ]
 
         projectors = np.eye(self.photon_dimension)
