@@ -5,6 +5,7 @@
 #include "nlohmann/json.hpp"
 #include "photon_est.h"
 #include "util/kronecker_product.h"
+#include <functional>
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
                              const std::vector<site> &sites, const std::vector<bond> &bonds,
@@ -28,53 +29,50 @@ sse_data cavity_magnet::generate_sse_data() const {
 	std::vector<sse_data::bond> sse_bonds;
 	std::vector<sse_data::site> sse_sites;
 
+	int photon_dim = std::transform_reduce(modes.begin(), modes.end(), 1, std::multiplies{},
+	                                       [](const auto &mode) { return mode.max_photons; });
+
+	Eigen::MatrixXd Hphot = Eigen::MatrixXd::Zero(photon_dim, photon_dim);
+	for(int n = 0; n < photon_dim; n++) {
+		int dim = 1;
+		for(const auto &m : modes) {
+			int ni = (n / dim) % m.max_photons;
+			Hphot(n, n) += m.omega * ni;
+		}
+	}
+
 	int mode_count = modes.size();
 
 	int bond_idx{};
 	for(const auto &b : bonds_) {
 		int mode_idx{};
+
+		std::vector<downfolded_coupling_params> mode_params(modes.size());
 		for(const auto &m : modes) {
-			Eigen::MatrixXd photon_number = Eigen::MatrixXd::Zero(m.max_photons, m.max_photons);
-
-			int site_idx_i = lat.uc.bonds[bond_idx].i;
-			int site_idx_j = lat.uc.bonds[bond_idx].j.uc;
-
-			int spin_dim_i = sites_[site_idx_i].spin_dim;
-			int spin_dim_j = sites_[site_idx_j].spin_dim;
-
-			auto spinop_i = spin_operators(spin_dim_i);
-			auto spinop_j = spin_operators(spin_dim_j);
-
-			int n = 0;
-			for(auto &d : photon_number.diagonal()) {
-				d = n;
-				n++;
-			}
-
-			Eigen::MatrixXd exchange_photon_coupling =
-			    downfolded_coupling(m.omega, b.mode_couplings[mode_idx], m.max_photons);
-
-			Eigen::MatrixXd spin_identity =
-			    Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
-
-			Eigen::MatrixXd H =
-			    b.J / modes.size() *
-			        kronecker_prod(exchange_photon_coupling,
-			                       -0.25 * spin_identity + scalar_product(spinop_i, spinop_j)) +
-			    m.omega / lat.bonds.size() * kronecker_prod(photon_number, spin_identity);
-
-			/*
-			auto spinz_i =
-			    kronecker_prod(spinop_i[1], Eigen::MatrixXd::Identity(spin_dim_j, spin_dim_j));
-			auto spinz_j =
-			    kronecker_prod(Eigen::MatrixXd::Identity(spin_dim_i, spin_dim_i), spinop_j[1]);
-			H += m.coupling * kronecker_prod(photon_number,
-			                                spinz_i / lat.uc.sites[site_idx_i].coordination +
-			                                    spinz_j / lat.uc.sites[site_idx_j].coordination) +
-			*/
-			vert_data.push_back({{m.max_photons, spin_dim_i, spin_dim_j}, H});
+			mode_params[mode_idx] = {m.omega, b.mode_couplings[mode_idx], m.max_photons};
 			mode_idx++;
 		}
+
+		int site_idx_i = lat.uc.bonds[bond_idx].i;
+		int site_idx_j = lat.uc.bonds[bond_idx].j.uc;
+
+		int spin_dim_i = sites_[site_idx_i].spin_dim;
+		int spin_dim_j = sites_[site_idx_j].spin_dim;
+
+		auto spinop_i = spin_operators(spin_dim_i);
+		auto spinop_j = spin_operators(spin_dim_j);
+
+		Eigen::MatrixXd spin_identity =
+		    Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
+
+		Eigen::MatrixXd exchange_photon_coupling = downfolded_coupling(mode_params);
+
+		Eigen::MatrixXd H =
+		    b.J * kronecker_prod(exchange_photon_coupling,
+		                         -0.25 * spin_identity + scalar_product(spinop_i, spinop_j)) +
+		    1.0 / lat.bonds.size() * kronecker_prod(Hphot, spin_identity);
+
+		vert_data.push_back({{photon_dim, spin_dim_i, spin_dim_j}, H});
 		bond_idx++;
 	}
 
