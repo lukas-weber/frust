@@ -3,6 +3,7 @@
 #include "../common/lattice.h"
 #include "../model.h"
 #include "basis.h"
+#include <optional>
 
 class cavity_magnet : public model {
 public:
@@ -31,6 +32,13 @@ public:
 
 	cavity_basis get_basis(int abstract_site_idx) const {
 		return bases_[abstract_site_idx];
+	}
+
+	std::optional<lattice::site_idx> get_lattice_site_idx(int abstract_site_idx) const {
+		if(abstract_site_idx < static_cast<int>(modes_.size())) {
+			return std::nullopt;
+		}
+		return abstract_site_idx - modes_.size();
 	}
 
 	sse_data generate_sse_data() const override;
