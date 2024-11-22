@@ -126,14 +126,18 @@ std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0, 
 	return std::nullopt;
 }
 
+template<bool TauY>
 void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	const auto matelem_func = [](bool switcheroo, const site_basis::state &sbefore, const site_basis::state &safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
 		const auto &sdown = switcheroo ? safter : sbefore;
 		
 		if(sdown.j == sup.j && sdown.m == sup.m) {
-			//return sold.jdim != snew.jdim;
-			return -sdown.jdim+sup.jdim;
+			if constexpr(TauY) {
+				return sdown.jdim != sup.jdim;
+			} else {
+				return -sdown.jdim+sup.jdim;
+			}
 		}
 		return 0;
 	};
@@ -244,17 +248,24 @@ void frust::worm_update() {
 		std::vector<double> corr(lat_.sites.size());
 		double sign = measure_sign();
 
+		bool tauy = param.get<bool>("chirality_op_tauy", false);
+
 		for(int i = 0; i < nworm_; i++) {
-			worm_traverse_measure(sign, corr);
+			if(tauy) {
+				worm_traverse_measure<true>(sign, corr);
+			} else {
+				worm_traverse_measure<false>(sign, corr);
+			}
 		}	
 		for(auto &c : corr) {
 			c *= -1./ceil(nworm_);
 		}
-		measure.add("SignTauZ", corr);
-		//measure.add("SignTauZ1", -(noper_==1)*7*mean/lat_.sites.size()/ceil(nworm_));
-		//measure.add("SignTauZ2", -(noper_==2)*7*mean/lat_.sites.size()/ceil(nworm_));
-		//measure.add("SignTauZ3", -(noper_==3)*7*mean/lat_.sites.size()/ceil(nworm_));
-		//measure.add("SignTauZ4", -(noper_==4)*7*mean/lat_.sites.size()/ceil(nworm_));
+		
+		if(tauy) {
+			measure.add("SignTauY", corr);
+		} else {
+			measure.add("SignTauZ", corr);
+		}
 	}
 
 	for(size_t i = 0; i < spin_.size(); i++) {
@@ -513,10 +524,14 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 			}
 			return result;
 		});
-		//eval.evaluate("TauZ1", {"SignTauZ1", "Sign"}, unsign);
-		//eval.evaluate("TauZ2", {"SignTauZ2", "Sign"}, unsign);
-		//eval.evaluate("TauZ3", {"SignTauZ3", "Sign"}, unsign);
-		//eval.evaluate("TauZ4", {"SignTauZ4", "Sign"}, unsign);
+		eval.evaluate("TauY", {"SignTauY", "SignChiralityOnsite", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
+			std::vector<double> result = obs[0];
+			result[0] = obs[1][0];
+			for(auto &r : result) {
+				r /= -obs[2][0];
+			}
+			return result;
+		});
 	}
 	
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);

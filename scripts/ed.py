@@ -146,6 +146,7 @@ def calc_observables(E, psi):
 
     if 'chirality' in job.tasks[taskname].get('measure'):
         obs['TauZ'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauz']]).T
+        obs['TauY'] = np.array([mean(taucorr) for taucorr in obs_ops['chirality_tauy']]).T
 
     if 'J' in obs_ops.keys():
         obs.update(j_obs())

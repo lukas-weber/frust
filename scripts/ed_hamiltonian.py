@@ -43,16 +43,20 @@ def chirality(Nfull):
     #tauz = -1j*(uL.H@uR + dL.H@dR - uR.H@uL - dR.H@dL)
     #tauz = us.H@ut + ds.H@dt + ut.H@us + dt.H@ds
     #tauz = us.H@ut + ds.H@dt - ut.H@us - dt.H@ds
+    tauy = -1j*(uL.H@uR + dL.H@dR - uR.H@uL - dR.H@dL)
     
-    def lift_tauz(i):
-        return sps.kron(sps.kron(sps.identity(8**i), tauz), sps.identity(8**(Nfull-i-1)))
+    def lift_tri(i, op):
+        return sps.kron(sps.kron(sps.identity(8**i), op), sps.identity(8**(Nfull-i-1)))
 
     tauzcorr = []
+    tauycorr = []
     for i in range(Nfull):
-        tauzcorr.append(lift_tauz(0)@lift_tauz(i))
+        tauzcorr.append(lift_tri(0,tauz)@lift_tri(i,tauz))
+        tauycorr.append(lift_tri(0,tauy)@lift_tri(i,tauy))
     #meantauz = -sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
 
-    return tauzcorr
+    return tauzcorr, tauycorr
+
 
 def construct(lat):
     Nfull = len(lat.sites)
@@ -118,6 +122,8 @@ def construct(lat):
     obs_ops['sxsyM'] = signed_mag(-1,-1)
 
     if all(len(s)==3 for s in full2half):
-        obs_ops['chirality_tauz'] = chirality(Nfull)
+        tauzcorr, tauycorr = chirality(Nfull)
+        obs_ops['chirality_tauz'] = tauzcorr
+        obs_ops['chirality_tauy'] = tauycorr
     
     return H, obs_ops
