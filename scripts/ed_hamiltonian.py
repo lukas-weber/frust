@@ -45,10 +45,13 @@ def chirality(Nfull):
     
     def lift_tauz(i):
         return sps.kron(sps.kron(sps.identity(8**i), tauz), sps.identity(8**(Nfull-i-1)))
-        
-    meantauz = sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
 
-    return meantauz
+    tauzcorr = []
+    for i in range(Nfull):
+        tauzcorr.append(-lift_tauz(0)@lift_tauz(i))
+    #meantauz = -sum(lift_tauz(i)@lift_tauz(j) for i in range(Nfull) for j in range(Nfull) if i != j)/Nfull**2
+
+    return tauzcorr
 
 def construct(lat):
     Nfull = len(lat.sites)
