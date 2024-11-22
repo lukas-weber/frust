@@ -79,14 +79,14 @@ vertexcode vertex_data::wrap_vertex_idx(int vertex_idx) {
 int vertex_data::vertex_change_apply(int vertex,
                                      int leg_in, worm_idx worm_in, int leg_out,
                                      worm_idx worm_out) const {
-	std::vector<state_idx> new_legstate(&legstates_[leg_count * vertex], &legstates_[leg_count * (vertex + 1)]);
+	std::vector<state_idx> new_legstate(&legstates_[leg_count * vertex], &legstates_[leg_count * vertex] + leg_count);
 
 	int dim_in = dims_[leg_in % (leg_count/2)];
 	int dim_out = dims_[leg_out % (leg_count/2)];
 
 	new_legstate[leg_in] = worm_action(worm_in, new_legstate[leg_in], dim_in);
 	new_legstate[leg_out] = worm_action(worm_out, new_legstate[leg_out], dim_out);
-	for(int v = 0; v < weights_.size(); v++) {
+	for(int v = 0; v < static_cast<int>(weights_.size()); v++) {
 		bool match = true;
 		for(int l = 0; l < leg_count; l++) {
 			match &= new_legstate[l] == legstates_[leg_count * v + l];
