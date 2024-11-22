@@ -31,6 +31,7 @@ private:
 
 
 	double avgwormlen_{1};
+	int maxwormlen_{0};
 	double nworm_{5};
 	int64_t noper_{};
 	
@@ -42,12 +43,13 @@ private:
 	measurement_settings settings_;
 
 	void diagonal_update();
+	bool wormtoolong(int wormlen) const;
 
 	void make_vertex_list();
 	int worm_traverse();
 	std::optional<uint32_t> find_worm_measure_start(int site0, uint32_t &p0, int direction0) const;
-	void worm_traverse_measure(double &sign, std::vector<double> &corr);
-	void worm_update();
+	int worm_traverse_measure(double &sign, std::vector<double> &corr);
+	bool worm_update();
 
 	template<class... Estimators>
 	void opstring_measurement(Estimators... est);

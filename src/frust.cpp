@@ -44,10 +44,19 @@ void frust::init() {
 
 	operators_.resize(param.get("init_opstring_cutoff",static_cast<int>(lat_.spinhalf_count*T_)));
 
+	maxwormlen_=param.get<int>("maxwormlen",0);
+
 	const int warmup = 5;
 	for(int i = 0; i < warmup; i++) {
 		diagonal_update();
 	}
+}
+
+bool frust::wormtoolong(int wormlen) const {
+	if(maxwormlen_!=0 && wormlen>=maxwormlen_*static_cast<int>(operators_.size()))
+		return true;
+	else
+		return false;
 }
 
 int frust::worm_traverse() {
@@ -83,7 +92,7 @@ int frust::worm_traverse() {
 		uint32_t vstep = 4*(v/4)+leg_out;
 		const auto &bond = lat_.bonds[op.bond()];
 		const auto &site_out = lat_.get_uc_site(leg_out&1 ? bond.j : bond.i);
-		if(vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) {
+		if(( vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) || wormtoolong(wormlength)) {
 			break;
 		}
 		wormfunc = wormfunc_out;
@@ -126,7 +135,7 @@ std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0, 
 	return std::nullopt;
 }
 
-void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
+int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore, const site_basis::state &safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
 		const auto &sdown = switcheroo ? safter : sbefore;
@@ -139,9 +148,10 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 	assert(lat_.uc.sites.size() == 1); // not implemented
 	
+	int wormlength{};
 	
 	if(noper_ == 0) {
-		return;
+		return wormlength;
 	}
 
 	uint32_t p0 = operators_.size()*random01();
@@ -150,7 +160,7 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 	auto v0opt = find_worm_measure_start(site0, p0, direction0);
 	if(!v0opt) {
-		return;
+		return wormlength;
 	}
 	uint32_t v0 = *v0opt;
 	uint32_t v1 = vertices_[v0];
@@ -163,6 +173,7 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	int wormfunc = wormfunc0;
 
 	do {
+		wormlength++;
 		auto &op = operators_[v/4];
 		assert(!op.vertex().invalid());
 		opercode old_op = op;
@@ -180,7 +191,7 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		sign *= vd.get_sign(old_op.vertex())*vd.get_sign(op.vertex());
 
-		if(vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) {
+		if( (vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) || wormtoolong(wormlength)) {
 			break;
 		}
 	
@@ -190,10 +201,10 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		assert(vnext != -1);
 
 		bool up = leg_out > 1;
-		if((up  &&     v/4 <= p0 && p0 < vnext/4) ||
+		if((up	&&	   v/4 <= p0 && p0 < vnext/4) ||
 		   (!up && vnext/4 <= p0 && p0 < v/4) ||
-		   (up  && vnext/4 <=     v/4 && (p0 >=     v/4 || p0 < vnext/4)) ||
-		   (!up &&     v/4 <= vnext/4 && (p0 >= vnext/4 || p0 <     v/4))) {
+		   (up	&& vnext/4 <=	  v/4 && (p0 >=		v/4 || p0 < vnext/4)) ||
+		   (!up &&	   v/4 <= vnext/4 && (p0 >= vnext/4 || p0 <		v/4))) {
 			int state_after_idx = vd.get_legstate(op.vertex())[leg_out];
 			int state_before_idx = site_out.basis.worms[site_out.basis.worms[wormfunc].inverse_idx].action[state_after_idx];
 			const auto &state_before = site_out.basis.states[state_before_idx];
@@ -223,24 +234,35 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		
 		v = vnext;
 	} while(v != v0 || wormfunc != wormfunc0);
+	return wormlength;
 }		
 		
 
-void frust::worm_update() {
+bool frust::worm_update() {
+	std::vector<opercode> old_operators={};
+	if(maxwormlen_!=0){
+		old_operators = operators_;
+	}
 	if(!is_thermalized() || !settings_.measure_chirality) {
-		double wormlength = 1;
+		double totalwormlength = 1;
 		for(int i = 0; i < nworm_; i++) {
-			wormlength += worm_traverse();
+			int wormlength{};
+			wormlength = worm_traverse();
+			totalwormlength += wormlength;
+			if(wormtoolong(wormlength)) {
+				operators_=old_operators;
+				return 0;
+			}
 		}
 		
 		if(is_thermalized() && noper_ != 0) {
-			measure.add("wormlength_fraction", wormlength/noper_);
+			measure.add("wormlength_fraction", totalwormlength/noper_);
 		}
 		
-		wormlength /= ceil(nworm_);
+		totalwormlength /= ceil(nworm_);
 
 		if(!is_thermalized()) {
-			avgwormlen_ += 0.01*(wormlength-avgwormlen_);
+			avgwormlen_ += 0.01*(totalwormlength-avgwormlen_);
 			double target_worms = param.get<double>("wormlength_fraction", 2.0)*noper_/avgwormlen_;
 			nworm_ += 0.01*(target_worms-nworm_)+tanh(target_worms-nworm_);
 			nworm_ = std::clamp(nworm_, 1., 1.+noper_/2.);
@@ -249,9 +271,14 @@ void frust::worm_update() {
 		int size = settings_.loopcorr_as_strucfac ? 1 : lat_.sites.size();
 		std::vector<double> corr(4 * size);
 		double sign = measure_sign();
+		int wormlength{};
 
 		for(int i = 0; i < nworm_; i++) {
-			worm_traverse_measure(sign, corr);
+			wormlength = worm_traverse_measure(sign, corr);
+			if(wormtoolong(wormlength)) {
+				operators_=old_operators;
+				return 0;
+			}
 		}	
 		for(auto &c : corr) {
 			c *= 1./ceil(nworm_);
@@ -272,6 +299,7 @@ void frust::worm_update() {
 		}
 	}
 
+	return 1;
 }
 
 void frust::make_vertex_list() {
@@ -368,9 +396,12 @@ void frust::diagonal_update() {
 }
 
 void frust::do_update() {
-	diagonal_update();
-	make_vertex_list();
-	worm_update();
+	bool wormsuccess=true;
+	do{
+		diagonal_update();
+		make_vertex_list();
+		wormsuccess = worm_update();
+	} while(!wormsuccess);
 }
 
 template<typename... Ests>
@@ -417,16 +448,16 @@ void frust::do_measurement() {
 	double sign = measure_sign();
 
 	auto obs = std::tuple{
-	    j_est{lat_, sign, settings_.measure_jcorrlen},
-	    mag_est<1, 1>{lat_, T_, sign},
-	    mag_est<1, -1>{lat_, T_, sign},
-	    mag_est<-1, 1>{lat_, T_, sign},
-	    mag_est<-1, -1>{lat_, T_, sign},
+		j_est{lat_, sign, settings_.measure_jcorrlen},
+		mag_est<1, 1>{lat_, T_, sign},
+		mag_est<1, -1>{lat_, T_, sign},
+		mag_est<-1, 1>{lat_, T_, sign},
+		mag_est<-1, -1>{lat_, T_, sign},
 	};
 
 	std::array<bool, 5> flags = {
-	    settings_.measure_j || settings_.measure_chirality,     settings_.measure_mag,     settings_.measure_sxmag,
-	    settings_.measure_symag, settings_.measure_sxsymag,
+		settings_.measure_j || settings_.measure_chirality,		settings_.measure_mag,	   settings_.measure_sxmag,
+		settings_.measure_symag, settings_.measure_sxsymag,
 	};
 
 	template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
