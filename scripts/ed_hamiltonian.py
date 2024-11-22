@@ -38,9 +38,11 @@ def chirality(Nfull):
     ds = 1/2**0.5 * np.matrix([0,0,0,1,0,-1,0,0])
     dt = 1/6**0.5 * np.matrix([0,0,0,1,0,1,-2,0])
 
-    #tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
+    tauz = uL.H@uL + dL.H@dL - uR.H@uR - dR.H@dR
     #tauz = -1j*(uL.H@uR + dL.H@dR - uR.H@uL - dR.H@dL)
-    tauz = us.H@ut + ds.H@dt + ut.H@us + dt.H@ds
+    #tauz = us.H@ut + ds.H@dt + ut.H@us + dt.H@ds
+    #tauz = us.H@ut + ds.H@dt - ut.H@us - dt.H@ds
+    
     def lift_tauz(i):
         return sps.kron(sps.kron(sps.identity(8**i), tauz), sps.identity(8**(Nfull-i-1)))
         

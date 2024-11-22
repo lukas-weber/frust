@@ -68,6 +68,8 @@ void lattice::to_json(nlohmann::json &out) {
 	out["Ly"] = Ly;
 	out["uc_spin_count"] = uc.sites.size();
 
+	out["energy_offset"] = energy_offset;
+
 	for(const auto &site : sites) {
 		const auto &uc_st = uc.sites[idx%uc.sites.size()];
 		out["sites"].push_back({

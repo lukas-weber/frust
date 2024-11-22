@@ -18,6 +18,7 @@ class Lattice:
 
         self.Lx = lattice['Lx']
         self.Ly = lattice['Ly']
+        self.energy_offset = lattice['energy_offset']
         self.uc_spin_count = lattice['uc_spin_count']
         self.bonds = [Bond(**b) for b in lattice['bonds']]
         self.sites = [Site(**s) for s in lattice['sites']]
