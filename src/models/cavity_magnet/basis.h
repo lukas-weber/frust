@@ -4,6 +4,7 @@
 #include "worms.h" // XXX: move state_idx type to another header?
 #include <functional>
 #include <numeric>
+#include <optional>
 
 class cavity_basis {
 public:
@@ -11,6 +12,14 @@ public:
 		spin,
 		mode,
 	};
+
+	std::optional<int> nstate(state_idx state) const { // complete cavity state used for histogram
+		if(type_ == site_type::spin) {
+			return std::nullopt;
+		}
+
+		return state;
+	}
 
 	double n(state_idx state, int mode) const {
 		if(type_ == site_type::spin) {

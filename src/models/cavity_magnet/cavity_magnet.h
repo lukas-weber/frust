@@ -25,6 +25,7 @@ public:
 	lattice lat;
 	std::vector<mode> modes;
 	cavity_magnet_measurement_settings settings;
+	int photon_dimension{};
 
 	cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
 	              const std::vector<site> &sites, const std::vector<bond> &bonds, double U,
