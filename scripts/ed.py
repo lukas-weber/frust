@@ -101,6 +101,8 @@ def calc_observables(E, psi):
         obs[prefix+'Mag'] = mean(M)
         obs[prefix+'Mag2'] = mean(M2)
         obs[prefix+'Mag4'] = mean(M4)
+        
+        obs[prefix+'BinderRatio'] = obs[prefix+'Mag2']**2/obs[prefix+'Mag4']
 
         if num_states == 0:
             obs[prefix+'MagChi'] = chi(M, N)
