@@ -5,7 +5,7 @@
 #include "lattice.h"
 #include "opercode.h"
 
-template <bool Staggered>
+template <int SignX, int SignY>
 class mag_est {
 private:
 	double n_{1};
@@ -24,17 +24,23 @@ public:
 	mag_est(const lattice &lat, double T, double sign) : lat_{lat}, T_{T}, sign_{sign} {
 	}
 
+	double stag_sign(uint32_t idx) {
+		double sign = 1;
+		idx /= lat_.uc.sites.size();
+		if(SignX < 0) {
+			sign *= 2.*((idx%lat_.Lx)&1)-1.;
+		}
+		if(SignY < 0) {
+			sign *= 2.*((idx/lat_.Lx)&1)-1.;
+		}
+		return sign;
+	}
+
 	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;
 
-		int i = 0;
-		for(const auto &site : lat_.sites) {
-			int sign = 1;
-			if(Staggered) {
-				sign *= site.sublattice;
-			}
-			tmpmag_ += sign * lat_.get_uc_site(i).basis.states[spin[i]].m;
-			i++;
+		for(uint32_t i = 0; i < spin.size(); i++) {
+			tmpmag_ += stag_sign(i) * lat_.get_uc_site(i).basis.states[spin[i]].m;
 		}
 		
 		mag_ = tmpmag_;
@@ -44,7 +50,7 @@ public:
 	}
 
 	void measure(opercode op, const std::vector<state_idx> &) {
-		if(!Staggered) {
+		if(SignX == 1 && SignY == 1) {
 			return;
 		}
 		
@@ -58,7 +64,7 @@ public:
 			double m20 = bi.states[leg_state[2]].m - bi.states[leg_state[0]].m;
 			double m31 = bj.states[leg_state[3]].m - bj.states[leg_state[1]].m;
 			
-			tmpmag_ += lat_.sites[bond.i].sublattice*m20 + lat_.sites[bond.j].sublattice*m31;
+			tmpmag_ += stag_sign(bond.i)*m20 + stag_sign(bond.j)*m31;
 		}
 
 		mag_ += tmpmag_;
@@ -68,11 +74,20 @@ public:
 		n_++;
 	}
 
+	const std::string prefix() {
+		std::string p;
+		if(SignX < 0) {
+			p += "StagX";
+		}
+		if(SignY < 0) {
+			p += "StagY";
+		}
+		return p;
+	}
+
 	void result(loadl::measurements &measure) {
 		std::string p = "Sign";
-		if(Staggered) {
-			p += "Stag";
-		}
+		p += prefix();
 
 		double norm = 1. / lat_.spinhalf_count;
 		mag_ *= norm;
@@ -91,7 +106,8 @@ public:
 
 	void register_evalables(loadl::evaluator &eval) {
 		std::string p = "Sign";
-		std::string p2 = Staggered ? "Stag" : "";
+		std::string p2 = prefix();
+
 		auto unsign = [](const std::vector<std::vector<double>> &obs) {
 			return std::vector<double>{obs[0][0]/obs[1][0]};
 		};

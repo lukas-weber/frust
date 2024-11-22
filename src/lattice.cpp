@@ -1,37 +1,6 @@
 #include "lattice.h"
 #include <tuple>
-	
-void lattice::init_sublattice() {
-	if(sites.size() == 0) {
-		return;
-	}
 
-	sites.at(0).sublattice = 1;
-
-	int num_set = 1;
-
-	for(const auto &site : sites) {
-		(void)site;
-		for(const auto &b : bonds) {
-			if(sites[b.i].sublattice != 0 && sites[b.j].sublattice == sites[b.i].sublattice) {
-				return;
-			}
-
-			if(sites[b.i].sublattice != 0) {
-				sites[b.j].sublattice = -sites[b.i].sublattice;
-				num_set++;
-			}
-
-			if(sites[b.j].sublattice != 0) {
-				sites[b.i].sublattice = -sites[b.j].sublattice;
-				num_set++;
-			}
-		}
-		if(num_set >= static_cast<int>(sites.size())) {
-			break;
-		}
-	}
-}
 
 lattice::lattice(const unitcell &ucell, int Lx, int Ly)
     : uc{ucell}, Lx{Lx}, Ly{Ly}  {
@@ -63,7 +32,6 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 		}
 	}
 
-	init_sublattice();
 	init_vertex_data(uc);
 }
 
@@ -89,11 +57,15 @@ void lattice::vertex_print() const {
 
 void lattice::to_json(nlohmann::json &out) {
 	int idx{};
+
+	out["Lx"] = Lx;
+	out["Ly"] = Ly;
+	out["uc_spin_count"] = uc.sites.size();
+
 	for(const auto &site : sites) {
 		const auto &uc_st = uc.sites[idx%uc.sites.size()];
 		out["sites"].push_back({
 			{"pos", site.pos},
-			{"sublattice", site.sublattice},
 			{"nspinhalfs", uc_st.basis.nspinhalfs},
 			{"Jin", uc_st.Jin},
 		});

@@ -44,7 +44,7 @@ public:
 			double j20 = bi.states[leg_state[2]].j-bi.states[leg_state[0]].j;
 			double j31 = bj.states[leg_state[3]].j-bj.states[leg_state[1]].j;
 			
-			tmpj_ += lat_.sites[bond.i].sublattice*j20 + lat_.sites[bond.j].sublattice*j31;
+			tmpj_ += j20 + j31;
 		}
 
 		j_ += tmpj_;

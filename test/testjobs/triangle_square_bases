@@ -10,6 +10,8 @@ tm.lattice = 'triangle_square'
 tm.Lx = 2
 tm.Ly = 2
 
+tm.measure = ['j', 'mag', 'sxmag', 'symag', 'sxsymag']
+
 tm.J1 = 2.1023
 tm.J2 = 3.36
 tm.J3 = 1.1356

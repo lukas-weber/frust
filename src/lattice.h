@@ -38,7 +38,6 @@ private:
 	std::vector<vertex_data> vertices_; // [uc_bond]
 
 	void calculate_energy_offset();
-	void init_sublattice();
 	void init_vertex_data(const unitcell &uc);
 };
 
