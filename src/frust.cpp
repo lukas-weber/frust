@@ -42,6 +42,8 @@ void frust::init() {
 		spin_[i] = lat_.get_uc_site(i).basis.size()*random01();
 	}
 
+	operators_.resize(param.get("init_opstring_cutoff",static_cast<int>(lat_.spinhalf_count*T_)));
+
 	const int warmup = 5;
 	for(int i = 0; i < warmup; i++) {
 		diagonal_update();
