@@ -18,10 +18,13 @@ fs = import('fs')
 test_simulation = find_program('test_simulation.py')
 gen_results = find_program('gen_result_files')
 
+ed_compare = find_program('../scripts/ed_compare.py')
+
+
 foreach tj : test_jobfiles
   test('ed_' + fs.name(tj),
     test_simulation,
-    args : [frust, tj, '--result-file', join_paths(meson.project_source_root(), 'testjobs/ed/', fs.name(tj) + '.ed.json')],
+    args : [frust, tj, '--result-file', join_paths(meson.project_source_root(), 'test/testjobs/ed/', fs.name(tj) + '.ed.json')],
     timeout : 5000,
     is_parallel : false,
     suite : 'ed')
@@ -30,6 +33,8 @@ foreach tj : test_jobfiles
     timeout : 5000,
     args : [frust, tj, '--seeded', '--result-file', join_paths(meson.project_source_root(), 'test/testjobs/seeded/', fs.name(tj) + '.seeded.json')],
     suite : 'seeded')
+  run_target('ed_compare_' + fs.name(tj),
+    command : [ed_compare, join_paths(meson.project_source_root(), 'test/testjobs/ed/', fs.name(tj) + '.ed.json'), join_paths(meson.project_build_root(), 'testjobs/', fs.name(tj) + '.results.json')])
 endforeach
 
 run_target('gen-seeded-results',
