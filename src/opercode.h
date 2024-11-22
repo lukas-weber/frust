@@ -12,7 +12,9 @@ public:
 
 	vertexcode() = default;
 
-	explicit vertexcode(bool diagonal, uint32_t vertex_idx) : code_{diagonal | (vertex_idx << 1)} {}
+	explicit vertexcode(bool diagonal, uint32_t vertex_idx) : code_{diagonal | (vertex_idx << 1)} {
+		assert(!invalid());
+	}
 
 	explicit vertexcode(uint32_t code) : code_{code} {}
 
