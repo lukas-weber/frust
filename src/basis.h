@@ -26,6 +26,7 @@ public:
 		char name{};
 		double j{};
 		double m{};
+		double jdim{};
 	};
 
 	static const uint32_t state_bits = 3; // max number of bits the state occupies
@@ -73,17 +74,17 @@ namespace site_bases {
 	};
 	const site_basis trimer = {
 		3,
-		{{'a', 0.5, 0.5}, {'b', 0.5, -0.5},
-		 {'x', 0.5, 0.5}, {'y', 0.5, -0.5},
-		 {'P', 1.5, 1.5}, {'p', 1.5, 0.5}, {'m', 1.5, -0.5}, {'M', 1.5, -1.5}},
-		init_mat(8,8, {0, 0, isq_, 0, -isq_, 0, 0, 0,
-			       0, 0, 0, isq_, 0, -isq_, 0, 0,
-			       0, -2*isq6_, isq6_, 0, isq6_, 0, 0, 0,
-			       0,0,0, isq6_, 0, isq6_, -2*isq6_, 0,
-			       1,0,0,0,0,0,0,0,
-			       0,isq3_, isq3_, 0, isq3_, 0, 0, 0,
-			       0,0,0, isq3_, 0, isq3_, isq3_, 0,
-			       0, 0, 0, 0, 0, 0, 0, 1}).transpose(),
+		{{'a', 0.5, 0.5, 0}, {'b', 0.5, -0.5, 0},
+		 {'x', 0.5, 0.5, 1}, {'y', 0.5, -0.5, 1},
+		 {'P', 1.5, 1.5, 1}, {'p', 1.5, 0.5, 1}, {'m', 1.5, -0.5, 1}, {'M', 1.5, -1.5, 1}},
+		init_mat(8,8, {0,	 0,  isq_,     0, -isq_,     0,	       0, 0,
+			       0,	 0,     0,  isq_,     0, -isq_,	       0, 0,
+			       0, -2*isq6_, isq6_,     0, isq6_,     0,	       0, 0,
+			       0,	 0,	0, isq6_,     0, isq6_, -2*isq6_, 0,
+			       1,	 0,	0,     0,     0,     0,	       0, 0,
+			       0,    isq3_, isq3_,     0, isq3_,     0,	       0, 0,
+			       0,	 0,	0, isq3_,     0, isq3_,	   isq3_, 0,
+			       0,	 0,     0,     0,     0,     0,	       0, 1}).transpose(),
 		generate_xor_worms(1<<3)       
 	};
 }	

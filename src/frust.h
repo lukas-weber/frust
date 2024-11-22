@@ -44,10 +44,13 @@ private:
 
 	void make_vertex_list();
 	int worm_traverse();
+	std::optional<uint32_t> find_worm_measure_start(int site0, uint32_t &p0, int direction0) const;
+	double worm_traverse_measure();
 	void worm_update();
 
 	template<class... Estimators>
 	void opstring_measurement(Estimators... est);
+	void measure_chirality(double sign);
 	double measure_sign() const;
 
 	void print_vertices();

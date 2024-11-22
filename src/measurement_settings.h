@@ -16,6 +16,8 @@ struct measurement_settings {
 				measure_symag = true;
 			} else if(obs == "sxsymag") {
 				measure_sxsymag = true;
+			} else if(obs == "chirality") {
+				measure_chirality = true;
 			} else {
 				throw std::runtime_error{fmt::format("unknown observable '{}'", obs)};
 			}
@@ -27,4 +29,5 @@ struct measurement_settings {
 	bool measure_sxmag{};
 	bool measure_symag{};
 	bool measure_sxsymag{};
+	bool measure_chirality{};
 };

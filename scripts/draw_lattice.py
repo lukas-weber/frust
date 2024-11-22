@@ -37,17 +37,21 @@ for s in lat.sites:
     for i in range(s.nspinhalfs):
         d.add(d.circle(pos[:,i].tolist(), r = 0.5, fill='black'))
 
-        if s.Jin != 0:
+        if len(s.Jin) != 0:
+            idx = 0
             for j in range(s.nspinhalfs):
                 if i < j:
-                    d.add(d.line(start=pos[:,i], end=pos[:,j], stroke='black', stroke_width=0.1, opacity=s.Jin/maxJ))
+                    d.add(d.line(start=pos[:,i], end=pos[:,j], stroke='black', stroke_width=0.1, opacity=s.Jin[idx]/maxJ))
+                    idx += 1
 
 for b in lat.bonds:
     nsi = lat.sites[b.i].nspinhalfs
     nsj = lat.sites[b.j].nspinhalfs
     for i in range(nsi): 
        for j in range(nsj):
-           d.add(d.line(start=poss[b.i][:,i], end=poss[b.j][:,j], stroke='black', stroke_width = 0.1, opacity=b.J[i*nsj+j]/maxJ))
+           len = np.sqrt(np.sum((poss[b.i][:,i]-poss[b.j][:,j])**2))
+           if len < 30:
+               d.add(d.line(start=poss[b.i][:,i], end=poss[b.j][:,j], stroke='black', stroke_width = 0.1, opacity=b.J[i*nsj+j]/maxJ))
 
 if args.outfile:
     d.save()
