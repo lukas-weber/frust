@@ -39,6 +39,8 @@ endforeach
 
 run_target('gen-seeded-results',
   command : [gen_results, frust, 'seeded', test_jobfiles])
+run_target('gen-ed-results',
+  command : [gen_results, frust, 'ed', test_jobfiles])
 
 hamiltonian_test = find_program('test_equal_hamiltonian.py')
 test('equal_hamiltonian', hamiltonian_test, args : [frust, files('testjobs/triangle_square_bases')])
