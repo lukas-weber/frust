@@ -1,0 +1,1093 @@
+[{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 0.1,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.027686198479334855
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.5131410256410261
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.44105995839477685,
+   "error": [
+    0.02768619847933488
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.5131410256410247
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.44105995839477635,
+   "error": [
+    2.214895878346789
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    207.05128205128204
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.44862500131968724,
+   "error": [
+    908.9108439227178
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    43081.5641025641
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    5.312064800908521
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    1.1481481481434033
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.6749567128894385,
+   "error": [
+    2.237409169509153e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    2.992461538461538e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.9303747923709831,
+   "error": [
+    8.076333152381307e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    4.440230769230771e-05
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.44105995839477635,
+   "error": [
+    2.214895878346789
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    207.05128205128204
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.8397223681497316,
+   "error": [
+    0.10258771077001068
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    2.890720802602948
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0001"
+},
+{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 0.25,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.029344505144809106
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.4979166666666657
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.2918651975382172,
+   "error": [
+    0.02934450514480918
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.4979166666666653
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.2918651975382175,
+   "error": [
+    0.9390241646338939
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    82.33333333333333
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.30773580446775983,
+   "error": [
+    160.78696960439606
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    6836.179487179487
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    1.6396149294256066
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -3.0062321937305825
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.896387965768045,
+   "error": [
+    1.1746414022347257e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.3561538461538463e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.2881243953474672,
+   "error": [
+    2.071125105943805e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.942782051282051e-05
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.2918651975382175,
+   "error": [
+    0.9390241646338939
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    82.33333333333333
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.34672766511579023,
+   "error": [
+    0.08386926081018253
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    3.6003386705988367
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0002"
+},
+{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 0.4,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.05362183638071158
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.44679487179487
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.4882242917437841,
+   "error": [
+    0.05362183638071153
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.4467948717948709
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.4882242917437841,
+   "error": [
+    1.0724367276142306
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    50.43589743589743
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.4772702177896047,
+   "error": [
+    108.27740527707041
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    2588.5384615384614
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    1.2956848290310359
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.5658831908837758
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.8990529224898677,
+   "error": [
+    1.1170001317474901e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0843846153846156e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.6328753685413931,
+   "error": [
+    3.540720152749673e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.3248435897435901e-05
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.4882242917437841,
+   "error": [
+    1.0724367276142306
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    50.43589743589743
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.816988590302728,
+   "error": [
+    0.2574312283620483
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    3.6497919115084474
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0003"
+},
+{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 0.5499999999999999,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.058894212599566904
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.40528846153846004
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.38005675029868585,
+   "error": [
+    0.05889421259956693
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.40528846153846015
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.38005675029868546,
+   "error": [
+    0.8566430923573368
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    36.07692307692307
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.4019365625663384,
+   "error": [
+    64.99415253793589
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1338.2307692307693
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    1.0903480817453346
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    0.16791310541276516
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.8755495743350631,
+   "error": [
+    1.1255589207444893e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    8.442820512820515e-07
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.3414805905665766,
+   "error": [
+    1.4737061802692397e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    8.69246153846154e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.38005675029868546,
+   "error": [
+    0.8566430923573368
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    36.07692307692307
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.4036430805869859,
+   "error": [
+    0.14793500255881287
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    3.728961511900649
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0004"
+},
+{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 0.7,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.09154835919341162
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.027243589743588592
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.6382141704325368,
+   "error": [
+    0.09154835919341162
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.027243589743588537
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.6382141704325373,
+   "error": [
+    1.0462669622104188
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    24.025641025641026
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.6036283522146313,
+   "error": [
+    53.28339830318558
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    609.8205128205128
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.928726788985584
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    1.2072649572649716
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.963670347959757,
+   "error": [
+    1.1139380835180652e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    7.614615384615385e-07
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.8842230610380484,
+   "error": [
+    1.7318628042478523e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    6.114435897435897e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.6382141704325373,
+   "error": [
+    1.0462669622104188
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    24.025641025641026
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.4293212235383532,
+   "error": [
+    0.1407667122841456
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    3.4179060730198607
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0005"
+},
+{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 0.85,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0881811777231744
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.06362179487179391
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.7896567227335242,
+   "error": [
+    0.08818117772317438
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.06362179487179374
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.7896567227335236,
+   "error": [
+    0.8299404962181117
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    20.128205128205128
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.7941292793344717,
+   "error": [
+    32.97395687702624
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    421.71794871794873
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.5314149541718739
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.35826210826223903
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.9557090209096344,
+   "error": [
+    1.1607248900734905e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    7.482051282051283e-07
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.6286763582703386,
+   "error": [
+    2.0197968410172162e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    6.748538461538463e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.7896567227335236,
+   "error": [
+    0.8299404962181117
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    20.128205128205128
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.8767529215652857,
+   "error": [
+    0.3235305197107651
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    4.516608482771339
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0006"
+},
+{
+ "parameters": {
+  "J": 0.1,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 1.0,
+  "binsize": 1,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "square",
+  "max_bosons": 4,
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "mode_couplings": [
+   0.5,
+   -0.5
+  ],
+  "mode_freqs": [
+   0.4,
+   0.4
+  ],
+  "model": "cavity_magnet",
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": {
+  "Energy": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.08539326141384758
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.06923076923076811
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "Sign": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.0
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    1.0
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignEnergy": {
+   "autocorr_time": 0.5344283298990858,
+   "error": [
+    0.08539326141384757
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.06923076923076817
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper": {
+   "autocorr_time": 0.5344283298990861,
+   "error": [
+    0.6831460913107805
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    17.153846153846153
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignNOper2": {
+   "autocorr_time": 0.45166363885515154,
+   "error": [
+    22.474474770668184
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    310.8461538461538
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SpecificHeat": {
+   "autocorr_time": 0.0,
+   "error": [
+    0.537707862259563
+   ],
+   "internal_bin_len": 0,
+   "mean": [
+    -0.0119301994302079
+   ],
+   "rebin_count": 13,
+   "rebin_len": 0
+  },
+  "_ll_measurement_time": {
+   "autocorr_time": 0.8557277533745155,
+   "error": [
+    1.2272401817615008e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    6.941794871794873e-07
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "_ll_sweep_time": {
+   "autocorr_time": 0.4299657856327869,
+   "error": [
+    1.190927686807603e-07
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    4.970641025641026e-06
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "nOper": {
+   "autocorr_time": 0.5344283298990861,
+   "error": [
+    0.6831460913107805
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    17.153846153846153
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "wormlength_fraction": {
+   "autocorr_time": 0.3245644405576806,
+   "error": [
+    0.17588930325479998
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    3.484076206767401
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  }
+ },
+ "task": "/home/lukas/mc/frust/build/testjobs/./cavity_square_seeded.data/task0007"
+}
+]

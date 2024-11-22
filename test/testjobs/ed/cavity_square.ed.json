@@ -1,0 +1,254 @@
+[
+ {
+  "parameters": {
+   "T": 0.1,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.5499947546498632,
+   "SpecificHeat": 0.0006222752382711859
+  }
+ },
+ {
+  "parameters": {
+   "T": 0.25,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.5418550151037053,
+   "SpecificHeat": 0.1672529730929142
+  }
+ },
+ {
+  "parameters": {
+   "T": 0.4,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.488903791340298,
+   "SpecificHeat": 0.5541608756543595
+  }
+ },
+ {
+  "parameters": {
+   "T": 0.5499999999999999,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.3794064543484465,
+   "SpecificHeat": 0.8489987732536372
+  }
+ },
+ {
+  "parameters": {
+   "T": 0.7,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.25592251652735815,
+   "SpecificHeat": 0.7440898008697048
+  }
+ },
+ {
+  "parameters": {
+   "T": 0.85,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.16211903711844738,
+   "SpecificHeat": 0.5103564055613221
+  }
+ },
+ {
+  "parameters": {
+   "T": 1.0,
+   "model": "cavity_magnet",
+   "sweeps": 50000,
+   "thermalization": 10000,
+   "binsize": 1000,
+   "lattice": "square",
+   "Lx": 4,
+   "Ly": 2,
+   "measure": [
+    "j",
+    "jcorrlen",
+    "mag",
+    "sxmag",
+    "symag",
+    "sxsymag"
+   ],
+   "J": 0.1,
+   "max_bosons": 4,
+   "mode_freqs": [
+    0.4,
+    0.4
+   ],
+   "mode_couplings": [
+    0.5,
+    -0.5
+   ],
+   "ed_compare": 1,
+   "ed_num_states": 0
+  },
+  "results": {
+   "Energy": -0.09940564929296541,
+   "SpecificHeat": 0.3388176302497573
+  }
+ }
+]
