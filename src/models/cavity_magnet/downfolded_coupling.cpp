@@ -1,5 +1,6 @@
 #include "downfolded_coupling.h"
 #include "occupation_numbers.h"
+#include <Eigen/Dense>
 #include <cmath>
 #include <complex>
 #include <numeric>
@@ -58,14 +59,14 @@ double J(int n, int m, const std::vector<downfolded_coupling_params> &modes,
 	return sign * 0.5 * sum;
 }
 
-Eigen::MatrixXd downfolded_coupling(const std::vector<downfolded_coupling_params> &modes) {
+std::vector<double> downfolded_coupling(const std::vector<downfolded_coupling_params> &modes) {
 	int photon_dim = std::transform_reduce(modes.begin(), modes.end(), 1, std::multiplies(),
 	                                       [](const auto &m) { return m.max_photons; });
 
-	Eigen::MatrixXd coupling(photon_dim, photon_dim);
+	std::vector<double> coupling(photon_dim * photon_dim);
 	for(int m = 0; m < photon_dim; m++) {
 		for(int n = 0; n < photon_dim; n++) {
-			coupling(m, n) = J(m, n, modes);
+			coupling[m * photon_dim + n] = J(m, n, modes);
 		}
 	}
 	return coupling;

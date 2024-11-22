@@ -1,5 +1,5 @@
 #pragma once
-#include <Eigen/Dense>
+#include <vector>
 
 struct downfolded_coupling_params {
 	double omega{};
@@ -7,4 +7,4 @@ struct downfolded_coupling_params {
 	int max_photons{};
 };
 
-Eigen::MatrixXd downfolded_coupling(const std::vector<downfolded_coupling_params> &modes);
+std::vector<double> downfolded_coupling(const std::vector<downfolded_coupling_params> &modes);
