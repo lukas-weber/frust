@@ -54,5 +54,18 @@ test('ed_chirality',
    is_parallel : false,
    suite : 'ed_test')
 
+test('ed_kagome',
+   sim_tests,
+   args : [frust, files('testjobs/kagome')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')
+
+test('ed_kagome_tri',
+   sim_tests,
+   args : [frust, files('testjobs/kagome_tri')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')
 hamiltonian_test = find_program('test_equal_hamiltonian.py')
 test('equal_hamiltonian', hamiltonian_test, args : [frust, files('testjobs/triangle_square_bases')])
