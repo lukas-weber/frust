@@ -26,6 +26,7 @@ public:
 	static constexpr transition invalid_transition{};
 
 	std::vector<std::array<jm,4>> legstates;
+	double energy_offset{};
 
 	const transition &get_transition(opercode op, int leg_in, jm_action action_in) const;
 	double get_weight(opercode op) const;
@@ -33,7 +34,6 @@ public:
 	vertex_data(const bond &b, const site &si, const site &sj);
 	void print(const site &si, const site &sj) const;
 private:
-	double energy_offset_{};
 
 	std::vector<double> weights_;
 	std::vector<transition> transitions_; // [vertex*leg_count*basis_size + worm_action_in*leg_count + leg_in]

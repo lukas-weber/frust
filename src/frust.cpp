@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "vertex_data.h"
 #include "latticedef.h"
+#include "mag_est.h"
 
 frust::frust(const loadl::parser &p)
 	: loadl::mc(p),
@@ -10,7 +11,7 @@ frust::frust(const loadl::parser &p)
 	v_first_.resize(lat_.sites.size());
 	v_last_.resize(lat_.sites.size());
 
-	lat_.vertex_print();
+	//lat_.vertex_print();
 }
 
 void frust::print_operators() {
@@ -34,9 +35,9 @@ void frust::init() {
 		return jm{static_cast<uint8_t>(jm::local_basis_size(st)*random01())};
 	});
 
-	/*for(int i = 0; i < 5; i++) {
+	for(int i = 0; i < 10; i++) {
 		diagonal_update();
-	}*/
+	}
 }
 
 int frust::worm_traverse() {
@@ -75,11 +76,11 @@ int frust::worm_traverse() {
 		/*const auto &bond = lat_.bonds[op.bond()];
 		const auto &si = lat_.sites[bond.i];
 		const auto &sj = lat_.sites[bond.j];
-		std::cout << fmt::format("{}: {} {:02b} -> ", op.name(si, sj), leg_in, action);*/
+		std::cout << fmt::format("{} {}: {} {:02b} -> ", v/4, op.name(si, sj), leg_in, action);*/
 
 		auto [leg_out, action_out, new_vertex_idx] = trans.scatter(random01());
-		/*op = lat_.vertex_idx_opercode(op.bond(), new_vertex_idx);
-		std::cout << fmt::format("{} {:02b}: {}\n", leg_out, action_out, op.name(si, sj));*/
+		op = lat_.vertex_idx_opercode(op.bond(), new_vertex_idx);
+		//std::cout << fmt::format("{} {:02b}: {}\n", leg_out, action_out, op.name(si, sj));*/
 
 		uint32_t vstep = 4*(v/4)+leg_out;
 		if(vstep == v0 && action_out == action0) {
@@ -94,6 +95,7 @@ int frust::worm_traverse() {
 }
 
 void frust::worm_update() {
+	//std::cout << fmt::format("nworm : {}\n", nworm_);
 	double wormlength = 1;
 	for(int i = 0; i < nworm_; i++) {
 		wormlength += worm_traverse();
@@ -212,7 +214,38 @@ void frust::do_update() {
 	worm_update();
 }
 
+template<typename... Ests>
+void frust::opstring_measurement(Ests... ests) {
+	auto x1 = {(ests.init(spin_), 0)...};
+	(void)x1;
+
+	int64_t n = 0;
+	for(auto op : operators_) {
+		if(op.identity()) {
+			continue;
+		}
+
+		if(!op.diagonal()) {
+			const auto &bond = lat_.bonds[op.bond()];
+			spin_[bond.i].apply(op.action(0));
+			spin_[bond.j].apply(op.action(1));
+		}
+
+		if(n < noper_) {
+			auto x2 = {(ests.measure(op, spin_), 0)...};
+			(void)x2;
+		}
+		n++;
+	}
+
+	auto x3 = {(ests.result(measure), 0)...};
+	(void)x3;
+}
 void frust::do_measurement() {
+	opstring_measurement(mag_est{lat_, T_});
+	measure.add("nOper", static_cast<double>(noper_));
+
+	measure.add("Energy", (-static_cast<double>(noper_) * T_ - lat_.energy_offset) / lat_.spinhalf_count);
 }
 
 void frust::checkpoint_write(const loadl::iodump::group &out) {

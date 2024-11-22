@@ -14,9 +14,6 @@ public:
 
 	void do_measurement() override;
 
-	//template<class... Estimators>
-	//void opstring_measurement(Estimators... est);
-
 	void checkpoint_write(const loadl::iodump::group &out) override;
 	void checkpoint_read(const loadl::iodump::group &in) override;
 
@@ -41,6 +38,9 @@ private:
 	void make_vertex_list();
 	int worm_traverse();
 	void worm_update();
+
+	template<class... Estimators>
+	void opstring_measurement(Estimators... est);
 
 	void print_vertices();
 	void print_operators();
