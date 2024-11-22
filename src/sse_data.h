@@ -1,7 +1,6 @@
 #pragma once
 
 #include "vertex_data.h"
-#include <iostream>
 #include <vector>
 
 class sse_data {
