@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+from loadleveller import taskmaker
+import numpy as np
+
+tm = taskmaker.TaskMaker(__file__, 'jobconfig.yml')
+tm.sweeps = 1500000
+tm.thermalization = 60000
+tm.binsize = 100
+tm.lattice = 'dimerized_bilayer'
+tm.Lx = 2
+tm.Ly = 1
+
+tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag', 'sxsucmag']
+
+tm.uc_signs = [1, -1]
+
+tm.Jpar = 1
+tm.Jpardim = 2
+tm.Jperp = 1
+
+tm.ed_num_states = 0
+
+Ts = np.linspace(0.1,4,7)
+
+for T in Ts:
+    tm.task(T=T)
+
+tm.write()

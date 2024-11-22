@@ -341,5 +341,7 @@ lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}
 
-	return lattice{uc, Lx, Ly, with_vertex_data};
+	std::vector<int> uc_signs = p.get<std::vector<int>>("uc_signs", std::vector<int>(uc.sites.size(), 1));
+	
+	return lattice{uc, uc_signs, Lx, Ly, with_vertex_data};
 }

@@ -33,6 +33,13 @@ test('ed_bilayer',
    is_parallel : false,
    suite : 'ed_test')
 
+test('ed_dimerized_bilayer',
+   sim_tests,
+   args : [frust, files('testjobs/dimerized_bilayer')],
+   timeout : 200,
+   is_parallel : false,
+   suite : 'ed_test')
+
 test('ed_shastry_sutherland',
    sim_tests,
    args : [frust, files('testjobs/shastry_sutherland')],
