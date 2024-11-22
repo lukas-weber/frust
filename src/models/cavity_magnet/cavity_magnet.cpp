@@ -32,24 +32,23 @@ sse_data cavity_magnet::generate_sse_data() const {
 			auto spinop_i = spin_operators(spin_dim_i);
 			auto spinop_j = spin_operators(spin_dim_j);
 
-
 			int n = 0;
 			for(auto &d : boson_number.diagonal()) {
 				d = n;
 				n++;
 			}
 
-			Eigen::MatrixXd exchange_photon_coupling = downfolded_coupling(m.omega, m.coupling, m.max_bosons);
+			Eigen::MatrixXd exchange_photon_coupling =
+			    downfolded_coupling(m.omega, m.coupling, m.max_bosons);
 
-			Eigen::MatrixXd spin_identity = Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
+			Eigen::MatrixXd spin_identity =
+			    Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
 
 			Eigen::MatrixXd H =
 			    b.J / modes_.size() *
-			        kronecker_prod(exchange_photon_coupling, -0.25*spin_identity + 
-			                      scalar_product(spinop_i, spinop_j)) +
-			    m.omega / lat.bonds.size() *
-			        kronecker_prod(boson_number,
-			                       spin_identity);
+			        kronecker_prod(exchange_photon_coupling,
+			                       -0.25 * spin_identity + scalar_product(spinop_i, spinop_j)) +
+			    m.omega / lat.bonds.size() * kronecker_prod(boson_number, spin_identity);
 
 			/*
 			auto spinz_i =

@@ -92,7 +92,8 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
     : leg_count{2 * static_cast<int>(dims.size())}, dims{dims},
       max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
 	assert(leg_count >= 2);
-	int total_dim = std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) { return a * b; });
+	int total_dim =
+	    std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) { return a * b; });
 	assert(total_dim == bond_hamiltonian.cols() && total_dim == bond_hamiltonian.rows());
 
 	const double tolerance = 1e-7;
@@ -224,7 +225,6 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 				if(prob < tolerance) {
 					prob = 0;
 				}
-
 
 				if(targets[in] >= 0) {
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
