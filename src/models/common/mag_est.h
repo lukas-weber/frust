@@ -11,7 +11,7 @@ constexpr uint32_t none = 0;
 constexpr uint32_t x = 1;
 constexpr uint32_t y = 2;
 constexpr uint32_t uc = 4;
-};
+}
 
 template<uint32_t Signs, typename Model>
 class mag_est {
