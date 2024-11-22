@@ -1,4 +1,5 @@
 #include "lattice.h"
+#include "nlohmann/json.hpp"
 
 vec2 lattice::site_pos(int site_idx) const {
 	auto [x, y, iuc] = split_idx(site_idx);
@@ -28,5 +29,23 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 				bonds.emplace_back(lat_bond{i, j});
 			}
 		}
+	}
+}
+
+void lattice::to_json(nlohmann::json& out) const {
+	out["Lx"] = Lx;
+	out["Ly"] = Ly;
+	out["uc_spin_count"] = uc.sites.size();
+
+	for(int idx = 0; idx < Lx*Ly*uc.sites.size(); idx++) {
+		out["sites"].push_back({
+		    {"pos", site_pos(idx)},
+		});
+	}
+	for(const auto &bond : bonds) {
+		out["bonds"].push_back({
+		    {"i", bond.i},
+		    {"j", bond.j},
+		});
 	}
 }

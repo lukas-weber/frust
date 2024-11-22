@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bond.h"
+#include <nlohmann/json_fwd.hpp>
 
 struct unitcell {
 	vec2 a1;
@@ -21,6 +22,7 @@ struct lattice {
 	auto split_idx(int site_idx) const;
 	vec2 site_pos(int site_idx) const;
 	int site_count() const;
+	void to_json(nlohmann::json &out) const;
 
 	lattice(const unitcell &uc, int Lx, int Ly);
 };

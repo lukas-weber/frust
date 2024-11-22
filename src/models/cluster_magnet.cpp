@@ -88,33 +88,20 @@ sse_data cluster_magnet::generate_sse_data() const {
 }
 	
 void cluster_magnet::to_json(nlohmann::json &out) const {
-	int idx{};
+	out["model"] = "cluster_magnet";
 
-	
-	out["Lx"] = lat.Lx;
-	out["Ly"] = lat.Ly;
-	out["uc_spin_count"] = lat.uc.sites.size();
+	lat.to_json(out);
 
-	// FIXME
-	/*for(const auto &site : lat.sites) {
-		const auto &uc_st = uc.sites[idx % uc.sites.size()];
-		out["sites"].push_back({
-		    {"pos", site.pos},
-		    {"nspinhalfs", uc_st.basis.nspinhalfs},
-		    {"Jin", uc_st.Jin},
-		    {"h", uc_st.h},
-		    {"sublattice_sign", uc_st.sublattice_sign},
-		});
-		idx++;
+	for(int i = 0; i < lat.Lx*lat.Ly*static_cast<int>(lat.uc.sites.size()); i++) {
+		auto &site = out["sites"][i];
+		const auto &s = get_site(i);
+		site["nspinhalfs"] = s.basis.nspinhalfs; 
+		site["Jin"] = s.Jin;
+		site["h"] = s.h;
+		site["sublattice_sign"] = s.sublattice_sign;
 	}
 
-	idx = 0;
-	for(const auto &bond : bonds) {
-		out["bonds"].push_back({
-		    {"i", bond.i},
-		    {"j", bond.j},
-		    {"J", uc.bonds[idx % uc.bonds.size()].J},
-		});
-		idx++;
-	}*/
+	for(int i = 0; i < static_cast<int>(bonds_.size()); i++) {
+		out["bonds"][i]["J"] = get_bond(i).J;
+	}
 }
