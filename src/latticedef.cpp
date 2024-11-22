@@ -40,7 +40,8 @@ static unitcell make_dimerized_bilayer(const loadl::parser &p) {
 	double Jperp = p.get<double>("Jperp");
 	double Jpardim = p.get<double>("Jpardim");
 
-	uc.sites = {{{0, 0}, {Jperp}, site_bases::dimer}, {{0, 0.5}, {Jperp}, site_bases::dimer}};
+	uc.sites = {{{0, 0}, {Jperp}, site_bases::dimer, 0, 1},
+		    {{0, 0.5}, {Jperp}, site_bases::dimer, 0, -1}};
 	uc.bonds = {{0, {0, 0, 1}, {Jpardim, Jpardim, Jpardim, Jpardim}},
 	            {0, {1, 0, 0}, {Jpar, Jpar, Jpar, Jpar}},
 	            {1, {1, 0, 1}, {Jpar, Jpar, Jpar, Jpar}},
@@ -341,7 +342,6 @@ lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}
 
-	std::vector<int> uc_signs = p.get<std::vector<int>>("uc_signs", std::vector<int>(uc.sites.size(), 1));
 	
-	return lattice{uc, uc_signs, Lx, Ly, with_vertex_data};
+	return lattice{uc, Lx, Ly, with_vertex_data};
 }
