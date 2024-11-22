@@ -68,7 +68,7 @@ static cavity_magnet_proto make_columnar_dimer(const loadl::parser &p) {
 	double JD = p.get<double>("JD", J);
 	double Jx = p.get<double>("Jx", J);
 
-	return {unitcells::honeycomb, {JD, Jx, Jx, J}};
+	return {unitcells::columnar_dimer, {JD, Jx, Jx, J}};
 }
 
 std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) {
