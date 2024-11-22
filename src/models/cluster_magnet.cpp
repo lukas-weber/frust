@@ -73,7 +73,7 @@ sse_data cluster_magnet::generate_sse_data() const {
 		H += kronecker_prod(Idi, onsite_term(sj)) / lat.uc.sites[bond.j.uc].coordination;
 		H += bond_term(bonds_[b], si, sj);
 
-		vert_data.push_back(vertex_data{dim_i, dim_j, H});
+		vert_data.push_back(vertex_data{{dim_i, dim_j}, H});
 	}
 	std::vector<sse_data::site> sites;
 	std::vector<sse_data::bond> bonds;

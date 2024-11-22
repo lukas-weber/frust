@@ -13,7 +13,7 @@ frust::frust(const loadl::parser &p)
 	v_first_.resize(data_.site_count);
 	v_last_.resize(data_.site_count);
 
-	//data_.print();
+	data_.print();
 }
 
 /*
@@ -78,27 +78,25 @@ int frust::worm_traverse() {
 		v0 = vertices_.size() * random01();
 	} while(vertices_[v0] < 0);
 
-	auto op0 = operators_[v0 / 4];
-	const auto &bond0 = data_.bonds[op0.bond()];
-	int site0 = v0 & 1 ? bond0.j : bond0.i;
+	auto op0 = operators_[v0 / data_.nlegs];
+	int site0 = data_.get_bond(op0.bond())[v0 % (data_.nlegs/2)];
 	int wormfunc0 = random01() * worm_count(data_.get_site_data(site0).dim);
 
 	int32_t v = v0;
 	int wormfunc = wormfunc0;
 
 	do {
-		auto &op = operators_[v / 4];
+		auto &op = operators_[v / data_.nlegs];
 		assert(!op.vertex().invalid());
-		int leg_in = v % 4;
+		int leg_in = v % data_.nlegs;
 		const auto [leg_out, wormfunc_out, new_vertex] =
 		    data_.get_vertex_data(op.bond()).scatter(op.vertex(), leg_in, wormfunc, random01());
 
 		op = opercode{op.bond(), new_vertex};
 
 
-		int32_t vstep = 4 * (v / 4) + leg_out;
-		const auto &bond = data_.bonds[op.bond()];
-		const auto &site_out = data_.get_site_data(leg_out & 1 ? bond.j : bond.i);
+		int32_t vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
+		const auto &site_out = data_.get_site_data(data_.get_bond(op.bond())[leg_out % (data_.nlegs/2)]);
 		if((vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim)) ||
 		   worm_too_long(wormlength)) {
 			break;
@@ -132,12 +130,14 @@ std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
 
 		auto op = operators_[p];
 		if(!op.identity() && (l != 0 || direction0 < 0)) {
-			const auto &bond = data_.bonds[op.bond()];
-			if(bond.i == site0 || bond.j == site0) {
+			const auto &bond = data_.get_bond(op.bond());
+			const auto &match_site = std::find(bond, bond + data_.nlegs/2, site0) - bond;
+			
+			if(match_site != data_.nlegs/2) {
 				/*if(direction0 == 1) {
 				    p0 = p0 ? p0-1 : opsize-1;
 				}*/
-				return 4 * p + 2 * (direction0 < 0) + (bond.j == site0);
+				return data_.nlegs * p + data_.nlegs/2 * (direction0 < 0) + match_site;
 			}
 		}
 	}
@@ -192,20 +192,19 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 	do {
 		wormlength++;
-		auto &op = operators_[v / 4];
+		auto &op = operators_[v / data_.nlegs];
 		assert(!op.vertex().invalid());
 		opercode old_op = op;
 
-		int leg_in = v % 4;
+		int leg_in = v % data_.nlegs;
 		const auto &vd = data_.get_vertex_data(op.bond());
 		const auto [leg_out, wormfunc_out, new_vertex] =
 		    vd.scatter(op.vertex(), leg_in, wormfunc, random01());
 
 		op = opercode{op.bond(), new_vertex};
 
-		int32_t vstep = 4 * (v / 4) + leg_out;
-		const auto &bond = data_.bonds[op.bond()];
-		int site_idx = leg_out & 1 ? bond.j : bond.i;
+		int32_t vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
+		int site_idx = data_.get_bond(op.bond())[leg_out % (data_.nlegs/2)];;
 		const auto &site_out = data_.get_site_data(site_idx);
 		const auto &model_site_out = cm_model.get_site(site_idx);
 
@@ -222,9 +221,9 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 
 		bool up = leg_out > 1;
-		if((up && v / 4 <= p0 && p0 < vnext / 4) || (!up && vnext / 4 <= p0 && p0 < v / 4) ||
-		   (up && vnext / 4 <= v / 4 && (p0 >= v / 4 || p0 < vnext / 4)) ||
-		   (!up && v / 4 <= vnext / 4 && (p0 >= vnext / 4 || p0 < v / 4))) {
+		if((up && v / data_.nlegs <= p0 && p0 < vnext / data_.nlegs) || (!up && vnext / data_.nlegs <= p0 && p0 < v / data_.nlegs) ||
+		   (up && vnext / data_.nlegs <= v / data_.nlegs && (p0 >= v / data_.nlegs || p0 < vnext / data_.nlegs)) ||
+		   (!up && v / data_.nlegs <= vnext / data_.nlegs && (p0 >= vnext / data_.nlegs || p0 < v / data_.nlegs))) {
 			int state_after_idx = vd.get_legstate(op.vertex())[leg_out];
 			int state_before_idx = worm_action(worm_inverse(wormfunc, site_out.dim), state_after_idx, site_out.dim);
 
@@ -233,12 +232,12 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 			int matidx = matelem_idx(!up, state_before, state_after);
 
 			if(matidx >= 0 && site_idx != site0) {
-				auto op0 = operators_[v0 / 4];
-				auto op1 = operators_[v1 / 4];
+				auto op0 = operators_[v0 / data_.nlegs];
+				auto op1 = operators_[v1 / data_.nlegs];
 				const auto &ls0 = data_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
 				const auto &ls1 = data_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
-				const auto &state_before0 = basis0.states[ls0[v0 % 4]];
-				const auto &state_after0 = basis0.states[ls1[v1 % 4]];
+				const auto &state_before0 = basis0.states[ls0[v0 % data_.nlegs]];
+				const auto &state_after0 = basis0.states[ls1[v1 % data_.nlegs]];
 				int matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
 //				std::cout << fmt::format("{}, {} {}, {}", matidx0, state_before0.name, state_after0.name, wormfunc0) << "\n";
@@ -310,8 +309,8 @@ bool frust::worm_update() {
 			spin_[i] = data_.get_site_data(i).dim * random01();
 		} else {
 			int32_t v = v_first_[i];
-			auto op = operators_[v / 4];
-			int leg = v % 4;
+			auto op = operators_[v / data_.nlegs];
+			int leg = v % data_.nlegs;
 			const auto &leg_state = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
 			spin_[i] = leg_state[leg];
 		}
@@ -321,7 +320,7 @@ bool frust::worm_update() {
 }
 
 void frust::make_vertex_list() {
-	vertices_.resize(operators_.size() * 4);
+	vertices_.resize(operators_.size() * data_.nlegs);
 	std::fill(vertices_.begin(), vertices_.end(), -1);
 	std::fill(v_first_.begin(), v_first_.end(), -1);
 	std::fill(v_last_.begin(), v_last_.end(), -1);
@@ -331,24 +330,18 @@ void frust::make_vertex_list() {
 		if(op.identity()) {
 			continue;
 		}
-		int v0 = 4 * p;
-		const auto &b = data_.bonds[op.bond()];
-		int v1 = v_last_[b.i];
-		int v2 = v_last_[b.j];
-		if(v1 != -1) {
-			vertices_[v1] = v0;
-			vertices_[v0] = v1;
-		} else {
-			v_first_[b.i] = v0;
+		int v0 = data_.nlegs * p;
+		const auto &b = data_.get_bond(op.bond());
+		for(int s = 0; s < data_.nlegs/2; s++) {
+			int v1 = v_last_[b[s]];
+			if(v1 != -1) {
+				vertices_[v1] = v0 + s;
+				vertices_[v0 + s] = v1;
+			} else {
+				v_first_[b[s]] = v0 + s;
+			}
+			v_last_[b[s]] = v0 + data_.nlegs/2 + s;
 		}
-		if(v2 != -1) {
-			vertices_[v2] = v0 + 1;
-			vertices_[v0 + 1] = v2;
-		} else {
-			v_first_[b.j] = v0 + 1;
-		}
-		v_last_[b.i] = v0 + 2;
-		v_last_[b.j] = v0 + 3;
 	}
 
 	for(size_t i = 0; i < v_first_.size(); i++) {
@@ -372,17 +365,20 @@ void frust::diagonal_update() {
 	auto tmpspin = spin_;
 
 	double opersize = operators_.size();
-	double p_make_bond_raw = data_.bonds.size() * 1. / T_;
-	double p_remove_bond_raw = T_ / data_.bonds.size();
+	double p_make_bond_raw = data_.bond_count() * 1. / T_;
+	double p_remove_bond_raw = T_ / data_.bond_count();
 
 	for(auto &op : operators_) {
 		if(op.identity()) {
-			uint32_t bond = random01() * data_.bonds.size();
-			const auto &b = data_.bonds[bond];
-			state_idx si = spin_[b.i];
-			state_idx sj = spin_[b.j];
+			uint32_t bond = random01() * data_.bond_count();
+			const auto &b = data_.get_bond(bond);
+			int state_idx = 0;
+			for(int s = 0; s < data_.nlegs/2; s++) {
+				state_idx += spin_[b[s]];
+				state_idx *= data_.get_site_data(b[s]).dim;
+			}
 
-			vertexcode newvert = data_.get_vertex_data(bond).get_diagonal_vertex(si, sj);
+			vertexcode newvert = data_.get_vertex_data(bond).get_diagonal_vertex(state_idx);
 			double weight = data_.get_vertex_data(bond).get_weight(newvert);
 			double p_make_bond = p_make_bond_raw / (opersize - noper_);
 
@@ -401,10 +397,11 @@ void frust::diagonal_update() {
 					noper_--;
 				}
 			} else {
-				const auto &b = data_.bonds[bond];
+				const auto &b = data_.get_bond(bond);
 				const auto &leg_state = vertdata.get_legstate(op.vertex());
-				spin_[b.i] = leg_state[2];
-				spin_[b.j] = leg_state[3];
+				for(int s = 0; s < vertdata.leg_count/2; s++) {
+					spin_[b[s]] = leg_state[vertdata.leg_count/2 + s];
+				}
 			}
 		}
 	}
@@ -432,10 +429,12 @@ void frust::opstring_measurement(Ests... ests) {
 		}
 
 		if(!op.diagonal()) {
-			const auto &bond = data_.bonds[op.bond()];
-			const auto &leg_state = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
-			spin_[bond.i] = leg_state[2];
-			spin_[bond.j] = leg_state[3];
+			const auto &b = data_.get_bond(op.bond());
+			const auto &vd = data_.get_vertex_data(op.bond());
+			const auto &leg_state = vd.get_legstate(op.vertex());
+			for(int s = 0; s < vd.leg_count/2; s++) {
+				spin_[b[s]] = leg_state[vd.leg_count/2 + s];
+			}
 		}
 
 		if(n < noper_) {
