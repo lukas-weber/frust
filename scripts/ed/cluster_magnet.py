@@ -1,9 +1,10 @@
 from . import hamiltonian
+from . import model_common
 import numpy as np
 import scipy.sparse as sps
 
 
-class Model:
+class Model(model_common.Magnet):
     def __init__(self, model_data):
         self.model_data = model_data
         self.Nfull = len(self.model_data.sites)
@@ -85,26 +86,6 @@ class Model:
         ]
         return ops
 
-    def signed_mag(self, sx, sy, suc):
-        dim = 2**self.N
-        M = sps.dok_matrix((dim, dim))
-        for x in range(self.model_data.Lx):
-            for y in range(self.model_data.Ly):
-                for uc in range(self.model_data.uc_site_count):
-                    i = (
-                        self.model_data.uc_site_count * (self.model_data.Lx * y + x)
-                        + uc
-                    )
-                    sign = (
-                        sx**x
-                        * sy**y
-                        * (self.model_data.sites[i].sublattice_sign if suc < 0 else 1)
-                    )
-
-                    for idx in self.full2half[i]:
-                        M += sign * self.lifter.Sz(idx)
-        return M / self.N
-
     def hamiltonian(self):
         dim = 2**self.N
         Id = sps.identity(dim)
@@ -180,25 +161,6 @@ class Model:
 
         ens = hamiltonian.Ensemble(E, psi, Ts)
 
-        def mag_obs(prefix, M):
-            M2 = M @ M
-            M4 = M2 @ M2
-
-            obs = {}
-            obs[prefix + "Mag"] = ens.mean(M)
-            obs[prefix + "Mag2"] = ens.mean(M2)
-            obs[prefix + "Mag4"] = ens.mean(M4)
-
-            obs[prefix + "BinderRatio"] = (
-                obs[prefix + "Mag2"] ** 2 / obs[prefix + "Mag4"]
-            )
-
-            obs[prefix + "MagChi"] = ens.chi(M, self.N)
-
-            print('observable prefix "{}"'.format(prefix))
-
-            return obs
-
         def j_obs():
             ops = self.j_operators()
             J = ops["J"]
@@ -235,17 +197,16 @@ class Model:
             Ts ** (-2) * (ens.diag_mean(E**2) - ens.diag_mean(E) ** 2) / self.N
         )
 
-        mag_ops = {
-            "mag": ("", self.signed_mag(1, 1, 1)),
-            "sxmag": ("StagX", self.signed_mag(-1, 1, 1)),
-            "symag": ("StagY", self.signed_mag(1, -1, 1)),
-            "sxsymag": ("StagXStagY", self.signed_mag(-1, -1, 1)),
-            "sxsucmag": ("StagXStagUC", self.signed_mag(-1, 1, -1)),
-        }
-
-        for name, op in mag_ops.items():
+        for name, op in self.mag_sign_cfgs.items():
             if name in params["measure"]:
-                obs.update(mag_obs(op[0], op[1]))
+                obs.update(
+                    {
+                        op[0] + k: v
+                        for k, v in self.observables_magnetization(
+                            ens, self.signed_magnetization(*signcfg)
+                        ).items()
+                    }
+                )
 
         if "chirality" in params["measure"]:
             chirality_ops = self.chirality_operators()
