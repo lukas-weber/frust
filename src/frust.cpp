@@ -95,7 +95,6 @@ int frust::worm_traverse() {
 
 		op = opercode{op.bond(), new_vertex};
 
-		std::cout << fmt::format("{} -> {}\n", op.vertex().code(), new_vertex.code());
 
 		int32_t vstep = 4 * (v / 4) + leg_out;
 		const auto &bond = data_.bonds[op.bond()];
