@@ -1,5 +1,6 @@
 #pragma once
 
+#include "occupation_numbers.h"
 #include "worms.h" // XXX: move state_idx type to another header?
 #include <functional>
 #include <numeric>
@@ -35,12 +36,9 @@ public:
 		std::vector<int> photon_numbers;
 		int mode_num = mode_dims.size();
 		photon_numbers.reserve(photon_dim * mode_num);
-		for(int i = 0; i < photon_dim * mode_num; i++) {
-			int dim = 1;
-
-			for(int d : mode_dims) {
-				photon_numbers.push_back((i / dim) % d);
-				dim *= d;
+		for(int n = 0; n < photon_dim; n++) {
+			for(int d : occupation_numbers{n, mode_dims}) {
+				photon_numbers.push_back(d);
 			}
 		}
 

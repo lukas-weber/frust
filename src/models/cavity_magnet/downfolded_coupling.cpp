@@ -1,4 +1,5 @@
 #include "downfolded_coupling.h"
+#include "occupation_numbers.h"
 #include <cmath>
 #include <complex>
 #include <numeric>
@@ -28,36 +29,32 @@ double J(int n, int m, const std::vector<downfolded_coupling_params> &modes,
 	double term = 0;
 	int lmax = -log(tolerance); // convergence should be exponential, at least for g < 1
 
+	std::vector<int> mode_dims(modes.size());
+	std::transform(modes.begin(), modes.end(), mode_dims.begin(),
+	               [](const auto &m) { return m.max_photons; });
+	std::vector<int> l_dims(modes.size(), lmax);
+	occupation_numbers nit{n, mode_dims}, mit{m, mode_dims};
+
 	for(int l = 0; l < round(std::pow(lmax, modes.size())); l++) {
 		cmplx disp_prod = 1;
 		double denom_n = 1;
 		double denom_m = 1;
-		int dim = 1;
-		int ldim = 1;
-		for(const auto &mo : modes) {
-			int ni = (n / dim) % mo.max_photons;
-			int mi = (m / dim) % mo.max_photons;
-			int li = (l / ldim) % lmax;
-			dim *= mo.max_photons;
-			ldim *= lmax;
-
-			disp_prod *= dispOp(ni, li, mo.g) * std::conj(dispOp(mi, li, mo.g));
-			denom_n += mo.omega * (li - ni);
-			denom_m += mo.omega * (li - mi);
+		occupation_numbers lit{l, l_dims};
+		int mode_idx{};
+		for(auto ni = nit.begin(), mi = mit.begin(), li = lit.begin();
+		    ni != nit.end() && mi != mit.end() && li != lit.end(); ++ni, ++mi, ++li) {
+			const auto &mo = modes[mode_idx];
+			disp_prod *= dispOp(*ni, *li, mo.g) * std::conj(dispOp(*mi, *li, mo.g));
+			denom_n += mo.omega * (*li - *ni);
+			denom_m += mo.omega * (*li - *mi);
+			mode_idx++;
 		}
 		term = disp_prod.real() * (1.0 / denom_n + 1.0 / denom_m);
 		sum += term;
 	}
 	assert(fabs(term) < tolerance);
-	int sign = 1;
-	int dim = 1;
-	for(const auto &mo : modes) {
-		int ni = (n / dim) % mo.max_photons;
-		int mi = (m / dim) % mo.max_photons;
-		dim *= mo.max_photons;
-
-		sign *= (1 - 2 * ((ni - mi) / 2 & 1));
-	}
+	int sign = std::inner_product(nit.begin(), nit.end(), mit.begin(), 1, std::multiplies(),
+	                              [](int ni, int mi) { return 1 - 2 * ((ni - mi) / 2 & 1); });
 	return sign * 0.5 * sum;
 }
 

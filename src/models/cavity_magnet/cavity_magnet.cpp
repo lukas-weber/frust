@@ -30,16 +30,17 @@ sse_data cavity_magnet::generate_sse_data() const {
 	std::vector<sse_data::bond> sse_bonds;
 	std::vector<sse_data::site> sse_sites;
 
-	int photon_dim = std::transform_reduce(modes.begin(), modes.end(), 1, std::multiplies{},
-	                                       [](const auto &mode) { return mode.max_photons; });
+	std::vector<int> mode_dims(modes.size());
+	std::transform(modes.begin(), modes.end(), mode_dims.begin(),
+	               [](const auto &m) { return m.max_photons; });
+	int photon_dim = std::accumulate(mode_dims.begin(), mode_dims.end(), 1, std::multiplies{});
 
 	Eigen::MatrixXd Hphot = Eigen::MatrixXd::Zero(photon_dim, photon_dim);
 	for(int n = 0; n < photon_dim; n++) {
-		int dim = 1;
-		for(const auto &m : modes) {
-			int ni = (n / dim) % m.max_photons;
-			dim *= m.max_photons;
-			Hphot(n, n) += m.omega * ni;
+		int mode_idx{};
+		for(int ni : occupation_numbers{n, mode_dims}) {
+			Hphot(n, n) += modes[mode_idx].omega * ni;
+			mode_idx++;
 		}
 	}
 
