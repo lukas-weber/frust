@@ -73,7 +73,7 @@ static unitcell make_kagome(const loadl::parser &p) {
 
 	double J = p.get<double>("J");
 
-	double h = p.get<double>("h");
+	double h = p.get<double>("h",0.);
 
 	std::string basis = p.get<std::string>("basis");
 
