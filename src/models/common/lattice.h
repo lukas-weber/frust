@@ -1,7 +1,7 @@
 #pragma once
 
 #include "util/vec.h"
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 
 struct unitcell {
 	struct bond {

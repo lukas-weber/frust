@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../sse_data.h"
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 #include <vector>
 
 class model {
