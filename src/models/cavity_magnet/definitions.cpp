@@ -25,7 +25,7 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 		proto = make_square(p);
 	}
 
-	int max_bosons = p.get<int>("max_bosons");
+	int max_photons = p.get<int>("max_photons");
 
 	auto freqs = p.get<std::vector<double>>("mode_freqs");
 	auto couplings = p.get<std::vector<double>>("mode_couplings");
@@ -38,7 +38,7 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 
 	std::vector<cavity_magnet::mode> modes;
 	for(int i = 0; i < static_cast<int>(freqs.size()); i++) {
-		modes.push_back({freqs[i], couplings[i], max_bosons});
+		modes.push_back({freqs[i], couplings[i], max_photons});
 	}
 
 	return std::make_unique<cavity_magnet>(lattice{proto.uc, Lx, Ly}, modes, proto.sites,

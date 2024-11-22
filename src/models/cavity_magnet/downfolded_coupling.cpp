@@ -32,10 +32,10 @@ double J(int n, int m, double omega, double g, double tolerance = 1e-12) {
 	return (1 - 2 * ((n - m) / 2 & 1)) * 0.5 * exp(-g * g) * sum;
 }
 
-Eigen::MatrixXd downfolded_coupling(double omega, double g, int max_bosons) {
-	Eigen::MatrixXd coupling(max_bosons, max_bosons);
-	for(int m = 0; m < max_bosons; m++) {
-		for(int n = 0; n < max_bosons; n++) {
+Eigen::MatrixXd downfolded_coupling(double omega, double g, int max_photons) {
+	Eigen::MatrixXd coupling(max_photons, max_photons);
+	for(int m = 0; m < max_photons; m++) {
+		for(int n = 0; n < max_photons; n++) {
 			coupling(m, n) = J(n, m, omega, g);
 		}
 	}
