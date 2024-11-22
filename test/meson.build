@@ -38,11 +38,15 @@ foreach tj : test_jobfiles
     suite : 'seeded')
   run_target('ed_compare_' + fs.name(tj),
     command : [ed_compare, join_paths(meson.project_source_root(), 'test/testjobs/ed/', fs.name(tj) + '.ed.json'), join_paths(meson.project_build_root(), 'testjobs/', fs.name(tj) + '.results.json')])
+  run_target('gen_seeded_result_' + fs.name(tj),
+    command : [gen_results, frust, 'seeded', tj])
+  run_target('gen_ed_result_' + fs.name(tj),
+    command : [gen_results, frust, 'ed', tj])
 endforeach
 
-run_target('gen-seeded-results',
+run_target('gen_seeded_results',
   command : [gen_results, frust, 'seeded', test_jobfiles])
-run_target('gen-ed-results',
+run_target('gen_ed_results',
   command : [gen_results, frust, 'ed', test_jobfiles])
 
 hamiltonian_test = find_program('test_equal_hamiltonian.py')
