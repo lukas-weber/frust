@@ -1,4 +1,4 @@
-#include "util.h"
+#include "util/kronecker_product.h"
 #include <catch2/catch.hpp>
 
 TEST_CASE("init_mat") {

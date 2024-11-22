@@ -1,5 +1,5 @@
 #pragma once
-#include "util.h"
+#include "util/kronecker_product.h"
 #include <Eigen/Dense>
 #include <array>
 #include <cstdint>
