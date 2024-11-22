@@ -1,15 +1,20 @@
 #pragma once
 #include <vector>
 
-struct downfolded_coupling_params {
+namespace downfolded_peierls_coupling {
+
+struct mode_params {
 	double omega{};
 	double g{};
 	int max_photons{};
 
 	// implementation of constructor is needed for the python bindings
-	downfolded_coupling_params(double omega, double g, int max_photons)
+	mode_params(double omega, double g, int max_photons)
 	    : omega{omega}, g{g}, max_photons{max_photons} {}
-	downfolded_coupling_params() = default;
+	mode_params() = default;
 };
 
-std::vector<double> downfolded_coupling(const std::vector<downfolded_coupling_params> &modes);
+double elem(int n, int m, const std::vector<mode_params> &modes, double tolerance);
+std::vector<double> matrix(const std::vector<mode_params> &modes);
+
+};

@@ -5,6 +5,8 @@
 #include <complex>
 #include <numeric>
 
+namespace downfolded_peierls_coupling {
+
 using cmplx = std::complex<double>;
 
 static cmplx dispOp(int n, int l, double g) {
@@ -24,8 +26,7 @@ static cmplx dispOp(int n, int l, double g) {
 	return exp(-g * g / 2) * sum;
 }
 
-double J(int n, int m, const std::vector<downfolded_coupling_params> &modes,
-         double tolerance = 1e-12) {
+double elem(int n, int m, const std::vector<mode_params> &modes, double tolerance = 1e-12) {
 	double sum = 0;
 	double term = 0;
 	int lmax = 1.1 * std::max(n, m) - log(tolerance);
@@ -59,15 +60,17 @@ double J(int n, int m, const std::vector<downfolded_coupling_params> &modes,
 	return sign * 0.5 * sum;
 }
 
-std::vector<double> downfolded_coupling(const std::vector<downfolded_coupling_params> &modes) {
+std::vector<double> matrix(const std::vector<mode_params> &modes) {
 	int photon_dim = std::transform_reduce(modes.begin(), modes.end(), 1, std::multiplies(),
 	                                       [](const auto &m) { return m.max_photons; });
 
 	std::vector<double> coupling(photon_dim * photon_dim);
 	for(int m = 0; m < photon_dim; m++) {
 		for(int n = 0; n < photon_dim; n++) {
-			coupling[m * photon_dim + n] = J(m, n, modes);
+			coupling[m * photon_dim + n] = elem(m, n, modes);
 		}
 	}
 	return coupling;
+}
+
 }
