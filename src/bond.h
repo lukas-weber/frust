@@ -1,10 +1,10 @@
 #pragma once
 
+#include "basis.h"
 #include <array>
 #include <vector>
-#include "basis.h"
 
-using vec2 = std::array<double,2>;
+using vec2 = std::array<double, 2>;
 
 inline const vec2 operator+(const vec2 &a, const vec2 &b) {
 	vec2 r;
@@ -30,7 +30,7 @@ struct uc_bond {
 		int dy{};
 		int uc{};
 	} j;
-	
+
 	// bonds between individual constituent spins
 	// shape should be [spin_i * site_j.nspinhalfs + spin_j]
 	std::vector<double> J;

@@ -1,9 +1,9 @@
 #pragma once
+#include "util.h"
+#include <Eigen/Dense>
+#include <array>
 #include <cstdint>
 #include <vector>
-#include <array>
-#include <Eigen/Dense>
-#include "util.h"
 
 using state_idx = uint8_t;
 using worm_idx = int;
@@ -29,31 +29,32 @@ public:
 	static const uint32_t state_bits = 3; // max number of bits the state occupies
 	static const uint32_t max_size = 8;
 	static const state_idx invalid = max_size;
-	
 
 	int nspinhalfs{};
 	std::vector<state> states;
 	std::vector<worm_function> worms;
 
-	site_basis(int nspinhalfs, const std::vector<state> &states, const Eigen::MatrixXd &trans , const std::vector<worm_function> &worms);
+	site_basis(int nspinhalfs, const std::vector<state> &states, const Eigen::MatrixXd &trans,
+	           const std::vector<worm_function> &worms);
 
 	int size() const;
 	double m(state_idx st) const;
 	double j(state_idx st) const;
 	char name(state_idx st) const;
 
-	std::array<Eigen::MatrixXd,3> spinop(int spinhalf) const;
+	std::array<Eigen::MatrixXd, 3> spinop(int spinhalf) const;
+
 private:
 	Eigen::MatrixXd trans_; // trans.col(st) is the sz-basis vector of state st.
 };
 
-
 namespace site_bases {
-	const state_idx in_ = site_basis::invalid;
-	const double isq_ = 1/sqrt(2.);
-	const double isq3_ = 1/sqrt(3.);
-	const double isq6_ = 1/sqrt(6.);
+const state_idx in_ = site_basis::invalid;
+const double isq_ = 1 / sqrt(2.);
+const double isq3_ = 1 / sqrt(3.);
+const double isq6_ = 1 / sqrt(6.);
 
+// clang-format off
 	const site_basis spin = {
 		1,
 		{{'+', 0.5, 0.5}, {'-', 0.5, -0.5}},
@@ -108,8 +109,8 @@ namespace site_bases {
 			       0,0,1}),
 		generate_addmod_worms(3),
 	};*/
-}	
-
+// clang-format on
+}
 
 inline int site_basis::size() const {
 	return states.size();

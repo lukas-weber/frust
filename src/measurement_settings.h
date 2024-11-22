@@ -1,7 +1,7 @@
 #pragma once
 
-#include <loadleveller/parser.h>
 #include <fmt/format.h>
+#include <loadleveller/parser.h>
 
 struct measurement_settings {
 	measurement_settings(const loadl::parser &p) {
@@ -33,7 +33,7 @@ struct measurement_settings {
 			throw std::runtime_error{"jcorrlen can only be measured if j is measured"};
 		}
 	}
-	
+
 	bool measure_j{};
 	bool measure_mag{};
 	bool measure_sxmag{};

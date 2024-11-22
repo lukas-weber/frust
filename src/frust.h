@@ -1,14 +1,13 @@
 #pragma once
 
-#include <loadleveller/loadleveller.h>
-#include <vector>
 #include <cstdint>
+#include <loadleveller/loadleveller.h>
 #include <optional>
+#include <vector>
 
-#include "opercode.h"
 #include "lattice.h"
 #include "measurement_settings.h"
-
+#include "opercode.h"
 
 class frust : public loadl::mc {
 public:
@@ -25,16 +24,17 @@ public:
 	void pt_update_param(const std::string &param_name, double new_param) override;
 
 	frust(const loadl::parser &p);
+
 private:
 	static constexpr int dump_version_ = 2;
 	double T_{};
 
+	int maxwormlen_{0};
 
 	double avgwormlen_{1};
-	int maxwormlen_{0};
 	double nworm_{5};
 	int64_t noper_{};
-	
+
 	std::vector<opercode> operators_;
 	std::vector<state_idx> spin_;
 
@@ -43,9 +43,10 @@ private:
 	measurement_settings settings_;
 
 	void diagonal_update();
-	bool wormtoolong(int wormlen) const;
 
 	void make_vertex_list();
+
+	bool worm_too_long(int wormlen) const;
 	int worm_traverse();
 	std::optional<uint32_t> find_worm_measure_start(int site0, uint32_t &p0, int direction0) const;
 	int worm_traverse_measure(double &sign, std::vector<double> &corr);
@@ -63,4 +64,3 @@ private:
 	std::vector<int> v_first_;
 	std::vector<int> v_last_;
 };
-

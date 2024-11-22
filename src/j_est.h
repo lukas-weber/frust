@@ -1,9 +1,9 @@
 #pragma once
 
-#include <loadleveller/measurements.h>
-#include <loadleveller/evalable.h>
 #include "lattice.h"
 #include "opercode.h"
+#include <loadleveller/evalable.h>
+#include <loadleveller/measurements.h>
 
 class j_est {
 private:
@@ -26,9 +26,10 @@ private:
 	const lattice &lat_;
 	double sign_{};
 	const double corrq_{};
+
 public:
-	j_est(const lattice &lat, double sign, bool measure_corrlen) : measure_corrlen_(measure_corrlen), lat_{lat}, sign_{sign}, corrq_{2*M_PI/lat.Lx} {
-	}
+	j_est(const lattice &lat, double sign, bool measure_corrlen)
+	    : measure_corrlen_(measure_corrlen), lat_{lat}, sign_{sign}, corrq_{2 * M_PI / lat.Lx} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		using namespace std::complex_literals;
@@ -44,24 +45,24 @@ public:
 			tmpj_ += j;
 			tmpjdim_ += jdim;
 
-			tmpnemdiag_ += (2*jdim-1)*(1.5-j);
+			tmpnemdiag_ += (2 * jdim - 1) * (1.5 - j);
 
 			if(measure_corrlen_) {
-				double xi = (i/uc_size)%lat_.Lx;
-				tmpjstruc_ += std::exp(1i*corrq_*xi)*j;
-				tmpjstruc2_ += std::exp(2i*corrq_*xi)*j;
+				double xi = (i / uc_size) % lat_.Lx;
+				tmpjstruc_ += std::exp(1i * corrq_ * xi) * j;
+				tmpjstruc2_ += std::exp(2i * corrq_ * xi) * j;
 			}
 			i++;
 		}
-		
+
 		j_ = tmpj_;
 		jdim_ = tmpjdim_;
-		nemdiag_ = tmpnemdiag_*tmpnemdiag_;
+		nemdiag_ = tmpnemdiag_ * tmpnemdiag_;
 		j2_ = j_ * j_;
 
 		if(measure_corrlen_) {
-			jstruc_ = std::real(tmpjstruc_*std::conj(tmpjstruc_));
-			jstruc2_ = std::real(tmpjstruc2_*std::conj(tmpjstruc2_));
+			jstruc_ = std::real(tmpjstruc_ * std::conj(tmpjstruc_));
+			jstruc2_ = std::real(tmpjstruc2_ * std::conj(tmpjstruc2_));
 		}
 	}
 
@@ -75,39 +76,46 @@ public:
 
 			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
-			double j20 = bi.states[leg_state[2]].j-bi.states[leg_state[0]].j;
-			double j31 = bj.states[leg_state[3]].j-bj.states[leg_state[1]].j;
+			double j20 = bi.states[leg_state[2]].j - bi.states[leg_state[0]].j;
+			double j31 = bj.states[leg_state[3]].j - bj.states[leg_state[1]].j;
 
 			tmpj_ += j20 + j31;
-			
-			double jdim20 = bi.states[leg_state[2]].jdim-bi.states[leg_state[0]].jdim;
-			double jdim31 = bj.states[leg_state[3]].jdim-bj.states[leg_state[1]].jdim;
+
+			double jdim20 = bi.states[leg_state[2]].jdim - bi.states[leg_state[0]].jdim;
+			double jdim31 = bj.states[leg_state[3]].jdim - bj.states[leg_state[1]].jdim;
 
 			tmpjdim_ += jdim20 + jdim31;
-			
-			double nem20 = (2*bi.states[leg_state[2]].jdim-1)*(1.5-bi.states[leg_state[2]].j) - (2*bi.states[leg_state[0]].jdim-1)*(1.5-bi.states[leg_state[0]].j);
-			double nem31 = (2*bj.states[leg_state[3]].jdim-1)*(1.5-bj.states[leg_state[3]].j) - (2*bj.states[leg_state[1]].jdim-1)*(1.5-bj.states[leg_state[1]].j);
+
+			double nem20 =
+			    (2 * bi.states[leg_state[2]].jdim - 1) * (1.5 - bi.states[leg_state[2]].j) -
+			    (2 * bi.states[leg_state[0]].jdim - 1) * (1.5 - bi.states[leg_state[0]].j);
+			double nem31 =
+			    (2 * bj.states[leg_state[3]].jdim - 1) * (1.5 - bj.states[leg_state[3]].j) -
+			    (2 * bj.states[leg_state[1]].jdim - 1) * (1.5 - bj.states[leg_state[1]].j);
 
 			tmpnemdiag_ += nem20 + nem31;
 
 			if(measure_corrlen_) {
-				double xi = (bond.i/uc_size)%lat_.Lx;
-				double xj = (bond.j/uc_size)%lat_.Lx;
-				std::complex<double> jq20 = std::exp(1i*corrq_*xi)*(bi.states[leg_state[2]].j-bi.states[leg_state[0]].j);
-				std::complex<double> jq31 = std::exp(1i*corrq_*xj)*(bj.states[leg_state[3]].j-bj.states[leg_state[1]].j);
+				double xi = (bond.i / uc_size) % lat_.Lx;
+				double xj = (bond.j / uc_size) % lat_.Lx;
+				std::complex<double> jq20 = std::exp(1i * corrq_ * xi) *
+				                            (bi.states[leg_state[2]].j - bi.states[leg_state[0]].j);
+				std::complex<double> jq31 = std::exp(1i * corrq_ * xj) *
+				                            (bj.states[leg_state[3]].j - bj.states[leg_state[1]].j);
 				tmpjstruc_ += jq20 + jq31;
-				tmpjstruc2_ += std::exp(1i*corrq_*xi)*jq20 + std::exp(1i*corrq_*xj)*jq31;
+				tmpjstruc2_ +=
+				    std::exp(1i * corrq_ * xi) * jq20 + std::exp(1i * corrq_ * xj) * jq31;
 			}
 		}
 
 		j_ += tmpj_;
 		jdim_ += tmpjdim_;
-		nemdiag_ += tmpnemdiag_*tmpnemdiag_;
+		nemdiag_ += tmpnemdiag_ * tmpnemdiag_;
 		j2_ += tmpj_ * tmpj_;
 
 		if(measure_corrlen_) {
-			jstruc_ += std::real(tmpjstruc_*std::conj(tmpjstruc_));
-			jstruc2_ += std::real(tmpjstruc2_*std::conj(tmpjstruc2_));
+			jstruc_ += std::real(tmpjstruc_ * std::conj(tmpjstruc_));
+			jstruc2_ += std::real(tmpjstruc2_ * std::conj(tmpjstruc2_));
 		}
 		n_++;
 	}
@@ -121,43 +129,46 @@ public:
 		nemdiag_ *= norm;
 		j2_ *= norm * norm;
 		jstruc_ *= norm * norm; // unusual normalization for the structure factor but well…
-		jstruc2_ *= norm * norm; 
+		jstruc2_ *= norm * norm;
 
-		measure.add(p + "JDim", sign_*jdim_ / n_);
-		measure.add(p + "NematicityDiagStruc", sign_*nemdiag_ / n_);
-		measure.add(p + "J", sign_*j_ / n_);
-		measure.add(p + "J2", sign_*j2_ / n_);
+		measure.add(p + "JDim", sign_ * jdim_ / n_);
+		measure.add(p + "NematicityDiagStruc", sign_ * nemdiag_ / n_);
+		measure.add(p + "J", sign_ * j_ / n_);
+		measure.add(p + "J2", sign_ * j2_ / n_);
 		if(measure_corrlen_) {
-			measure.add(p + "JStruc1", sign_*jstruc_ / n_);
-			measure.add(p + "JStruc2", sign_*jstruc2_ / n_);
+			measure.add(p + "JStruc1", sign_ * jstruc_ / n_);
+			measure.add(p + "JStruc2", sign_ * jstruc2_ / n_);
 		}
 
-		measure.add(p + "ChiralityOnsite", sign_*(1.5-j_/n_));
+		measure.add(p + "ChiralityOnsite", sign_ * (1.5 - j_ / n_));
 	}
 
 	void register_evalables(loadl::evaluator &eval) {
 		std::string p = "Sign";
 		auto unsign = [](const std::vector<std::vector<double>> &obs) {
-			return std::vector<double>{obs[0][0]/obs[1][0]};
+			return std::vector<double>{obs[0][0] / obs[1][0]};
 		};
-		
-		eval.evaluate("JDim", {p+"JDim", "Sign"}, unsign);
-		eval.evaluate("NematicityDiagStruc", {p+"NematicityDiagStruc", "Sign"}, unsign);
-		eval.evaluate("J", {p+"J", "Sign"}, unsign);
-		eval.evaluate("J2", {p+"J2", "Sign"}, unsign);
+
+		eval.evaluate("JDim", {p + "JDim", "Sign"}, unsign);
+		eval.evaluate("NematicityDiagStruc", {p + "NematicityDiagStruc", "Sign"}, unsign);
+		eval.evaluate("J", {p + "J", "Sign"}, unsign);
+		eval.evaluate("J2", {p + "J2", "Sign"}, unsign);
 		if(measure_corrlen_) {
-			eval.evaluate("JStruc1", {p+"JStruc1", "Sign"}, unsign);
-			eval.evaluate("JStruc2", {p+"JStruc2", "Sign"}, unsign);
-			eval.evaluate("JCorrLen", {p+"JStruc1", p+"JStruc2"}, [&](const std::vector<std::vector<double>> &obs) {
-				double Sq1 = obs[0][0];
-				double Sq2 = obs[1][0];
-				double r = Sq1/Sq2;
-				return std::vector<double>{1/corrq_ * std::sqrt(std::max((r-1)/(4-r),0.0))};
-			});
+			eval.evaluate("JStruc1", {p + "JStruc1", "Sign"}, unsign);
+			eval.evaluate("JStruc2", {p + "JStruc2", "Sign"}, unsign);
+			eval.evaluate("JCorrLen", {p + "JStruc1", p + "JStruc2"},
+			              [&](const std::vector<std::vector<double>> &obs) {
+				              double Sq1 = obs[0][0];
+				              double Sq2 = obs[1][0];
+				              double r = Sq1 / Sq2;
+				              return std::vector<double>{
+				                  1 / corrq_ * std::sqrt(std::max((r - 1) / (4 - r), 0.0))};
+			              });
 		}
-		eval.evaluate("JVar", {p+"J2", p+"J", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
-			return std::vector<double>{(obs[0][0]-obs[1][0]*obs[1][0]/obs[2][0])/obs[2][0]};
-		});
-		
+		eval.evaluate("JVar", {p + "J2", p + "J", "Sign"},
+		              [](const std::vector<std::vector<double>> &obs) {
+			              return std::vector<double>{
+			                  (obs[0][0] - obs[1][0] * obs[1][0] / obs[2][0]) / obs[2][0]};
+		              });
 	}
 };
