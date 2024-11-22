@@ -9,6 +9,14 @@ cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
     : model{model_type::cavity_magnet}, lat{lat}, modes_{modes}, sites_{sites}, bonds_{bonds} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
+	for(const auto &m : modes) {
+		(void)m;
+		bases_.push_back(cavity_basis::make_mode_basis());
+	}
+
+	for(int i = 0; i < lat.site_count(); i++) {
+		bases_.push_back(cavity_basis::make_spin_basis(sites[i % sites.size()].spin_dim));
+	}
 }
 
 sse_data cavity_magnet::generate_sse_data() const {

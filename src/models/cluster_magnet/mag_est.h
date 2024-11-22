@@ -67,7 +67,7 @@ public:
 		tmpmag_ = 0;
 
 		for(uint32_t i = 0; i < spin.size(); i++) {
-			tmpmag_ += stag_sign(i) * model_.get_site(i).basis.m(spin[i]);
+			tmpmag_ += stag_sign(i) * model_.get_basis(i).m(spin[i]);
 		}
 
 		mag_ = tmpmag_;
@@ -83,8 +83,8 @@ public:
 
 		if(!op.diagonal()) {
 			const auto &bond = model_.lat.bonds[op.bond()];
-			const auto &bi = model_.get_site(bond.i).basis;
-			const auto &bj = model_.get_site(bond.j).basis;
+			const auto &bi = model_.get_basis(bond.i);
+			const auto &bj = model_.get_basis(bond.j);
 
 			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 

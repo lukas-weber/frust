@@ -2,6 +2,7 @@
 
 #include "../common/lattice.h"
 #include "../model.h"
+#include "basis.h"
 
 class cavity_magnet : public model {
 public:
@@ -12,6 +13,7 @@ public:
 	struct bond {
 		double J{1};
 	};
+
 	struct mode {
 		double omega{};
 		double coupling{};
@@ -27,6 +29,10 @@ public:
 		return bonds_[bond_idx % bonds_.size()];
 	}
 
+	cavity_basis get_basis(int abstract_site_idx) const {
+		return bases_[abstract_site_idx];
+	}
+
 	sse_data generate_sse_data() const override;
 	void to_json(nlohmann::json &out) const override;
 	int normalization_site_count() const override {
@@ -37,4 +43,5 @@ private:
 	std::vector<mode> modes_;
 	std::vector<site> sites_;
 	std::vector<bond> bonds_;
+	std::vector<cavity_basis> bases_;
 };

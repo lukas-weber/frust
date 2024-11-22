@@ -15,7 +15,7 @@ struct cluster_site {
 	// bonds inside the cluster site. vector enumerates the ascendingly ordered pairs (i, j) with i
 	// < j.
 	std::vector<double> Jin;
-	site_basis basis;
+	const site_basis &basis;
 
 	// magnetic field
 	double h{};
@@ -32,6 +32,8 @@ public:
 	const cluster_bond &get_bond(int bond_idx) const;
 	const cluster_site &get_site(int site_idx) const;
 
+	const site_basis &get_basis(int site_idx) const;
+
 	sse_data generate_sse_data() const override;
 	void to_json(nlohmann::json &out) const override;
 	int normalization_site_count() const override;
@@ -47,6 +49,10 @@ inline const cluster_bond &cluster_magnet::get_bond(int bond_idx) const {
 
 inline const cluster_site &cluster_magnet::get_site(int site_idx) const {
 	return sites_[site_idx % sites_.size()];
+}
+
+inline const site_basis &cluster_magnet::get_basis(int site_idx) const {
+	return sites_[site_idx % sites_.size()].basis;
 }
 
 inline int cluster_magnet::normalization_site_count() const {
