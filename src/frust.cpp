@@ -14,6 +14,11 @@ frust::frust(const loadl::parser &p)
 	v_first_.resize(data_.site_count);
 	v_last_.resize(data_.site_count);
 
+	maxwormlen_ = param.get<int>("maxwormlen", 0);
+	if(maxwormlen_ != 0) {
+		std::cout << "Warning: maxwormlen set: this feature is not tested!\n";
+	}
+
 	if(param.get<bool>("print_vertex_data", false)) {
 		data_.print();
 	}
@@ -55,11 +60,6 @@ void frust::init() {
 
 	// FIXME: make this (not) depend on the energy scale of the model
 	operators_.resize(param.get("init_opstring_cutoff", static_cast<int>(data_.site_count * T_)));
-
-	maxwormlen_ = param.get<int>("maxwormlen", 0);
-	if(maxwormlen_ != 0) {
-		std::cout << "Warning: maxwormlen set: this feature is not tested!\n";
-	}
 
 	const int warmup = 5;
 	for(int i = 0; i < warmup; i++) {
