@@ -466,25 +466,27 @@ double frust::measure_sign() const {
 void frust::do_measurement() {
 	double sign = measure_sign();
 
-	auto obs = std::tuple{
-	    j_est{*model_, sign, settings_.measure_jcorrlen},
-	    mag_est<1, 1, 1>{*model_, T_, sign},
-	    mag_est<1, -1, 1>{*model_, T_, sign},
-	    mag_est<-1, 1, 1>{*model_, T_, sign},
-	    mag_est<-1, -1, 1>{*model_, T_, sign},
-	    mag_est<-1, 1, -1>{*model_, T_, sign},
-	};
+	if(model_->type == model::model_type::cluster_magnet) {
+		auto obs = std::tuple{
+		    j_est{*model_, sign, settings_.measure_jcorrlen},
+		    mag_est<1, 1, 1>{*model_, T_, sign},
+		    mag_est<1, -1, 1>{*model_, T_, sign},
+		    mag_est<-1, 1, 1>{*model_, T_, sign},
+		    mag_est<-1, -1, 1>{*model_, T_, sign},
+		    mag_est<-1, 1, -1>{*model_, T_, sign},
+		};
 
-	std::array<bool, 6> flags = {
-	    settings_.measure_j || settings_.measure_chirality,
-	    settings_.measure_mag,
-	    settings_.measure_sxmag,
-	    settings_.measure_symag,
-	    settings_.measure_sxsymag,
-	    settings_.measure_sxsucmag,
-	};
+		std::array<bool, 6> flags = {
+		    settings_.measure_j || settings_.measure_chirality,
+		    settings_.measure_mag,
+		    settings_.measure_sxmag,
+		    settings_.measure_symag,
+		    settings_.measure_sxsymag,
+		    settings_.measure_sxsucmag,
+		};
 
-	template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
+		template_select([&](auto... vals) { opstring_measurement(vals...); }, obs, flags);
+	}
 
 	measure.add("Sign", sign);
 	measure.add("nOper", static_cast<double>(noper_));
@@ -557,29 +559,30 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	measurement_settings settings{p};
 	std::unique_ptr<model> m = model_from_param(p);
 
-	if(settings.measure_j || settings.measure_chirality) {
-		j_est{*m, 0, settings.measure_jcorrlen}.register_evalables(eval);
-	}
+	if(m->type == model::model_type::cluster_magnet) {
+		if(settings.measure_j || settings.measure_chirality) {
+			j_est{*m, 0, settings.measure_jcorrlen}.register_evalables(eval);
+		}
 
-	if(settings.measure_mag) {
-		mag_est<1, 1, 1>{*m, T, 0}.register_evalables(eval);
-	}
+		if(settings.measure_mag) {
+			mag_est<1, 1, 1>{*m, T, 0}.register_evalables(eval);
+		}
 
-	if(settings.measure_sxmag) {
-		mag_est<-1, 1, 1>{*m, T, 0}.register_evalables(eval);
-	}
+		if(settings.measure_sxmag) {
+			mag_est<-1, 1, 1>{*m, T, 0}.register_evalables(eval);
+		}
 
-	if(settings.measure_symag) {
-		mag_est<1, -1, 1>{*m, T, 0}.register_evalables(eval);
-	}
+		if(settings.measure_symag) {
+			mag_est<1, -1, 1>{*m, T, 0}.register_evalables(eval);
+		}
 
-	if(settings.measure_sxsymag) {
-		mag_est<-1, -1, 1>{*m, T, 0}.register_evalables(eval);
-	}
-	
-	if(settings.measure_sxsucmag) {
-		mag_est<-1, 1, -1>{*m, T, 0}.register_evalables(eval);
-	}
+		if(settings.measure_sxsymag) {
+			mag_est<-1, -1, 1>{*m, T, 0}.register_evalables(eval);
+		}
+		
+		if(settings.measure_sxsucmag) {
+			mag_est<-1, 1, -1>{*m, T, 0}.register_evalables(eval);
+		}
 
 	if(settings.measure_chirality) {
 		if(settings.loopcorr_as_strucfac) {
@@ -605,39 +608,39 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 
 				              return std::vector<double>{result};
 			              });
-		} else {
-			eval.evaluate("NematicityOffCorr", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-			              [](const std::vector<std::vector<double>> &obs) {
-				              std::vector<double> result(obs[0].size() / 4, 0);
-				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-					              result[i] =
-					                  9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
-				              }
-				              result[0] += 9.0 / 16.0 * obs[1][0] / obs[2][0];
-				              return result;
-			              });
-			eval.evaluate("TauZ", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-			              [](const std::vector<std::vector<double>> &obs) {
-				              std::vector<double> result(obs[0].size() / 4, 0);
-				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-					              result[i] = corrfunc_matrix<-1, 1, 1>(obs[0], i) / obs[2][0];
-				              }
-				              result[0] += obs[1][0] / obs[2][0];
-				              return result;
-			              });
-			eval.evaluate("TauY", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-			              [](const std::vector<std::vector<double>> &obs) {
-				              std::vector<double> result(obs[0].size() / 4, 0);
-				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-					              result[i] = corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
-				              }
-				              result[0] += obs[1][0] / obs[2][0];
+			} else {
+				eval.evaluate("NematicityOffCorr", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+				              [](const std::vector<std::vector<double>> &obs) {
+					              std::vector<double> result(obs[0].size() / 4, 0);
+					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
+						              result[i] =
+						                  9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
+					              }
+					              result[0] += 9.0 / 16.0 * obs[1][0] / obs[2][0];
+					              return result;
+				              });
+				eval.evaluate("TauZ", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+				              [](const std::vector<std::vector<double>> &obs) {
+					              std::vector<double> result(obs[0].size() / 4, 0);
+					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
+						              result[i] = corrfunc_matrix<-1, 1, 1>(obs[0], i) / obs[2][0];
+					              }
+					              result[0] += obs[1][0] / obs[2][0];
+					              return result;
+				              });
+				eval.evaluate("TauY", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+				              [](const std::vector<std::vector<double>> &obs) {
+					              std::vector<double> result(obs[0].size() / 4, 0);
+					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
+						              result[i] = corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
+					              }
+					              result[0] += obs[1][0] / obs[2][0];
 
-				              return result;
-			              });
+					              return result;
+				              });
+			}
 		}
 	}
-
 	eval.evaluate("Energy", {"SignEnergy", "Sign"}, unsign);
 	eval.evaluate("SpecificHeat", {"SignNOper2", "SignNOper", "Sign"},
 	              [&](const std::vector<std::vector<double>> &obs) {
@@ -647,6 +650,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 
 		              return std::vector<double>{(sn2 / sign - sn * sn / sign / sign - sn / sign) / m->normalization_site_count()};
 	              });
+	
 }
 
 double frust::pt_weight_ratio(const std::string &param_name, double new_param) {
