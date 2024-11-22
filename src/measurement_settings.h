@@ -34,10 +34,6 @@ struct measurement_settings {
 		if(!measure_j && measure_jcorrlen) {
 			throw std::runtime_error{"jcorrlen can only be measured if j is measured"};
 		}
-		
-		if(measure_sxsucmag && !p.defined("uc_signs")) {
-			throw std::runtime_error{"wanted to measure unitcell staggered magnetization, but uc_signs not defined"};
-		}
 	}
 
 	bool measure_j{};
