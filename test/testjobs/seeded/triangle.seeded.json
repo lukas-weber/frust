@@ -1,0 +1,176 @@
+[{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 1.0,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0001"
+},
+{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 1.8333333333333335,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0002"
+},
+{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 2.666666666666667,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0003"
+},
+{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 3.5,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0004"
+},
+{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 4.333333333333334,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0005"
+},
+{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 5.166666666666667,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0006"
+},
+{
+ "parameters": {
+  "J": 1.15,
+  "Lx": 4,
+  "Ly": 2,
+  "T": 6.0,
+  "binsize": 1000,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "triangle",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./triangle_seeded.data/task0007"
+}
+]

@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+if [ $# -le 1 ]; then
+	echo "Usage: $0 MCBINARY (ed|seeded) JOBS..."
+	exit 1
+fi
+
+mc_binary=$1
+seeded=$2
+shift
+shift
+
+seeded_arg=""
+if [ $seeded == "seeded" ]; then
+	seeded_arg="--seeded"
+fi
+cd $MESON_BUILD_ROOT
+
+for job in $@; do
+	echo $MESON_SOURCE_ROOT/$MESON_SUBDIR/testjobs/$seeded/$(basename $job).$seeded.json
+	$MESON_SOURCE_ROOT/$MESON_SUBDIR/test_simulation.py $mc_binary $MESON_SOURCE_ROOT/$MESON_SUBDIR/$job $seeded_arg --generate $MESON_SOURCE_ROOT/$MESON_SUBDIR/testjobs/$seeded/$(basename $job).$seeded.json
+done

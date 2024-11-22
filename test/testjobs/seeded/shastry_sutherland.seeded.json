@@ -1,0 +1,190 @@
+[{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 0.05,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0001"
+},
+{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 0.375,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0002"
+},
+{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 0.7000000000000001,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0003"
+},
+{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 1.0250000000000001,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0004"
+},
+{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 1.35,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0005"
+},
+{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 1.675,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0006"
+},
+{
+ "parameters": {
+  "J": 0.5,
+  "JD": 1,
+  "Lx": 2,
+  "Ly": 1,
+  "T": 2.0,
+  "basis": "dimer",
+  "binsize": 100,
+  "ed_compare": 1,
+  "ed_num_states": 0,
+  "lattice": "shastry_sutherland",
+  "measure": [
+   "j",
+   "jcorrlen",
+   "mag",
+   "sxmag",
+   "symag",
+   "sxsymag"
+  ],
+  "seed": 18088206,
+  "sweeps": 50,
+  "thermalization": 50
+ },
+ "results": null,
+ "task": "/home/lukas/mc/frust/build/testjobs/./shastry_sutherland_seeded.data/task0007"
+}
+]

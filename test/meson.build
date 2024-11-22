@@ -11,117 +11,29 @@ unit_tests = executable('unit_tests', test_srcs,
 
 test('unit_tests', unit_tests)
 
-sim_tests = find_program('simtest.py')
-test('ed_square',
-   sim_tests,
-   args : [frust, files('testjobs/square')],
-   timeout : 200,
-   is_parallel : false,
-   suite : 'ed_test')
+subdir('testjobs')
 
-test('ed_triangle',
-   sim_tests,
-   args : [frust, files('testjobs/triangle')],
-   timeout : 200,
-   is_parallel : false,
-   suite : 'ed_test')
+fs = import('fs')
 
-test('ed_bilayer',
-   sim_tests,
-   args : [frust, files('testjobs/bilayer')],
-   timeout : 200,
-   is_parallel : false,
-   suite : 'ed_test')
+test_simulation = find_program('test_simulation.py')
+gen_results = find_program('gen_result_files')
 
-test('ed_dimerized_bilayer',
-   sim_tests,
-   args : [frust, files('testjobs/dimerized_bilayer')],
-   timeout : 500,
-   is_parallel : false,
-   suite : 'ed_test')
+foreach tj : test_jobfiles
+  test('ed_' + fs.name(tj),
+    test_simulation,
+    args : [frust, tj, '--result-file', join_paths(meson.project_source_root(), 'testjobs/ed/', fs.name(tj) + '.ed.json')],
+    timeout : 5000,
+    is_parallel : false,
+    suite : 'ed')
+  test('seeded_' + fs.name(tj),
+    test_simulation,
+    timeout : 5000,
+    args : [frust, tj, '--seeded', '--result-file', join_paths(meson.project_source_root(), 'test/testjobs/seeded/', fs.name(tj) + '.seeded.json')],
+    suite : 'seeded')
+endforeach
 
-test('ed_shastry_sutherland',
-   sim_tests,
-   args : [frust, files('testjobs/shastry_sutherland')],
-   timeout : 200,
-   is_parallel : false,
-   suite : 'ed_test')
-
-test('ed_triang_square',
-   sim_tests,
-   args : [frust, files('testjobs/triangle_square')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-test('ed_triang_square_rot',
-   sim_tests,
-   args : [frust, files('testjobs/triangle_square_rot')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-test('ed_triang_square3',
-   sim_tests,
-   args : [frust, files('testjobs/triangle_square3')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-test('ed_diamond_square_dim_spi',
-   sim_tests,
-   args : [frust, files('testjobs/diamond_square_dim_spi')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-# FIXME: this is a test for the rotated dimer basis. currently JDim does not
-# compare correctly to the ed results which do not know about the basis rotation
-#
-#test('ed_triang_square4',
-#   sim_tests,
-#   args : [frust, files('testjobs/triangle_square4')],
-#   timeout : 5000,
-#   is_parallel : false,
-#   suite : 'ed_test')
-
-# XXX: maxwormlen is not confirmed to work. I am leaving the functionality enabled for now
-# in case somebody needs it. Still, I am not sure if it works correctly.
-#
-#test('ed_maxwormlen',
-#   sim_tests,
-#   args : [frust, files('testjobs/maxwormlen')],
-#   timeout : 5000,
-#   is_parallel : false,
-#   suite : 'ed_test')
-
-test('ed_chirality',
-   sim_tests,
-   args : [frust, files('testjobs/chirality')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-test('ed_kagome',
-   sim_tests,
-   args : [frust, files('testjobs/kagome')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-test('ed_kagome_tri',
-   sim_tests,
-   args : [frust, files('testjobs/kagome_tri')],
-   timeout : 5000,
-   is_parallel : false,
-   suite : 'ed_test')
-
-#test('ed_kagome_dim_spi',
-#   sim_tests,
-#   args : [frust, files('testjobs/kagome_dim_spi')],
-#   timeout : 5000,
-#   is_parallel : false,
-#   suite : 'ed_test')
+run_target('gen-seeded-results',
+  command : [gen_results, frust, 'seeded', test_jobfiles])
 
 hamiltonian_test = find_program('test_equal_hamiltonian.py')
 test('equal_hamiltonian', hamiltonian_test, args : [frust, files('testjobs/triangle_square_bases')])
