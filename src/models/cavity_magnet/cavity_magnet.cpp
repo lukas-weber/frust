@@ -6,7 +6,7 @@
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
                              const std::vector<site> &sites, const std::vector<bond> &bonds)
-    : model{model_type::cavity_magnet}, lat{lat}, modes_{modes}, sites_{sites}, bonds_{bonds} {
+    : model{model_type::cavity_magnet}, lat{lat}, modes{modes}, sites_{sites}, bonds_{bonds} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
 	for(const auto &m : modes) {
@@ -24,11 +24,11 @@ sse_data cavity_magnet::generate_sse_data() const {
 	std::vector<sse_data::bond> sse_bonds;
 	std::vector<sse_data::site> sse_sites;
 
-	int mode_count = modes_.size();
+	int mode_count = modes.size();
 
 	int bond_idx{};
 	for(const auto &b : bonds_) {
-		for(const auto &m : modes_) {
+		for(const auto &m : modes) {
 			Eigen::MatrixXd boson_number = Eigen::MatrixXd::Zero(m.max_bosons, m.max_bosons);
 
 			int site_idx_i = lat.uc.bonds[bond_idx].i;
@@ -53,7 +53,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 			    Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
 
 			Eigen::MatrixXd H =
-			    b.J / modes_.size() *
+			    b.J / modes.size() *
 			        kronecker_prod(exchange_photon_coupling,
 			                       -0.25 * spin_identity + scalar_product(spinop_i, spinop_j)) +
 			    m.omega / lat.bonds.size() * kronecker_prod(boson_number, spin_identity);
@@ -74,14 +74,14 @@ sse_data cavity_magnet::generate_sse_data() const {
 
 	bond_idx = 0;
 	for(const auto &b : lat.bonds) {
-		for(int mode_idx = 0; mode_idx < static_cast<int>(modes_.size()); mode_idx++) {
+		for(int mode_idx = 0; mode_idx < static_cast<int>(modes.size()); mode_idx++) {
 			int bond_type = b.type * mode_count + mode_idx;
 			sse_bonds.push_back({bond_type, {mode_idx, mode_count + b.i, mode_count + b.j}});
 		}
 		bond_idx++;
 	}
 
-	std::transform(modes_.begin(), modes_.end(), std::back_inserter(sse_sites),
+	std::transform(modes.begin(), modes.end(), std::back_inserter(sse_sites),
 	               [](const auto &m) { return sse_data::site{m.max_bosons}; });
 	for(int i = 0; i < lat.Lx * lat.Ly; i++) {
 		for(int uc = 0; uc < static_cast<int>(lat.uc.sites.size()); uc++) {
@@ -111,7 +111,7 @@ void cavity_magnet::to_json(nlohmann::json &out) const {
 		}
 	}
 
-	for(const auto &m : modes_) {
+	for(const auto &m : modes) {
 		out["modes"].push_back(
 		    {{"omega", m.omega}, {"coupling", m.coupling}, {"max_bosons", m.max_bosons}});
 	}
