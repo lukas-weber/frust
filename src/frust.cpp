@@ -69,7 +69,7 @@ int frust::worm_traverse() {
 
 	int wormlength{1};
 
-	uint32_t v0{};
+	int32_t v0{};
 	do {
 		v0 = vertices_.size() * random01();
 	} while(vertices_[v0] < 0);
@@ -79,7 +79,7 @@ int frust::worm_traverse() {
 	int site0 = v0 & 1 ? bond0.j : bond0.i;
 	int wormfunc0 = random01() * lat_.get_uc_site(site0).basis.worms.size();
 
-	uint32_t v = v0;
+	int32_t v = v0;
 	int wormfunc = wormfunc0;
 
 	do {
@@ -91,7 +91,7 @@ int frust::worm_traverse() {
 
 		op = opercode{op.bond(), new_vertex};
 
-		uint32_t vstep = 4 * (v / 4) + leg_out;
+		int32_t vstep = 4 * (v / 4) + leg_out;
 		const auto &bond = lat_.bonds[op.bond()];
 		const auto &site_out = lat_.get_uc_site(leg_out & 1 ? bond.j : bond.i);
 		if((vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) ||
@@ -108,7 +108,7 @@ int frust::worm_traverse() {
 	return wormlength;
 }
 
-std::optional<uint32_t> frust::find_worm_measure_start(int site0, uint32_t &p0,
+std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
                                                        int direction0) const {
 	int opsize = operators_.size();
 
@@ -161,7 +161,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		return wormlength;
 	}
 
-	uint32_t p0 = operators_.size() * random01();
+	int32_t p0 = operators_.size() * random01();
 	int site0 = lat_.sites.size() * random01();
 	int direction0 = 1 - 2 * (random01() > 0.5);
 
@@ -169,14 +169,14 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	if(!v0opt) {
 		return wormlength;
 	}
-	uint32_t v0 = *v0opt;
-	uint32_t v1 = vertices_[v0];
+	int32_t v0 = *v0opt;
+	int32_t v1 = vertices_[v0];
 	auto [uc0, x0, y0] = lat_.split_idx(site0);
 
 	const auto &basis0 = lat_.get_uc_site(site0).basis;
 	int wormfunc0 = random01() * basis0.worms.size();
 
-	uint32_t v = v0;
+	int32_t v = v0;
 	int wormfunc = wormfunc0;
 
 	do {
@@ -192,7 +192,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		op = opercode{op.bond(), new_vertex};
 
-		uint32_t vstep = 4 * (v / 4) + leg_out;
+		int32_t vstep = 4 * (v / 4) + leg_out;
 		const auto &bond = lat_.bonds[op.bond()];
 		int site_idx = leg_out & 1 ? bond.j : bond.i;
 		const auto &site_out = lat_.get_uc_site(site_idx);
@@ -204,7 +204,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		}
 
 		wormfunc = wormfunc_out;
-		uint32_t vnext = vertices_[vstep];
+		int32_t vnext = vertices_[vstep];
 
 		assert(vnext != -1);
 
@@ -280,10 +280,9 @@ bool frust::worm_update() {
 		int size = settings_.loopcorr_as_strucfac ? 1 : lat_.sites.size();
 		std::vector<double> corr(4 * size);
 		double sign = measure_sign();
-		int wormlength{};
 
 		for(int i = 0; i < nworm_; i++) {
-			wormlength = worm_traverse_measure(sign, corr);
+			worm_traverse_measure(sign, corr);
 		}
 		for(auto &c : corr) {
 			c *= 1. / ceil(nworm_);
@@ -296,7 +295,7 @@ bool frust::worm_update() {
 		if(v_first_[i] < 0) {
 			spin_[i] = lat_.get_uc_site(i).basis.size() * random01();
 		} else {
-			uint32_t v = v_first_[i];
+			int32_t v = v_first_[i];
 			auto op = operators_[v / 4];
 			int leg = v % 4;
 			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
@@ -593,7 +592,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 			eval.evaluate("NematicityOffCorr", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
 			              [](const std::vector<std::vector<double>> &obs) {
 				              std::vector<double> result(obs[0].size() / 4, 0);
-				              for(int i = 1; i < result.size(); i++) {
+				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
 					              result[i] =
 					                  9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
 				              }
@@ -603,7 +602,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 			eval.evaluate("TauZ", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
 			              [](const std::vector<std::vector<double>> &obs) {
 				              std::vector<double> result(obs[0].size() / 4, 0);
-				              for(int i = 1; i < result.size(); i++) {
+				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
 					              result[i] = corrfunc_matrix<-1, 1, 1>(obs[0], i) / obs[2][0];
 				              }
 				              result[0] += obs[1][0] / obs[2][0];
@@ -612,7 +611,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 			eval.evaluate("TauY", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
 			              [](const std::vector<std::vector<double>> &obs) {
 				              std::vector<double> result(obs[0].size() / 4, 0);
-				              for(int i = 1; i < result.size(); i++) {
+				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
 					              result[i] = corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
 				              }
 				              result[0] += obs[1][0] / obs[2][0];

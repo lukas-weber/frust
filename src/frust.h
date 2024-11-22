@@ -48,7 +48,7 @@ private:
 
 	bool worm_too_long(int wormlen) const;
 	int worm_traverse();
-	std::optional<uint32_t> find_worm_measure_start(int site0, uint32_t &p0, int direction0) const;
+	std::optional<int32_t> find_worm_measure_start(int site0, int32_t &p0, int direction0) const;
 	int worm_traverse_measure(double &sign, std::vector<double> &corr);
 	bool worm_update();
 
