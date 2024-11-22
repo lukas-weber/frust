@@ -32,7 +32,7 @@ public:
 
 	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
 		const auto &bond = data.get_bond(op.bond());
-		if(false && !op.diagonal() && bond[0] == 0) {
+		if(!op.diagonal() && bond[0] == 0) {
 			int leg_count = data.get_vertex_data(op.bond()).leg_count;
 			// photon spin coupling. assumed to be the only offdiagonal photon operator now.
 			assert(leg_count == 6);
