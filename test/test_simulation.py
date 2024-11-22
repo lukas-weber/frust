@@ -5,6 +5,7 @@ import subprocess
 import multiprocessing
 import filecmp
 import yaml
+import json
 import shutil
 import os
 
@@ -55,8 +56,17 @@ else:
     seeded_job = args.testjob + '_seeded'
     subprocess.run(['../../test/gen_seeded_job.sh', args.testjob, jobname + '_seeded'], check=True)
     subprocess.run(['loadl', 'run', jobname + '_seeded', '-sr'], check=True)
+    result_file = jobname+'_seeded.results.json'
     if args.generate:
-        shutil.copy(jobname+'_seeded.results.json', args.generate)
+        shutil.copy(result_file, args.generate)
     else:
-        if not filecmp.cmp(jobname+'_seeded.results.json', args.result_file, shallow=False):
-            raise Exception('new and old seeded result file do not match! {} != {}'.format(mc_result, args.seeded_result))
+
+        def load_without_profiling(filename):
+            with open(filename, 'r') as f:
+                r = json.load(f)
+            return json.dumps([{'parameters': t['parameters'],
+                'results': {name: result for name, result in t['results'].items() if not name.startswith('_ll_')},
+                'task': t['task']} for t in r], sort_keys=True)
+
+        if load_without_profiling(result_file) != load_without_profiling(args.result_file):
+            raise Exception('new and old seeded result file do not match! {} != {}'.format(result_file, args.seeded_result))
