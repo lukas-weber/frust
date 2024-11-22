@@ -11,5 +11,5 @@ merge_sample_skip: 0
 
 mc_runtime: '4:00' # job will stop after this time
 mc_checkpoint_time: '3:00' # checkpoint writing interval
-mc_binary: ../frust/build/src/frust # change this to the location of your mc binary
+mc_binary: ../../build/src/frust # change this to the location of your mc binary
 

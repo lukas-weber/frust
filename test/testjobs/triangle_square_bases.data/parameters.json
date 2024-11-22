@@ -1,0 +1,42 @@
+{
+ "jobname": "./triangle_square_bases",
+ "jobconfig": {
+  "mpirun": "mpirun",
+  "num_cores": 8,
+  "mem_per_cpu": "2G",
+  "merge_sample_skip": 0,
+  "mc_runtime": "4:00",
+  "mc_checkpoint_time": "3:00",
+  "mc_binary": "/home/lukas/src/phd/frust/build/src/frust"
+ },
+ "tasks": {
+  "task0001": {
+   "sweeps": 2000000,
+   "thermalization": 50000,
+   "binsize": 100,
+   "lattice": "triangle_square",
+   "Lx": 2,
+   "Ly": 2,
+   "J1": 2,
+   "J2": 3.0,
+   "J3": 1,
+   "Jn": 0,
+   "Jnn": 0,
+   "basis": 1
+  },
+  "task0002": {
+   "sweeps": 2000000,
+   "thermalization": 50000,
+   "binsize": 100,
+   "lattice": "triangle_square",
+   "Lx": 2,
+   "Ly": 2,
+   "J1": 2,
+   "J2": 3.0,
+   "J3": 1,
+   "Jn": 0,
+   "Jnn": 0,
+   "basis": 2
+  }
+ }
+}
