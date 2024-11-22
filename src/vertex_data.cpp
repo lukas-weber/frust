@@ -274,6 +274,9 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 	for(auto &t : transitions_) {
 		auto prob_begin = transition_cumprobs_.begin() + t.offset;
 		std::partial_sum(prob_begin, prob_begin + t.length, prob_begin);
+		if(!t.invalid()) {
+			assert(abs(*(prob_begin + t.length - 1) - 1) < tolerance);
+		}
 	}
 }
 
