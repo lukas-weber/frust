@@ -36,14 +36,13 @@ class Model(model_common.Magnet):
         dim = self.photon_dimension * self.spin_dimension
         H = sps.dok_matrix((dim, dim))
 
+        omegas = np.array([m.omega for m in self.model_data.modes])
+        max_photons = np.array([m.max_photons for m in self.model_data.modes])
+
         for b in self.model_data.bonds:
-            assert len(self.model_data.modes) == 1
-            max_photons = self.model_data.modes[0].max_photons
-            omega = self.model_data.modes[0].omega
-            coupling = b.mode_couplings[0]
             H += b.J * sps.kron(
                 downfolded_coupling.matrix(
-                    max_photons, omega / self.model_data.U, coupling
+                    max_photons, omegas / self.model_data.U, b.mode_couplings
                 ),
                 (
                     self.lifter.heisen_bond(b.i, b.j)
