@@ -13,7 +13,7 @@ tm.Ly = 2
 tm.basis = 2
 
 tm.J1 = 1
-tm.J2 = 0.0
+tm.J2 = 0.1
 tm.J3 = 0.543
 tm.Jn = 0.124
 tm.Jnn = 0.35

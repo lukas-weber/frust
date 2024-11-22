@@ -26,7 +26,7 @@ public:
 		double m{};
 	};
 
-	static const worm_idx worm_count = 3;
+	static const worm_idx worm_count = 5;
 	static const uint32_t state_bits = 2; // max number of bits the state occupies
 	static const uint32_t max_size = 4;
 	static const state_idx invalid = max_size;
@@ -58,7 +58,10 @@ namespace site_bases {
 		{{'+', 0.5, 0.5}, {'-', 0.5, -0.5}},
 		{worm_function{"S+", 1, {in_, 0}},
 		 worm_function{"S-", 0, {1, in_}},
-		 worm_function{"NA", 2, {in_, in_}}},
+		 worm_function{"NA", 2, {in_, in_}},
+		 worm_function{"NA", 3, {in_, in_}},
+		 worm_function{"NA", 4, {in_, in_}},
+		 },
 		init_mat(2,2, {1,0,0,1})
 	};
 	const site_basis dimer = {
@@ -66,7 +69,10 @@ namespace site_bases {
 		{{'*', 0, 0}, {'P', 1, 1}, {'0', 1, 0}, {'M', 1, -1}},
 		{worm_function{"S+", 1, {in_, in_, 1, 2}},
 		 worm_function{"S-", 0, {in_, 2, 3, in_}},
-		 worm_function{"Dz", 2, {2, in_, 0, in_}}},
+		 worm_function{"Dz", 2, {2, in_, 0, in_}},
+		 worm_function{"D-", 3, {1, 0, in_, in_}},
+		 worm_function{"D+", 4, {3, in_, in_, 0}}
+		},
 		init_mat(4,4, {0,     1, 0,    0,
 			       isq_,  0, isq_, 0,
 			       -isq_, 0, isq_, 0,

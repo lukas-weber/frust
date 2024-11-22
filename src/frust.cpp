@@ -75,16 +75,14 @@ int frust::worm_traverse() {
 		int leg_in = v%4;
 		const auto &trans = lat_.get_vertex_data(op.bond()).get_transition(op.vertex(), leg_in, wormfunc);
 
-		/*if(random01()<1e-4) { // abort long loop
-			return -1;
-		}*/
 
 		auto [leg_out, wormfunc_out, new_vertex] = trans.scatter(random01());
-		op = opercode{op.bond(), new_vertex};
-		/*if(wormlength >= noper_) {
+		op = opercode{op.bond(), new_vertex};/*
+		if(wormlength >= noper_) {
+			const auto &bond = lat_.bonds[op.bond()];
 			const auto &si = lat_.sites[bond.i];
 			const auto &sj = lat_.sites[bond.j];
-			//std::cout << fmt::format("{}-{}-{} {}: {} {} -> {} {}: {}\n", v/4, idx, oldop.bond(), oldop.name(si, sj), leg_in, vertex_data::wormfuncs[wormfunc].name, leg_out, vertex_data::wormfuncs[wormfunc_out].name, op.name(si,sj));
+			std::cout << fmt::format("{}-{}-{} {}: {} {} -> {} {}: {}\n", v/4, idx, oldop.bond(), oldop.vertex().vertex_idx(), leg_in, wormfunc, leg_out, wormfunc_out, op.vertex().vertex_idx());
 		}*/
 
 		uint32_t vstep = 4*(v/4)+leg_out;
@@ -197,6 +195,11 @@ void frust::diagonal_update() {
 	double p_make_bond_raw = lat_.bonds.size()*1./T_;
 	double p_remove_bond_raw = T_/lat_.bonds.size();
 
+	/*std::vector<std::vector<double>> bond_histograms(lat_.bonds.size());
+	for(int i = 0; i < lat_.bonds.size(); i++) {
+		bond_histograms[i].resize(lat_.get_vertex_data(i).vertex_count());
+	}*/
+
 	for(auto &op : operators_) {
 
 		if(op.identity()) {
@@ -215,9 +218,10 @@ void frust::diagonal_update() {
 			}
 		} else {
 			int bond = op.bond();
-			const auto &b = lat_.bonds[bond];
-
 			const auto &vertdata = lat_.get_vertex_data(bond);
+			/*uint32_t v = op.vertex().vertex_idx();
+			auto &histogram = bond_histograms[bond];
+			histogram[v]++;*/
 			if(op.diagonal()) {
 				double weight = vertdata.get_weight(op.vertex());
 				double p_remove_bond = (opersize-noper_+1)*p_remove_bond_raw;
@@ -226,12 +230,17 @@ void frust::diagonal_update() {
 					noper_--;
 				}
 			} else {
+				const auto &b = lat_.bonds[bond];
 				const auto &leg_state = vertdata.get_legstate(op.vertex());
 				spin_[b.i] = leg_state[2];
 				spin_[b.j] = leg_state[3];
 			}
 		}
 	}
+	/*
+	if(is_thermalized()) {
+		measure.add("bond_hist", bond_histograms[0]);
+	}*/
 	assert(tmpspin == spin_);
 }
 
