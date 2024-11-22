@@ -29,7 +29,7 @@ static const Eigen::MatrixXd Szj = init_mat(4,4, {
 })/2;
 // clang-format on
 						
-static Eigen::MatrixXd bond_hamiltonian(const cavity_magnet::mode& mode, const cavity_magnet::bond& bond, const unitcell::site& si, const unitcell::site& sj) {
+static Eigen::MatrixXd bond_hamiltonian(const cavity_magnet::mode& mode, const cavity_magnet::bond& bond, const unitcell::site& si, const unitcell::site& sj, int mode_count, int bond_count) {
 	int dim = 4 * mode.max_bosons;
 	Eigen::MatrixXd res = Eigen::MatrixXd::Zero(dim, dim);
 
@@ -40,8 +40,8 @@ static Eigen::MatrixXd bond_hamiltonian(const cavity_magnet::mode& mode, const c
 		n++;
 	}
 
-	return kronecker_prod(boson_number, Szi/si.coordination+Szj/sj.coordination) +
-	bond.J * kronecker_prod(Eigen::MatrixXd::Identity(mode.max_bosons, mode.max_bosons), heisenberg_exchange) + mode.omega * kronecker_prod(boson_number, Eigen::MatrixXd::Identity(4,4));
+	return mode.coupling * kronecker_prod(boson_number, Szi/si.coordination+Szj/sj.coordination) +
+	bond.J/mode_count * kronecker_prod(Eigen::MatrixXd::Identity(mode.max_bosons, mode.max_bosons), heisenberg_exchange) + mode.omega/bond_count * kronecker_prod(boson_number, Eigen::MatrixXd::Identity(4,4));
 	
 }
 
@@ -55,7 +55,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 	int bond_idx{};
 	for(const auto& b : bonds_) {
 		for(const auto &m : modes_) {
-			auto H = bond_hamiltonian(m, b, lat.uc.sites[lat.uc.bonds[bond_idx].i], lat.uc.sites[lat.uc.bonds[bond_idx].j.uc]);
+			auto H = bond_hamiltonian(m, b, lat.uc.sites[lat.uc.bonds[bond_idx].i], lat.uc.sites[lat.uc.bonds[bond_idx].j.uc], modes_.size(), lat.bonds.size());
 			vert_data.push_back({{m.max_bosons, 2, 2}, H});
 		}
 		bond_idx++;
@@ -82,6 +82,13 @@ sse_data cavity_magnet::generate_sse_data() const {
 void cavity_magnet::to_json(nlohmann::json& out) const {
 	out["model"] = "cavity_magnet";
 	lat.to_json(out);
+
+	int bond_idx{};
+	for(const auto& b : lat.bonds) {
+		(void)b;
+		out["bonds"][bond_idx]["J"] = get_bond(bond_idx).J;
+		bond_idx++;
+	}
 	for(const auto& m : modes_) {
 		out["modes"].push_back({{"omega", m.omega}, {"coupling", m.coupling}, {"max_bosons", m.max_bosons}});
 	}
