@@ -37,7 +37,7 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 void lattice::to_json(nlohmann::json& out) const {
 	out["Lx"] = Lx;
 	out["Ly"] = Ly;
-	out["uc_spin_count"] = uc.sites.size();
+	out["uc_site_count"] = uc.sites.size();
 
 	for(int idx = 0; idx < static_cast<int>(Lx*Ly*uc.sites.size()); idx++) {
 		out["sites"].push_back({

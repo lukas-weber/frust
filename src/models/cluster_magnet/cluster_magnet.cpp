@@ -103,7 +103,7 @@ void cluster_magnet::to_json(nlohmann::json &out) const {
 		site["sublattice_sign"] = s.sublattice_sign;
 	}
 
-	for(int i = 0; i < static_cast<int>(bonds_.size()); i++) {
+	for(int i = 0; i < static_cast<int>(lat.bonds.size()); i++) {
 		out["bonds"][i]["J"] = get_bond(i).J;
 	}
 }
