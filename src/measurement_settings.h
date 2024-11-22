@@ -24,6 +24,11 @@ struct measurement_settings {
 				throw std::runtime_error{fmt::format("unknown observable '{}'", obs)};
 			}
 		}
+
+		if(p.get<bool>("loopcorr_as_strucfac", false)) {
+			loopcorr_as_strucfac = true;
+		}
+
 		if(!measure_j && measure_jcorrlen) {
 			throw std::runtime_error{"jcorrlen can only be measured if j is measured"};
 		}
@@ -36,4 +41,6 @@ struct measurement_settings {
 	bool measure_sxsymag{};
 	bool measure_chirality{};
 	bool measure_jcorrlen{};
+
+	bool loopcorr_as_strucfac{};
 };

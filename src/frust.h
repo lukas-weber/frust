@@ -46,7 +46,6 @@ private:
 	void make_vertex_list();
 	int worm_traverse();
 	std::optional<uint32_t> find_worm_measure_start(int site0, uint32_t &p0, int direction0) const;
-	template<bool TauY>
 	void worm_traverse_measure(double &sign, std::vector<double> &corr);
 	void worm_update();
 

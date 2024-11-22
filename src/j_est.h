@@ -11,13 +11,13 @@ private:
 
 	double tmpj_{};
 	double tmpjdim_{};
-	double tmpjchir_{};
+	double tmpnemdiag_{};
 	std::complex<double> tmpjstruc_{};
 	std::complex<double> tmpjstruc2_{};
 	double j_{};
 	double j2_{};
-	double jchir_{};
 	double jdim_{};
+	double nemdiag_{};
 
 	double jstruc_{};
 	double jstruc2_{};
@@ -34,6 +34,7 @@ public:
 		using namespace std::complex_literals;
 		tmpj_ = 0;
 		tmpjdim_ = 0;
+		tmpnemdiag_ = 0;
 		int uc_size = lat_.uc.sites.size();
 
 		int i = 0;
@@ -42,7 +43,8 @@ public:
 			double jdim = lat_.get_uc_site(i).basis.states[s].jdim;
 			tmpj_ += j;
 			tmpjdim_ += jdim;
-			tmpjchir_ += j<1.5;
+
+			tmpnemdiag_ += (2*jdim-1)*(1.5-j);
 
 			if(measure_corrlen_) {
 				double xi = (i/uc_size)%lat_.Lx;
@@ -54,8 +56,8 @@ public:
 		
 		j_ = tmpj_;
 		jdim_ = tmpjdim_;
+		nemdiag_ = tmpnemdiag_*tmpnemdiag_;
 		j2_ = j_ * j_;
-		jchir_ = tmpjchir_;
 
 		if(measure_corrlen_) {
 			jstruc_ = std::real(tmpjstruc_*std::conj(tmpjstruc_));
@@ -83,10 +85,10 @@ public:
 
 			tmpjdim_ += jdim20 + jdim31;
 			
-			j20 = (bi.states[leg_state[2]].j<1.5)-(bi.states[leg_state[0]].j<1.5);
-			j31 = (bj.states[leg_state[3]].j<1.5)-(bj.states[leg_state[1]].j<1.5);
+			double nem20 = (2*bi.states[leg_state[2]].jdim-1)*(1.5-bi.states[leg_state[2]].j) - (2*bi.states[leg_state[0]].jdim-1)*(1.5-bi.states[leg_state[0]].j);
+			double nem31 = (2*bj.states[leg_state[3]].jdim-1)*(1.5-bj.states[leg_state[3]].j) - (2*bj.states[leg_state[1]].jdim-1)*(1.5-bj.states[leg_state[1]].j);
 
-			tmpjchir_ += j20 + j31;
+			tmpnemdiag_ += nem20 + nem31;
 
 			if(measure_corrlen_) {
 				double xi = (bond.i/uc_size)%lat_.Lx;
@@ -100,9 +102,9 @@ public:
 
 		j_ += tmpj_;
 		jdim_ += tmpjdim_;
+		nemdiag_ += tmpnemdiag_*tmpnemdiag_;
 		j2_ += tmpj_ * tmpj_;
 
-		jchir_ += tmpjchir_;
 		if(measure_corrlen_) {
 			jstruc_ += std::real(tmpjstruc_*std::conj(tmpjstruc_));
 			jstruc2_ += std::real(tmpjstruc2_*std::conj(tmpjstruc2_));
@@ -116,12 +118,13 @@ public:
 		double norm = 1. / lat_.sites.size();
 		j_ *= norm;
 		jdim_ *= norm;
+		nemdiag_ *= norm;
 		j2_ *= norm * norm;
-		jchir_ *= norm;
 		jstruc_ *= norm * norm; // unusual normalization for the structure factor but well…
 		jstruc2_ *= norm * norm; 
 
 		measure.add(p + "JDim", sign_*jdim_ / n_);
+		measure.add(p + "NematicityDiagStruc", sign_*nemdiag_ / n_);
 		measure.add(p + "J", sign_*j_ / n_);
 		measure.add(p + "J2", sign_*j2_ / n_);
 		if(measure_corrlen_) {
@@ -129,7 +132,7 @@ public:
 			measure.add(p + "JStruc2", sign_*jstruc2_ / n_);
 		}
 
-		measure.add(p + "ChiralityOnsite", -sign_*jchir_/n_);
+		measure.add(p + "ChiralityOnsite", sign_*(1.5-j_/n_));
 	}
 
 	void register_evalables(loadl::evaluator &eval) {
@@ -139,6 +142,7 @@ public:
 		};
 		
 		eval.evaluate("JDim", {p+"JDim", "Sign"}, unsign);
+		eval.evaluate("NematicityDiagStruc", {p+"NematicityDiagStruc", "Sign"}, unsign);
 		eval.evaluate("J", {p+"J", "Sign"}, unsign);
 		eval.evaluate("J2", {p+"J2", "Sign"}, unsign);
 		if(measure_corrlen_) {
