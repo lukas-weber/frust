@@ -43,7 +43,7 @@ lat = lattice.load(job, taskname)
 σx2 = np.array([[0,1],[1,0]])
 
 Nmult = len(lat.sites)
-half2mult = sum([site.nspinhalfs*[i] for i, site in enumerate(lat.sites)], start=[])
+half2mult = sum([site.nspinhalfs*[i] for i, site in enumerate(lat.sites)], [])
 mult2half = [[i for i, x in enumerate(half2mult) if x == idx] for idx in range(Nmult)]
 
 N = len(half2mult)
