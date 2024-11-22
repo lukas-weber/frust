@@ -10,12 +10,14 @@ private:
 	double n_{1};
 
 	double tmpj_{};
+	double tmpjdim_{};
 	double tmpjchir_{};
 	std::complex<double> tmpjstruc_{};
 	std::complex<double> tmpjstruc2_{};
 	double j_{};
 	double j2_{};
 	double jchir_{};
+	double jdim_{};
 
 	double jstruc_{};
 	double jstruc2_{};
@@ -31,12 +33,15 @@ public:
 	void init(const std::vector<state_idx> &spin) {
 		using namespace std::complex_literals;
 		tmpj_ = 0;
+		tmpjdim_ = 0;
 		int uc_size = lat_.uc.sites.size();
 
 		int i = 0;
 		for(auto s : spin) {
 			double j = lat_.get_uc_site(i).basis.states[s].j;
+			double jdim = lat_.get_uc_site(i).basis.states[s].jdim;
 			tmpj_ += j;
+			tmpjdim_ += jdim;
 			tmpjchir_ += j<1.5;
 
 			if(measure_corrlen_) {
@@ -48,6 +53,7 @@ public:
 		}
 		
 		j_ = tmpj_;
+		jdim_ = tmpjdim_;
 		j2_ = j_ * j_;
 		jchir_ = tmpjchir_;
 
@@ -72,6 +78,11 @@ public:
 
 			tmpj_ += j20 + j31;
 			
+			double jdim20 = bi.states[leg_state[2]].jdim-bi.states[leg_state[0]].jdim;
+			double jdim31 = bj.states[leg_state[3]].jdim-bj.states[leg_state[1]].jdim;
+
+			tmpjdim_ += jdim20 + jdim31;
+			
 			j20 = (bi.states[leg_state[2]].j<1.5)-(bi.states[leg_state[0]].j<1.5);
 			j31 = (bj.states[leg_state[3]].j<1.5)-(bj.states[leg_state[1]].j<1.5);
 
@@ -88,6 +99,7 @@ public:
 		}
 
 		j_ += tmpj_;
+		jdim_ += tmpjdim_;
 		j2_ += tmpj_ * tmpj_;
 
 		jchir_ += tmpjchir_;
@@ -103,11 +115,13 @@ public:
 
 		double norm = 1. / lat_.sites.size();
 		j_ *= norm;
+		jdim_ *= norm;
 		j2_ *= norm * norm;
 		jchir_ *= norm;
 		jstruc_ *= norm * norm; // unusual normalization for the structure factor but well…
 		jstruc2_ *= norm * norm; 
 
+		measure.add(p + "JDim", sign_*jdim_ / n_);
 		measure.add(p + "J", sign_*j_ / n_);
 		measure.add(p + "J2", sign_*j2_ / n_);
 		if(measure_corrlen_) {
@@ -124,6 +138,7 @@ public:
 			return std::vector<double>{obs[0][0]/obs[1][0]};
 		};
 		
+		eval.evaluate("JDim", {p+"JDim", "Sign"}, unsign);
 		eval.evaluate("J", {p+"J", "Sign"}, unsign);
 		eval.evaluate("J2", {p+"J2", "Sign"}, unsign);
 		if(measure_corrlen_) {
