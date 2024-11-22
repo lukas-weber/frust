@@ -406,25 +406,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.6790605273925616,
+   "autocorr_time": 0.5695468330450769,
    "error": [
-    9.026747768682881e-07
+    1.0125196882580777e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    3.326697435897436e-05
+    3.501482051282052e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.4664682227157804,
+   "autocorr_time": 0.4774395836538267,
    "error": [
-    5.408938083346005e-05
+    6.480097116068695e-05
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0003233029487179486
+    0.00038369064102564094
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -864,25 +864,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.7406414926622291,
+   "autocorr_time": 1.0934745655453404,
    "error": [
-    8.216092721465248e-07
+    1.4205138807503218e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.1890051282051284e-05
+    1.9284923076923075e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.5916483250041424,
+   "autocorr_time": 0.6627254193714441,
    "error": [
-    7.581168565667216e-06
+    1.1898613128493054e-05
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.0614564102564105e-05
+    9.524128205128203e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -1322,25 +1322,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.7571675787002108,
+   "autocorr_time": 0.8586186880315025,
    "error": [
-    1.0686872651729935e-06
+    7.894802263721152e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.2605641025641026e-05
+    8.647128205128206e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.4801232234555152,
+   "autocorr_time": 0.43646577928696845,
    "error": [
-    1.1127501150795122e-05
+    7.41264582228744e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    8.233176923076923e-05
+    5.7926948717948705e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -1780,25 +1780,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.7193875695880134,
+   "autocorr_time": 0.7930872451382974,
    "error": [
-    7.855553663607894e-07
+    7.591177284315722e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    8.364000000000003e-06
+    7.822230769230769e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.4512959269190946,
+   "autocorr_time": 0.4416118131563695,
    "error": [
-    2.807690096377383e-06
+    2.8798443015333055e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.334869230769231e-05
+    2.3038743589743597e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -2238,25 +2238,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.9234329782768665,
+   "autocorr_time": 0.8666758255648089,
    "error": [
-    8.301380691754642e-07
+    7.461129821100806e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    7.0397435897435875e-06
+    6.215179487179489e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 1.1590653173110108,
+   "autocorr_time": 1.0274305260749783,
    "error": [
-    3.995864793392576e-06
+    4.281771734797501e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.879894871794872e-05
+    1.8110153846153852e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -2696,25 +2696,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 1.267478265186685,
+   "autocorr_time": 0.9407278382407289,
    "error": [
-    1.0308710698299357e-06
+    9.463319291908124e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.248923076923078e-06
+    6.447230769230769e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.3843758868875455,
+   "autocorr_time": 0.3410649116822524,
    "error": [
-    2.0214294403067707e-06
+    2.2845927169921165e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.8525025641025642e-05
+    2.266953846153846e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -3154,25 +3154,25 @@
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.9169027130672098,
+   "autocorr_time": 0.8686015465615005,
    "error": [
-    7.65535844270267e-07
+    7.658912332821786e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.416974358974359e-06
+    6.071820512820512e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.4908924029703447,
+   "autocorr_time": 0.394223753108715,
    "error": [
-    2.0538824511821903e-06
+    2.1338380157628634e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.0069461538461543e-05
+    2.187151282051283e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
