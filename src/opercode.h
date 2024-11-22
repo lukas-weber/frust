@@ -1,7 +1,7 @@
 #pragma once
+#include <cassert>
 #include <cstdint>
 #include <fmt/format.h>
-#include <cassert>
 
 class vertexcode {
 public:

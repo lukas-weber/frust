@@ -1,7 +1,7 @@
 #include "frust.h"
-#include "models/model_def.h"
 #include "models/cluster_magnet/j_est.h"
 #include "models/cluster_magnet/mag_est.h"
+#include "models/model_def.h"
 #include "vertex_data.h"
 #include <algorithm>
 
@@ -16,7 +16,6 @@ frust::frust(const loadl::parser &p)
 	data_.print();
 }
 
-
 void frust::print_operators() {
 	int p = -1;
 	for(auto op : operators_) {
@@ -26,16 +25,20 @@ void frust::print_operators() {
 		}
 		const auto &b = data_.get_bond(op.bond());
 		const auto &ls = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
-		std::cout << fmt::format("{} {}: {}{}->{}{}\n", data_.nlegs*p, fmt::join(b,b+data_.nlegs/2, "-"), ls[0], ls[1], ls[2], ls[3]);
+		std::cout << fmt::format("{} {}: {}{}->{}{}\n", data_.nlegs * p,
+		                         fmt::join(b, b + data_.nlegs / 2, "-"), ls[0], ls[1], ls[2],
+		                         ls[3]);
 	}
-	
+
 	std::cout << fmt::format("{}\n", fmt::join(spin_.begin(), spin_.end(), ", "));
 }
 
 void frust::print_vertices() {
 	for(int p = 0; p < static_cast<int>(operators_.size()); p++) {
 		if(vertices_[data_.nlegs * p] > 0) {
-			std::cout << fmt::format("{:4d}| {:4d}\n", data_.nlegs*p, fmt::join(&vertices_[data_.nlegs * p], &vertices_[data_.nlegs * p] + data_.nlegs, ","));
+			std::cout << fmt::format("{:4d}| {:4d}\n", data_.nlegs * p,
+			                         fmt::join(&vertices_[data_.nlegs * p],
+			                                   &vertices_[data_.nlegs * p] + data_.nlegs, ","));
 		}
 	}
 	std::cout << fmt::format("vfirst: {}\n", fmt::join(v_first_.begin(), v_first_.end(), ", "));
@@ -48,8 +51,7 @@ void frust::init() {
 	}
 
 	// FIXME: make this (not) depend on the energy scale of the model
-	operators_.resize(
-	    param.get("init_opstring_cutoff", static_cast<int>(data_.site_count * T_)));
+	operators_.resize(param.get("init_opstring_cutoff", static_cast<int>(data_.site_count * T_)));
 
 	maxwormlen_ = param.get<int>("maxwormlen", 0);
 	if(maxwormlen_ != 0) {
@@ -82,7 +84,7 @@ int frust::worm_traverse() {
 	} while(vertices_[v0] < 0);
 
 	auto op0 = operators_[v0 / data_.nlegs];
-	int site0 = data_.get_bond(op0.bond())[v0 % (data_.nlegs/2)];
+	int site0 = data_.get_bond(op0.bond())[v0 % (data_.nlegs / 2)];
 	int wormfunc0 = random01() * worm_count(data_.get_site_data(site0).dim);
 
 	int32_t v = v0;
@@ -97,9 +99,9 @@ int frust::worm_traverse() {
 
 		op = opercode{op.bond(), new_vertex};
 
-
 		int32_t vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
-		const auto &site_out = data_.get_site_data(data_.get_bond(op.bond())[leg_out % (data_.nlegs/2)]);
+		const auto &site_out =
+		    data_.get_site_data(data_.get_bond(op.bond())[leg_out % (data_.nlegs / 2)]);
 		if((vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim)) ||
 		   worm_too_long(wormlength)) {
 			break;
@@ -115,7 +117,7 @@ int frust::worm_traverse() {
 }
 
 std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
-                                                       int direction0) const {
+                                                      int direction0) const {
 	int opsize = operators_.size();
 
 	if(v_first_[site0] < 0) {
@@ -134,13 +136,13 @@ std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
 		auto op = operators_[p];
 		if(!op.identity() && (l != 0 || direction0 < 0)) {
 			const auto &bond = data_.get_bond(op.bond());
-			const auto &match_site = std::find(bond, bond + data_.nlegs/2, site0) - bond;
-			
-			if(match_site != data_.nlegs/2) {
+			const auto &match_site = std::find(bond, bond + data_.nlegs / 2, site0) - bond;
+
+			if(match_site != data_.nlegs / 2) {
 				/*if(direction0 == 1) {
 				    p0 = p0 ? p0-1 : opsize-1;
 				}*/
-				return data_.nlegs * p + data_.nlegs/2 * (direction0 < 0) + match_site;
+				return data_.nlegs * p + data_.nlegs / 2 * (direction0 < 0) + match_site;
 			}
 		}
 	}
@@ -153,7 +155,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	if(model_->type != model::model_type::cluster_magnet) {
 		throw std::runtime_error{"not implemented"};
 	}
-	const auto &cm_model = static_cast<cluster_magnet&>(*model_);
+	const auto &cm_model = static_cast<cluster_magnet &>(*model_);
 	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore,
 	                            const site_basis::state &safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
@@ -164,9 +166,8 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		}
 		return -1;
 	};
-	
 
-	//assert(data_.uc.sites.size() == 1); // not implemented
+	// assert(data_.uc.sites.size() == 1); // not implemented
 
 	int wormlength{};
 
@@ -207,7 +208,8 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		op = opercode{op.bond(), new_vertex};
 
 		int32_t vstep = data_.nlegs * (v / data_.nlegs) + leg_out;
-		int site_idx = data_.get_bond(op.bond())[leg_out % (data_.nlegs/2)];;
+		int site_idx = data_.get_bond(op.bond())[leg_out % (data_.nlegs / 2)];
+
 		const auto &site_out = data_.get_site_data(site_idx);
 		const auto &model_site_out = cm_model.get_site(site_idx);
 
@@ -222,13 +224,16 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		assert(vnext != -1);
 
-
 		bool up = leg_out > 1;
-		if((up && v / data_.nlegs <= p0 && p0 < vnext / data_.nlegs) || (!up && vnext / data_.nlegs <= p0 && p0 < v / data_.nlegs) ||
-		   (up && vnext / data_.nlegs <= v / data_.nlegs && (p0 >= v / data_.nlegs || p0 < vnext / data_.nlegs)) ||
-		   (!up && v / data_.nlegs <= vnext / data_.nlegs && (p0 >= vnext / data_.nlegs || p0 < v / data_.nlegs))) {
+		if((up && v / data_.nlegs <= p0 && p0 < vnext / data_.nlegs) ||
+		   (!up && vnext / data_.nlegs <= p0 && p0 < v / data_.nlegs) ||
+		   (up && vnext / data_.nlegs <= v / data_.nlegs &&
+		    (p0 >= v / data_.nlegs || p0 < vnext / data_.nlegs)) ||
+		   (!up && v / data_.nlegs <= vnext / data_.nlegs &&
+		    (p0 >= vnext / data_.nlegs || p0 < v / data_.nlegs))) {
 			int state_after_idx = vd.get_legstate(op.vertex())[leg_out];
-			int state_before_idx = worm_action(worm_inverse(wormfunc, site_out.dim), state_after_idx, site_out.dim);
+			int state_before_idx =
+			    worm_action(worm_inverse(wormfunc, site_out.dim), state_after_idx, site_out.dim);
 
 			const auto &state_before = model_site_out.basis.states[state_before_idx];
 			const auto &state_after = model_site_out.basis.states[state_after_idx];
@@ -243,12 +248,13 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 				const auto &state_after0 = basis0.states[ls1[v1 % data_.nlegs]];
 				int matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
-//				std::cout << fmt::format("{}, {} {}, {}", matidx0, state_before0.name, state_after0.name, wormfunc0) << "\n";
+				//				std::cout << fmt::format("{}, {} {}, {}", matidx0, state_before0.name,
+				//state_after0.name, wormfunc0) << "\n";
 				if(matidx0 >= 0) {
 					auto [uc, x, y] = cm_model.lat.split_idx(site_idx);
 
-					int idx =
-					    ((y - y0 + cm_model.lat.Ly) % cm_model.lat.Ly) * cm_model.lat.Lx + (x - x0 + cm_model.lat.Lx) % cm_model.lat.Lx;
+					int idx = ((y - y0 + cm_model.lat.Ly) % cm_model.lat.Ly) * cm_model.lat.Lx +
+					          (x - x0 + cm_model.lat.Lx) % cm_model.lat.Lx;
 					if(settings_.loopcorr_as_strucfac) {
 						idx = 0;
 					}
@@ -335,7 +341,7 @@ void frust::make_vertex_list() {
 		}
 		int v0 = data_.nlegs * p;
 		const auto &b = data_.get_bond(op.bond());
-		for(int s = 0; s < data_.nlegs/2; s++) {
+		for(int s = 0; s < data_.nlegs / 2; s++) {
 			int v1 = v_last_[b[s]];
 			if(v1 != -1) {
 				vertices_[v1] = v0 + s;
@@ -343,7 +349,7 @@ void frust::make_vertex_list() {
 			} else {
 				v_first_[b[s]] = v0 + s;
 			}
-			v_last_[b[s]] = v0 + data_.nlegs/2 + s;
+			v_last_[b[s]] = v0 + data_.nlegs / 2 + s;
 		}
 	}
 
@@ -376,7 +382,7 @@ void frust::diagonal_update() {
 			uint32_t bond = random01() * data_.bond_count;
 			const auto &b = data_.get_bond(bond);
 			int state_idx = 0;
-			for(int s = 0; s < data_.nlegs/2; s++) {
+			for(int s = 0; s < data_.nlegs / 2; s++) {
 				state_idx *= data_.get_site_data(b[s]).dim;
 				state_idx += spin_[b[s]];
 			}
@@ -402,8 +408,8 @@ void frust::diagonal_update() {
 			} else {
 				const auto &b = data_.get_bond(bond);
 				const auto &leg_state = vertdata.get_legstate(op.vertex());
-				for(int s = 0; s < vertdata.leg_count/2; s++) {
-					spin_[b[s]] = leg_state[vertdata.leg_count/2 + s];
+				for(int s = 0; s < vertdata.leg_count / 2; s++) {
+					spin_[b[s]] = leg_state[vertdata.leg_count / 2 + s];
 				}
 			}
 		}
@@ -436,8 +442,8 @@ void frust::opstring_measurement(Ests... ests) {
 			const auto &b = data_.get_bond(op.bond());
 			const auto &vd = data_.get_vertex_data(op.bond());
 			const auto &leg_state = vd.get_legstate(op.vertex());
-			for(int s = 0; s < vd.leg_count/2; s++) {
-				spin_[b[s]] = leg_state[vd.leg_count/2 + s];
+			for(int s = 0; s < vd.leg_count / 2; s++) {
+				spin_[b[s]] = leg_state[vd.leg_count / 2 + s];
 			}
 		}
 
@@ -494,7 +500,7 @@ void frust::do_measurement() {
 	measure.add("SignNOper2", sign * static_cast<double>(noper_) * static_cast<double>(noper_));
 
 	measure.add("SignEnergy", sign * (-static_cast<double>(noper_) * T_ - data_.energy_offset) /
-	          model_->normalization_site_count());
+	                              model_->normalization_site_count());
 }
 
 void frust::checkpoint_write(const loadl::iodump::group &out) {
@@ -579,42 +585,45 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 		if(settings.measure_sxsymag) {
 			mag_est<-1, -1, 1>{*m, T, 0}.register_evalables(eval);
 		}
-		
+
 		if(settings.measure_sxsucmag) {
 			mag_est<-1, 1, -1>{*m, T, 0}.register_evalables(eval);
 		}
 
-	if(settings.measure_chirality) {
-		if(settings.loopcorr_as_strucfac) {
-			eval.evaluate(
-			    "NematicityStruc",
-			    {"SignJDimOffCorr", "SignChiralityOnsite", "Sign", "SignNematicityDiagStruc"},
-			    [](const std::vector<std::vector<double>> &obs) {
-				    double result = 9.0 / 16.0 *
-				                    (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0) + obs[3][0]) /
-				                    obs[2][0];
-				    return std::vector<double>{result};
-			    });
-			eval.evaluate("TauZStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-			              [](const std::vector<std::vector<double>> &obs) {
-				              double result =
-				                  (obs[1][0] + corrfunc_matrix<-1, 1, 1>(obs[0], 0)) / obs[2][0];
-				              return std::vector<double>{result};
-			              });
-			eval.evaluate("TauYStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
-			              [](const std::vector<std::vector<double>> &obs) {
-				              double result =
-				                  (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0)) / obs[2][0];
+		if(settings.measure_chirality) {
+			if(settings.loopcorr_as_strucfac) {
+				eval.evaluate(
+				    "NematicityStruc",
+				    {"SignJDimOffCorr", "SignChiralityOnsite", "Sign", "SignNematicityDiagStruc"},
+				    [](const std::vector<std::vector<double>> &obs) {
+					    double result =
+					        9.0 / 16.0 *
+					        (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0) + obs[3][0]) /
+					        obs[2][0];
+					    return std::vector<double>{result};
+				    });
+				eval.evaluate("TauZStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+				              [](const std::vector<std::vector<double>> &obs) {
+					              double result =
+					                  (obs[1][0] + corrfunc_matrix<-1, 1, 1>(obs[0], 0)) /
+					                  obs[2][0];
+					              return std::vector<double>{result};
+				              });
+				eval.evaluate("TauYStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+				              [](const std::vector<std::vector<double>> &obs) {
+					              double result =
+					                  (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0)) / obs[2][0];
 
-				              return std::vector<double>{result};
-			              });
+					              return std::vector<double>{result};
+				              });
 			} else {
-				eval.evaluate("NematicityOffCorr", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+				eval.evaluate("NematicityOffCorr",
+				              {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
 				              [](const std::vector<std::vector<double>> &obs) {
 					              std::vector<double> result(obs[0].size() / 4, 0);
 					              for(int i = 1; i < static_cast<int>(result.size()); i++) {
-						              result[i] =
-						                  9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
+						              result[i] = 9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) /
+						                          obs[2][0];
 					              }
 					              result[0] += 9.0 / 16.0 * obs[1][0] / obs[2][0];
 					              return result;
@@ -648,9 +657,9 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 		              double sn = obs[1][0];
 		              double sign = obs[2][0];
 
-		              return std::vector<double>{(sn2 / sign - sn * sn / sign / sign - sn / sign) / m->normalization_site_count()};
+		              return std::vector<double>{(sn2 / sign - sn * sn / sign / sign - sn / sign) /
+		                                         m->normalization_site_count()};
 	              });
-	
 }
 
 double frust::pt_weight_ratio(const std::string &param_name, double new_param) {

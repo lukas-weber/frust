@@ -32,19 +32,20 @@ public:
 
 	double get_weight(vertexcode v) const;
 	int get_sign(vertexcode v) const;
-	vertexcode get_diagonal_vertex(int compound_state_idx) const; // compound_state_idx fits right into diagonal_vertices_
-	const state_idx *get_legstate(vertexcode v) const; // [leg_count] XXX: replace by std::span or something
+	vertexcode get_diagonal_vertex(
+	    int compound_state_idx) const; // compound_state_idx fits right into diagonal_vertices_
+	const state_idx *
+	    get_legstate(vertexcode v) const; // [leg_count] XXX: replace by std::span or something
 	int vertex_count() const;
-	
+
 	// bond_hamiltonian has dimension [dim_i, dim_j, ...; dim_i, dim_j, ...]
-	vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd& bond_hamiltonian);
+	vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bond_hamiltonian);
 	void print() const;
 
 private:
 	int max_worm_count_{};
-	std::vector<vertexcode>
-	    diagonal_vertices_; // [dims_[0]; dims_[1]; ...]
-	    
+	std::vector<vertexcode> diagonal_vertices_; // [dims_[0]; dims_[1]; ...]
+
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
 	std::vector<transition>
@@ -53,8 +54,8 @@ private:
 	std::vector<state_idx> legstates_; // [vertex; leg_count]
 
 	vertexcode wrap_vertex_idx(int vertex_idx);
-	int vertex_change_apply(int vertex, int leg_in,
-	                        worm_idx worm_in, int leg_out, worm_idx worm_out) const;
+	int vertex_change_apply(int vertex, int leg_in, worm_idx worm_in, int leg_out,
+	                        worm_idx worm_out) const;
 };
 
 inline const vertex_data::transition invalid_transition{};

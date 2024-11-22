@@ -5,10 +5,10 @@
 #include <optional>
 #include <vector>
 
-#include "sse_data.h"
-#include "models/model.h"
 #include "measurement_settings.h"
+#include "models/model.h"
 #include "opercode.h"
+#include "sse_data.h"
 
 class frust : public loadl::mc {
 public:
@@ -25,6 +25,7 @@ public:
 	void pt_update_param(const std::string &param_name, double new_param) override;
 
 	frust(const loadl::parser &p);
+
 private:
 	static constexpr int dump_version_ = 2;
 	double T_{};

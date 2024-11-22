@@ -1,6 +1,6 @@
 #include "definitions.h"
-#include "cluster_magnet.h"
 #include "basis.h"
+#include "cluster_magnet.h"
 
 struct cluster_magnet_proto {
 	unitcell uc;
@@ -11,10 +11,7 @@ struct cluster_magnet_proto {
 static cluster_magnet_proto make_square(const loadl::parser &p) {
 	double J = p.get<double>("J");
 
-	return {unitcells::square,
-		{{{}, site_bases::spin}},
-		{{{J}},
-		 {{J}}}};
+	return {unitcells::square, {{{}, site_bases::spin}}, {{{J}}, {{J}}}};
 }
 
 static cluster_magnet_proto make_bilayer(const loadl::parser &p) {
@@ -23,8 +20,8 @@ static cluster_magnet_proto make_bilayer(const loadl::parser &p) {
 	double Jx = p.get<double>("Jx", Jpar);
 
 	return {unitcells::square,
-		{{{Jperp}, site_bases::dimer}},
-		{{{Jpar, Jx, Jx, Jpar}}, {{Jpar, Jx, Jx, Jpar}}}};
+	        {{{Jperp}, site_bases::dimer}},
+	        {{{Jpar, Jx, Jx, Jpar}}, {{Jpar, Jx, Jx, Jpar}}}};
 }
 
 static cluster_magnet_proto make_dimerized_bilayer(const loadl::parser &p) {
@@ -33,12 +30,11 @@ static cluster_magnet_proto make_dimerized_bilayer(const loadl::parser &p) {
 	double Jpardim = p.get<double>("Jpardim");
 
 	return {unitcells::columnar_dimer,
-		{{{Jperp}, site_bases::dimer, 0, 1},
-		 {{Jperp}, site_bases::dimer, 0, -1}},
-		{{{Jpardim, Jpardim, Jpardim, Jpardim}},
-		 {{Jpar, Jpar, Jpar, Jpar}},
-		 {{Jpar, Jpar, Jpar, Jpar}},
-		 {{Jpar, Jpar, Jpar, Jpar}}}};
+	        {{{Jperp}, site_bases::dimer, 0, 1}, {{Jperp}, site_bases::dimer, 0, -1}},
+	        {{{Jpardim, Jpardim, Jpardim, Jpardim}},
+	         {{Jpar, Jpar, Jpar, Jpar}},
+	         {{Jpar, Jpar, Jpar, Jpar}},
+	         {{Jpar, Jpar, Jpar, Jpar}}}};
 }
 
 static cluster_magnet_proto make_shastry_sutherland(const loadl::parser &p) {
@@ -48,32 +44,17 @@ static cluster_magnet_proto make_shastry_sutherland(const loadl::parser &p) {
 
 	if(basis == "spin") {
 		return {unitcells::shastry_sutherland,
-			{{{}, site_bases::spin},
-			 {{}, site_bases::spin},
-			 {{}, site_bases::spin},
-			 {{}, site_bases::spin}},
-			{{{J}},
-			 {{J}},
-			 {{J}},
-			 {{J}},
-			 {{JD}},
-			 {{J}},
-			 {{J}},
-			 {{J}},
-			 {{J}},
-			 {{JD}}}
-		};
+		        {{{}, site_bases::spin},
+		         {{}, site_bases::spin},
+		         {{}, site_bases::spin},
+		         {{}, site_bases::spin}},
+		        {{{J}}, {{J}}, {{J}}, {{J}}, {{JD}}, {{J}}, {{J}}, {{J}}, {{J}}, {{JD}}}};
 	}
 
 	if(basis == "dimer") {
 		return {unitcells::shastry_sutherland_dimer,
-		       {{{JD}, site_bases::dimer},
-		        {{JD}, site_bases::dimer}},
-		       {{{0, J, 0, J}},
-		        {{0, J, 0, J}},
-		        {{J, 0, J, 0}},
-		        {{J, J, 0, 0}}}
-		};
+		        {{{JD}, site_bases::dimer}, {{JD}, site_bases::dimer}},
+		        {{{0, J, 0, J}}, {{0, J, 0, J}}, {{J, 0, J, 0}}, {{J, J, 0, 0}}}};
 	}
 
 	// uc.sites = {
@@ -119,7 +100,7 @@ static cluster_magnet_proto make_shastry_sutherland(const loadl::parser &p) {
 
 static cluster_magnet_proto make_triangle(const loadl::parser &p) {
 	double J = p.get<double>("J");
-	return {unitcells::triangle, {{{}, site_bases::spin}}, {{{J}},{{J}},{{J}}}};
+	return {unitcells::triangle, {{{}, site_bases::spin}}, {{{J}}, {{J}}, {{J}}}};
 }
 
 static cluster_magnet_proto make_kagome(const loadl::parser &p) {
@@ -135,32 +116,22 @@ static cluster_magnet_proto make_kagome(const loadl::parser &p) {
 
 	if(basis == "trimer") {
 		return {unitcells::kagome_trimer,
-			{{{J3, J1, J2}, site_bases::trimer, h}},
-		    	{{{0, 0, 0, 0, 0, 0, 0, J, 0}},
-			 {{0, 0, 0, 0, 0, 0, J, 0, 0}},
-			 {{0, 0, 0, J, 0, 0, 0, 0, 0}}}
-		};
+		        {{{J3, J1, J2}, site_bases::trimer, h}},
+		        {{{0, 0, 0, 0, 0, 0, 0, J, 0}},
+		         {{0, 0, 0, 0, 0, 0, J, 0, 0}},
+		         {{0, 0, 0, J, 0, 0, 0, 0, 0}}}};
 	}
 	if(basis == "dimer") {
-		return {unitcells::kagome_dimer_spin, 
-			{{{J3}, site_bases::dimer, h},
-		  	 {{}, site_bases::spin, h}},
-		  	{{{J1, J2}},
-		         {{0, J, 0, 0}},
-		         {{J, 0}},
-		         {{0, J}}}
-		};
+		return {unitcells::kagome_dimer_spin,
+		        {{{J3}, site_bases::dimer, h}, {{}, site_bases::spin, h}},
+		        {{{J1, J2}}, {{0, J, 0, 0}}, {{J, 0}}, {{0, J}}}};
 	}
 	if(basis == "spin") {
 		return {unitcells::kagome,
-			{{{}, site_bases::spin, h},
-		         {{}, site_bases::spin, h},
-		         {{}, site_bases::spin, h}},
-			{{{J3}}, {{J1}}, {{J2}},
-			 {{J}},  {{J}},  {{J}}}
-		};
+		        {{{}, site_bases::spin, h}, {{}, site_bases::spin, h}, {{}, site_bases::spin, h}},
+		        {{{J3}}, {{J1}}, {{J2}}, {{J}}, {{J}}, {{J}}}};
 	}
-	
+
 	throw std::runtime_error(fmt::format("unknown basis: {}", basis));
 }
 
@@ -171,14 +142,8 @@ static cluster_magnet_proto make_diamond_square(const loadl::parser &p) {
 	double h = p.get<double>("h", 0.);
 
 	return {unitcells::lieb_lattice,
-		{{{}, site_bases::spin, h},
-		 {{J2}, site_bases::dimer, h},
-		 {{J2}, site_bases::dimer, h}},
-		{{{J1, J1}},
-		 {{J1, J1}},
-		 {{J1, J1}},
-		 {{J1, J1}}}
-	};
+	        {{{}, site_bases::spin, h}, {{J2}, site_bases::dimer, h}, {{J2}, site_bases::dimer, h}},
+	        {{{J1, J1}}, {{J1, J1}}, {{J1, J1}}, {{J1, J1}}}};
 }
 
 static cluster_magnet_proto make_triangle_square(const loadl::parser &p) {
@@ -196,38 +161,24 @@ static cluster_magnet_proto make_triangle_square(const loadl::parser &p) {
 			throw std::runtime_error{"basis = 1 does not support Jnn"};
 		}
 		return {unitcells::triangle_square,
-			{{{}, site_bases::spin},
-			 {{}, site_bases::spin},
-			 {{}, site_bases::spin}},
-			{{{J3}}, {{J2}}, {{J1}},
-			 {{Jn}}, {{Jn}}, {{Jn}}}
-		};
+		        {{{}, site_bases::spin}, {{}, site_bases::spin}, {{}, site_bases::spin}},
+		        {{{J3}}, {{J2}}, {{J1}}, {{Jn}}, {{Jn}}, {{Jn}}}};
 	}
 	if(basis == 2) {
 		return {unitcells::triangle_square_dimer_spin,
-		        {{{J3}, site_bases::dimer},
-		         {{}, site_bases::spin}},
-		        {{{J1, J2}},
-		         {{Jnn, Jn, Jnn, Jnn}},
-		         {{Jn, Jn}}}
-		};
+		        {{{J3}, site_bases::dimer}, {{}, site_bases::spin}},
+		        {{{J1, J2}}, {{Jnn, Jn, Jnn, Jnn}}, {{Jn, Jn}}}};
 	}
 	if(basis == 5) {
 		return {unitcells::triangle_square_dimer_spin_rot,
-			{{{J2}, site_bases::dimer},
-			 {{}, site_bases::spin}},
-		        {{{J3, J1}},
-		         {{0, Jn}},
-		         {{0, Jn, 0, 0}},
-		         {{Jn, 0}}}
-		};
+		        {{{J2}, site_bases::dimer}, {{}, site_bases::spin}},
+		        {{{J3, J1}}, {{0, Jn}}, {{0, Jn, 0, 0}}, {{Jn, 0}}}};
 	}
 	if(basis == 3 || basis == 4) {
 		return {unitcells::triangle_square_trimer,
-			{{{J3, J1, J2}, basis == 3 ? site_bases::trimer : site_bases::trimer23}},
-			{{{Jnn, Jnn, Jnn, Jn, Jnn, Jnn, Jnn, Jnn, Jnn}},
-		         {{Jnn, Jnn, Jnn, Jnn, Jnn, Jnn, Jn, Jn, Jnn}}}
-		};
+		        {{{J3, J1, J2}, basis == 3 ? site_bases::trimer : site_bases::trimer23}},
+		        {{{Jnn, Jnn, Jnn, Jn, Jnn, Jnn, Jnn, Jnn, Jnn}},
+		         {{Jnn, Jnn, Jnn, Jnn, Jnn, Jnn, Jn, Jn, Jnn}}}};
 	}
 
 	throw std::runtime_error(fmt::format("unknown basis {}", basis));
@@ -260,7 +211,6 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 		throw std::runtime_error{fmt::format("unknown lattice '{}'", name)};
 	}
 
-
 	// FIXME: very messy solution of the L=1 bond cutter. The current architecture is a bit
 	// clumsy in this case.
 	std::vector<unitcell::bond> filtered_uc_bonds;
@@ -268,7 +218,7 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 
 	assert(proto.uc.bonds.size() == proto.bonds.size());
 	for(int i = 0; i < static_cast<int>(proto.uc.bonds.size()); i++) {
-		const auto& b = proto.uc.bonds[i];
+		const auto &b = proto.uc.bonds[i];
 		// FIXME: only cut bonds that actually connect the same spins!
 		if((Ly == 1 && b.j.dy != 0) || (Lx == 1 && b.j.dx != 0)) {
 			continue;
@@ -279,6 +229,6 @@ std::unique_ptr<cluster_magnet> cluster_magnet_from_param(const loadl::parser &p
 
 	proto.uc.bonds = filtered_uc_bonds;
 	proto.bonds = filtered_cluster_bonds;
-	
+
 	return std::make_unique<cluster_magnet>(lattice{proto.uc, Lx, Ly}, proto.sites, proto.bonds);
 }

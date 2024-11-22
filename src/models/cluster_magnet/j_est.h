@@ -1,8 +1,8 @@
 #pragma once
 
+#include "cluster_magnet.h"
 #include "opercode.h"
 #include "sse_data.h"
-#include "cluster_magnet.h"
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
 
@@ -30,7 +30,8 @@ private:
 
 public:
 	j_est(const model &model, double sign, bool measure_corrlen)
-	    : measure_corrlen_(measure_corrlen), model_{static_cast<const cluster_magnet &>(model)}, sign_{sign}, corrq_{2 * M_PI / model_.lat.Lx} {}
+	    : measure_corrlen_(measure_corrlen), model_{static_cast<const cluster_magnet &>(model)},
+	      sign_{sign}, corrq_{2 * M_PI / model_.lat.Lx} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		using namespace std::complex_literals;
