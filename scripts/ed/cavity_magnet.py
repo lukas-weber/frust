@@ -13,37 +13,6 @@ class Model:
         self.lifter = hamiltonian.SpinLifter([s.spin_dim for s in model_data.sites])
         self.boson_lifter = hamiltonian.Lifter([m.max_bosons for m in model_data.modes])
 
-    def _downfolded_coupling(self, mode):
-        def disp_op(n, m, g):
-            return sum(
-                (1j * g) ** (n + m - 2 * k)
-                * np.exp(
-                    0.5 * math.lgamma(1 + n)
-                    + 0.5 * math.lgamma(1 + m)
-                    - math.lgamma(1 + k)
-                    - math.lgamma(1 + n - k)
-                    - math.lgamma(1 + m - k)
-                )
-                for k in range(min(n, m) + 1)
-            )
-
-        def elem(n, m, omega, g):
-            return (
-                0.5
-                * np.exp(-(g**2))
-                * sum(
-                    (disp_op(n, l, g) * np.conj(disp_op(l, m, g))).real
-                    * (1 / (1 + omega * (l - m)) + 1 / (1 + omega * (l - n)))
-                    for l in range(2 * min(n, m) + 20)
-                )
-            )
-
-        return np.array(
-            [
-                [elem(n, m, mode.omega, mode.coupling) for n in range(mode.max_bosons)]
-                for m in range(mode.max_bosons)
-            ]
-        )
 
     def hamiltonian(self):
         boson_numbers = []
@@ -69,8 +38,11 @@ class Model:
 
         for b in self.model_data.bonds:
             assert len(self.model_data.modes) == 1
+            max_bosons = self.model_data.modes[0].max_bosons
+            omega = self.model_data.modes[0].omega
+            coupling = self.model_data.modes[0].coupling
             H += b.J * sps.kron(
-                self._downfolded_coupling(self.model_data.modes[0]),
+                downfolded_coupling.matrix(max_bosons, omega, coupling),
                 self.lifter.heisen_bond(b.i, b.j),
             )
 
