@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+from loadleveller import taskmaker
+import numpy as np
+
+tm = taskmaker.TaskMaker(__file__, 'jobconfig.yml')
+tm.model = 'cavity_magnet'
+tm.sweeps = 50000
+tm.thermalization = 10000
+tm.binsize = 1000
+tm.lattice = 'square'
+tm.cavity = 'degenerate'
+tm.Lx = 4
+tm.Ly = 2
+
+tm.measure = ['mag', 'sxsymag']
+
+tm.J = 0.9
+tm.U = 3*tm.J
+
+tm.max_photons = 4
+tm.omega = 0.45*tm.U
+tm.g = 0.3
+
+tm.ed_compare = 1
+tm.ed_num_states = 0
+
+Ts = np.linspace(0.05,1,7)
+for T in Ts:
+        tm.task(T=T)
+
+tm.write()
