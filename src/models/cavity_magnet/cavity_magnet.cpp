@@ -14,10 +14,11 @@ cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
       bonds_{bonds}, U_{U} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
-	for(const auto &m : modes) {
-		(void)m;
-		bases_.push_back(cavity_basis::make_mode_basis());
-	}
+	std::vector<int> mode_dims(modes.size());
+	std::transform(modes.begin(), modes.end(), mode_dims.begin(),
+	               [](const auto &m) { return m.max_photons; });
+
+	bases_.push_back(cavity_basis::make_mode_basis(mode_dims));
 
 	for(int i = 0; i < lat.site_count(); i++) {
 		bases_.push_back(cavity_basis::make_spin_basis(sites[i % sites.size()].spin_dim));
@@ -37,11 +38,10 @@ sse_data cavity_magnet::generate_sse_data() const {
 		int dim = 1;
 		for(const auto &m : modes) {
 			int ni = (n / dim) % m.max_photons;
+			dim *= m.max_photons;
 			Hphot(n, n) += m.omega * ni;
 		}
 	}
-
-	int mode_count = modes.size();
 
 	int bond_idx{};
 	for(const auto &b : bonds_) {
@@ -78,15 +78,12 @@ sse_data cavity_magnet::generate_sse_data() const {
 
 	bond_idx = 0;
 	for(const auto &b : lat.bonds) {
-		for(int mode_idx = 0; mode_idx < static_cast<int>(modes.size()); mode_idx++) {
-			int bond_type = b.type * mode_count + mode_idx;
-			sse_bonds.push_back({bond_type, {mode_idx, mode_count + b.i, mode_count + b.j}});
-		}
+		int bond_type = b.type;
+		sse_bonds.push_back({bond_type, {0, 1 + b.i, 1 + b.j}});
 		bond_idx++;
 	}
 
-	std::transform(modes.begin(), modes.end(), std::back_inserter(sse_sites),
-	               [](const auto &m) { return sse_data::site{m.max_photons}; });
+	sse_sites.push_back({photon_dim});
 	for(int i = 0; i < lat.Lx * lat.Ly; i++) {
 		for(int uc = 0; uc < static_cast<int>(lat.uc.sites.size()); uc++) {
 			sse_sites.push_back({sites_[uc].spin_dim});
