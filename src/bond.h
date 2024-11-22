@@ -39,7 +39,8 @@ struct uc_bond {
 struct uc_site {
 	vec2 pos;
 
-	double Jin{};
+	// bonds inside the side. vector enumerates the ascendingly ordered pairs (i, j) with i < j.
+	std::vector<double> Jin;
 	site_basis basis;
 
 	int coordination{}; // filled in automatically
