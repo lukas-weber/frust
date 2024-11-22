@@ -15,21 +15,18 @@ class Model(model_common.Magnet):
         self.lifter = hamiltonian.SpinLifter([s.spin_dim for s in model_data.sites])
         self.boson_lifter = hamiltonian.Lifter([m.max_bosons for m in model_data.modes])
 
-    def hamiltonian(self):
+    def boson_number_ops(self):
         boson_numbers = []
-        dim = 1
 
-        for m in self.model_data.modes:
+        for i, m in enumerate(self.model_data.modes):
             boson_numbers.append(
-                sps.kron(
-                    sps.identity(dim),
-                    sps.kron(
-                        sps.diags(np.arange(m.max_bosons)),
-                        sps.identity(self.boson_dimension / m.max_bosons / dim),
-                    ),
-                )
+                self.boson_lifter.lift_op(i, sps.diags(np.arange(m.max_bosons)))
             )
-            dim *= m.max_bosons
+
+        return boson_numbers
+
+    def hamiltonian(self):
+        boson_numbers = self.boson_number_ops()
 
         boson_identity = sps.identity(self.boson_dimension)
         spin_identity = sps.identity(self.spin_dimension)
@@ -79,5 +76,24 @@ class Model(model_common.Magnet):
                         for k, v in self.observables_magnetization(ens, M).items()
                     }
                 )
+
+                boson_numbers = [
+                    sps.kron(op, sps.eye(self.spin_dimension))
+                    for op in self.boson_number_ops()
+                ]
+
+                obs["PhotonNum"] = np.array(
+                    [
+                        ens.mean(boson_numbers[m])
+                        for m in range(len(self.model_data.modes))
+                    ]
+                ).T
+                obs["PhotonNum2"] = np.array(
+                    [
+                        ens.mean(boson_numbers[m] @ boson_numbers[m])
+                        for m in range(len(self.model_data.modes))
+                    ]
+                ).T
+                obs["PhotonNumVar"] = obs["PhotonNum2"] - obs["PhotonNum"] ** 2
 
         return obs
