@@ -32,26 +32,20 @@ static auto construct_vertices(const std::vector<int>& dims, const Eigen::Matrix
 
 			if(fabs(w) > tolerance) {
 				if(i == j) {
-					// indexing order has to be reverted to be consistent with the order of legstates and other parts of the code
-					int diagonal_vertex_id{};
-					int tmp = i;
-					for(int d : dims) {
-						diagonal_vertex_id *= d;
-						diagonal_vertex_id += tmp%d;
-						tmp /= d;
-					}
-					diagonal_vertices[diagonal_vertex_id] = vertexcode{true, static_cast<uint32_t>(weights.size())};
+					diagonal_vertices[i] = vertexcode{true, static_cast<uint32_t>(weights.size())};
 				}
 
-				int tmp = i;
-				for(int d : dims) {
-					legstates.push_back(tmp % d);
-					tmp /= d;
-				}
-				tmp = j;
-				for(int d : dims) {
-					legstates.push_back(tmp % d);
-					tmp /= d;
+
+				for(int tmp : {i, j}) {
+					std::vector<state_idx> legstate;
+
+					for(int k = 0; k < static_cast<int>(dims.size()); k++) {
+						int d = dims[dims.size()-k-1];
+						legstate.push_back(tmp % d);
+						tmp /= d;
+					}
+					std::reverse(legstate.begin(), legstate.end());
+					std::copy(legstate.begin(), legstate.end(), std::back_inserter(legstates));
 				}
 
 				weights.push_back(fabs(w));
