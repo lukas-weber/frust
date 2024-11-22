@@ -78,6 +78,7 @@ void lattice::to_json(nlohmann::json &out) {
 			{"pos", site.pos},
 			{"nspinhalfs", uc_st.basis.nspinhalfs},
 			{"Jin", uc_st.Jin},
+			{"h", uc_st.h},
 		});
 		idx++;
 	}

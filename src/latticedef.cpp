@@ -73,11 +73,13 @@ static unitcell make_kagome(const loadl::parser &p) {
 
 	double J = p.get<double>("J");
 
+	double h = p.get<double>("h");
+
 	std::string basis = p.get<std::string>("basis");
 
 	if(basis == "trimer") {
 		uc.sites = {
-			{{0,0}, {J3,J1,J2}, site_bases::trimer},
+			{{0,0}, {J3,J1,J2}, site_bases::trimer,h},
 		};
 
 		uc.bonds = {
@@ -93,8 +95,8 @@ static unitcell make_kagome(const loadl::parser &p) {
 		};
 	} else if(basis == "dimer") {
 		uc.sites = {
-			{{0,0}, {J3}, site_bases::dimer},
-			{{0.2,0.5}, {}, site_bases::spin},
+			{{0,0}, {J3}, site_bases::dimer,h},
+			{{0.2,0.5}, {}, site_bases::spin,h},
 		};
 		uc.bonds = {
 			{0, {0,0,1}, {J1, J2}},
@@ -105,9 +107,9 @@ static unitcell make_kagome(const loadl::parser &p) {
 		};
 	} else if(basis == "spin") {
 		uc.sites = {
-			{{0,0}, {}, site_bases::spin},
-			{{0.5,0}, {}, site_bases::spin},
-			{{0.5,0.5}, {}, site_bases::spin},
+			{{0,0}, {}, site_bases::spin,h},
+			{{0.5,0}, {}, site_bases::spin,h},
+			{{0.5,0.5}, {}, site_bases::spin,h},
 		};
 		
 		uc.bonds = {

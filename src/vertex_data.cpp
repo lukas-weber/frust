@@ -19,6 +19,7 @@ static Eigen::MatrixXd onsite_term(const uc_site &s) {
 	int idx = 0;
 	for(int i = 0; i < b.nspinhalfs; i++) {
 		auto spini = b.spinop(i);
+		res += spini[2] * s.h;
 		for(int j = 0; j < i; j++) {
 			auto spinj = b.spinop(j);
 			res += s.Jin[idx]*(0.5*(spini[0]*spinj[1] + spini[1]*spinj[0]) + spini[2]*spinj[2]);
@@ -161,7 +162,7 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 			vertex_change vc{inv_steps, step_in, step_out};
 
 			auto it = std::find_if(variables.begin(), variables.end(),
-			                       [&](auto x) { return vc.inverse() == x; });
+								   [&](auto x) { return vc.inverse() == x; });
 			if(it == variables.end()) {
 				variables.push_back(vc);
 			}
@@ -171,18 +172,18 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 	std::vector<solp::constraint> constraints;
 	std::vector<double> objective(variables.size(), 0);
 	std::transform(
-	    variables.begin(), variables.end(), objective.begin(), [&](const vertex_change &vc) {
+		variables.begin(), variables.end(), objective.begin(), [&](const vertex_change &vc) {
 		bool exclude_bounce = vc.inverse() == vc;
 		return exclude_bounce;
-	    });
+		});
 
 	for(int step_out : steps) {
 		std::vector<double> coeff(variables.size(), 0);
 
 		for(size_t i = 0; i < variables.size(); i++) {
 			coeff[i] =
-			    (variables[i].step_in == step_out) ||
-			    (variables[i].inverse().step_in == step_out);
+				(variables[i].step_in == step_out) ||
+				(variables[i].inverse().step_in == step_out);
 		}
 		constraints.push_back(solp::constraint{coeff, 0});
 	}
@@ -219,11 +220,11 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 
 				if(targets[in] >= 0) {
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
-					    wrap_vertex_idx(targets[in_inv]);
+						wrap_vertex_idx(targets[in_inv]);
 					double norm = constraints[step_idx[in]].rhs == 0 ? 1 : constraints[step_idx[in]].rhs;
 					assert(norm > 0);
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
-					    result.x[i]/norm;
+						result.x[i]/norm;
 				}
 
 				in = var.inverse().step_in;
@@ -232,11 +233,11 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 
 				if(targets[in] >= 0) {
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
-					    wrap_vertex_idx(targets[in_inv]);
+						wrap_vertex_idx(targets[in_inv]);
 					double norm = constraints[step_idx[in]].rhs == 0 ? 1 : constraints[step_idx[in]].rhs;
 					assert(norm > 0);
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
-					    result.x[i]/norm;
+						result.x[i]/norm;
 				}
 			}
 		}
@@ -271,8 +272,8 @@ void vertex_data::transition::print() const {
 			codes.push_back(t.vertex_idx());
 		}
 		std::cout << fmt::format("{:.2f}|{:2d}\n",
-		                         fmt::join(probs.begin(), probs.end(), " "),
-		                         fmt::join(codes.begin(), codes.end(), " "));
+								 fmt::join(probs.begin(), probs.end(), " "),
+								 fmt::join(codes.begin(), codes.end(), " "));
 }
 	
 
