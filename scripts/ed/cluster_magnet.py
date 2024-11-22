@@ -203,7 +203,13 @@ class Model(model_common.Magnet):
                     {
                         op[0] + k: v
                         for k, v in self.observables_magnetization(
-                            ens, self.signed_magnetization(*signcfg)
+                            ens,
+                            self.signed_magnetization(
+                                lambda i: sum(
+                                    self.lifter.Sz(celli) for celli in self.full2half[i]
+                                ),
+                                *op[1]
+                            ),
                         ).items()
                     }
                 )
