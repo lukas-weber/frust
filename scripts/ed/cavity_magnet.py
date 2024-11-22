@@ -40,7 +40,7 @@ class Model(model_common.Magnet):
             assert len(self.model_data.modes) == 1
             max_photons = self.model_data.modes[0].max_photons
             omega = self.model_data.modes[0].omega
-            coupling = self.model_data.modes[0].coupling
+            coupling = b.mode_couplings[0]
             H += b.J * sps.kron(
                 downfolded_coupling.matrix(max_photons, omega, coupling),
                 (
