@@ -32,18 +32,18 @@ cmplx generator::disp_op(int n, int l, double g) const {
 		return n == l;
 	}
 
-	cmplx sum = 0;
+	double sum = 0;
 	double logg = log(g);
 
 	std::array<cmplx, 4> sign = {1, 1i, -1, -1i};
 
 	for(int a = 0; a <= std::min(n, l); a++) {
-		int pow_exp = n + l - 2 * a;
-		double term = exp(logg * pow_exp + 0.5 * lgamma_cache_[l] + 0.5 * lgamma_cache_[n] -
-		                  lgamma_cache_[a] - lgamma_cache_[n - a] - lgamma_cache_[l - a]);
-		sum += sign[pow_exp % sign.size()] * term;
+		double pow_exp = n + l - 2 * a;
+		double term = std::exp(logg * pow_exp + 0.5 * lgamma_cache_[l] + 0.5 * lgamma_cache_[n] -
+		                       lgamma_cache_[a] - lgamma_cache_[n - a] - lgamma_cache_[l - a]);
+		sum += (1 - 2 * (a & 1)) * term;
 	}
-	return sum;
+	return sign[(n + l) % sign.size()] * sum;
 }
 
 double generator::elem(int n, int m) const {
