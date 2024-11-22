@@ -75,14 +75,24 @@ sse_data cavity_magnet::generate_sse_data() const {
 		                         -0.25 * spin_identity + scalar_product(spinop_i, spinop_j)) +
 		    1.0 / lat.bonds.size() * kronecker_prod(Hphot, spin_identity);
 
-		vert_data.push_back({{photon_dim, spin_dim_i, spin_dim_j}, H});
+		if(photon_dim > 1) {
+			vert_data.push_back({{photon_dim, spin_dim_i, spin_dim_j}, H});
+		} else {
+			vert_data.push_back({{spin_dim_i, spin_dim_j}, H});
+		}
+
 		bond_idx++;
 	}
 
 	bond_idx = 0;
 	for(const auto &b : lat.bonds) {
 		int bond_type = b.type;
-		sse_bonds.push_back({bond_type, {0, 1 + b.i, 1 + b.j}});
+		if(photon_dim > 1) {
+			sse_bonds.push_back({bond_type, {0, 1 + b.i, 1 + b.j}});
+		} else {
+			sse_bonds.push_back({bond_type, {1 + b.i, 1 + b.j}});
+		}
+
 		bond_idx++;
 	}
 
