@@ -41,9 +41,9 @@ class Model(model_common.Magnet):
 
         for b in self.model_data.bonds:
             H += b.J * sps.kron(
-                downfolded_peierls_coupling.matrix(
+                downfolded_peierls_coupling.Generator(
                     omegas / self.model_data.U, b.mode_couplings, int(max(max_photons))
-                ),
+                ).matrix(),
                 (
                     self.lifter.heisen_bond(b.i, b.j)
                     - 0.25 * sps.eye(self.spin_dimension)
