@@ -16,7 +16,7 @@ frust::frust(const loadl::parser &p)
 	data_.print();
 }
 
-/*
+
 void frust::print_operators() {
 	int p = -1;
 	for(auto op : operators_) {
@@ -24,19 +24,22 @@ void frust::print_operators() {
 		if(op.identity()) {
 			continue;
 		}
-		const auto &b = data_.bonds[op.bond()];
+		const auto &b = data_.get_bond(op.bond());
 		const auto &ls = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
-		const auto &bi = data_.get_site_data(b.i).basis.states;
-		const auto &bj = data_.get_site_data(b.j).basis.states;
-		std::cout << fmt::format("{} {}-{}: {}{}->{}{}\n", 4 * p, b.i, b.j, bi[ls[0]].name,
-		                         bj[ls[1]].name, bi[ls[2]].name, bj[ls[3]].name);
+		std::cout << fmt::format("{} {}: {}{}->{}{}\n", data_.nlegs*p, fmt::join(b,b+data_.nlegs/2, "-"), ls[0], ls[1], ls[2], ls[3]);
 	}
-	int idx{};
-	for(auto s : spin_) {
-		std::cout << data_.get_site_data(idx).basis.states[s].name << ", ";
+	
+	std::cout << fmt::format("{}\n", fmt::join(spin_.begin(), spin_.end(), ", "));
+}
+
+void frust::print_vertices() {
+	for(int p = 0; p < static_cast<int>(operators_.size()); p++) {
+		if(vertices_[data_.nlegs * p] > 0) {
+			std::cout << fmt::format("{:4d}| {:4d}\n", data_.nlegs*p, fmt::join(&vertices_[data_.nlegs * p], &vertices_[data_.nlegs * p] + data_.nlegs, ","));
+		}
 	}
-	std::cout << "\n";
-}*/
+	std::cout << fmt::format("vfirst: {}\n", fmt::join(v_first_.begin(), v_first_.end(), ", "));
+}
 
 void frust::init() {
 	spin_.resize(data_.site_count);
