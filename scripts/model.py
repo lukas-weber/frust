@@ -11,6 +11,9 @@ class Bond:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
+class Mode:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
 
 class Model:
     def _load_lattice(self, lattice):

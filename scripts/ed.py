@@ -9,6 +9,7 @@ from loadleveller import jobfile
 
 import model
 from ed import cluster_magnet
+from ed import cavity_magnet
 
 
 parser = argparse.ArgumentParser(description='ED code for the frust project. Automatically calculates the results for a chosen loadleveller jobfile. If there is more than one task in the jobfile, those tasks must only vary by temperature.')
