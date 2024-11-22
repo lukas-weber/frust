@@ -1,0 +1,6 @@
+[wrap-git]
+directory = highs
+url = https://github.com/ERGO-Code/HiGHS.git
+revision = v1.2
+
+patch_directory = highs
