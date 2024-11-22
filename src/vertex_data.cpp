@@ -32,7 +32,15 @@ static auto construct_vertices(const std::vector<int>& dims, const Eigen::Matrix
 
 			if(fabs(w) > tolerance) {
 				if(i == j) {
-					diagonal_vertices[i] = vertexcode{true, static_cast<uint32_t>(weights.size())};
+					// indexing order has to be reverted to be consistent with the order of legstates and other parts of the code
+					int diagonal_vertex_id{};
+					int tmp = i;
+					for(int d : dims) {
+						diagonal_vertex_id *= d;
+						diagonal_vertex_id += tmp%d;
+						tmp /= d;
+					}
+					diagonal_vertices[diagonal_vertex_id] = vertexcode{true, static_cast<uint32_t>(weights.size())};
 				}
 
 				int tmp = i;
