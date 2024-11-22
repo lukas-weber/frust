@@ -30,7 +30,6 @@ foreach tj : test_jobfiles
     test_simulation,
     args : [frust, tj, '--result-file', join_paths(meson.project_source_root(), 'test/testjobs/ed/', fs.name(tj) + '.ed.json')],
     timeout : 5000,
-    is_parallel : false,
     suite : 'ed')
   test('seeded_' + fs.name(tj),
     test_simulation,
