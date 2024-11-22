@@ -163,7 +163,7 @@ vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamil
 		t.targets.resize(leg_count * max_worm_count_);
 	}
 	
-	std::vector<double> constraints_upper(steps.size());
+	std::vector<double> constraints(steps.size());
 
 	Highs highs;
 	highs.setOptionValue("log_dev_level", kHighsLogDevLevelNone);
@@ -179,11 +179,11 @@ vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamil
 				    vertex_change_apply(dim_i, dim_j, v, leg_in, worm_in, leg_out, worm_out);
 
 				targets[step_out] = target;
-				constraints_upper[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
+				constraints[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
 			}
 
-			model.lp_.row_lower_ = constraints_upper;
-			model.lp_.row_upper_ = constraints_upper;
+			model.lp_.row_lower_ = constraints;
+			model.lp_.row_upper_ = constraints;
 
 			HighsStatus status = highs.passModel(model);
 			assert(status == HighsStatus::kOk);
@@ -211,7 +211,7 @@ vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamil
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
 					    wrap_vertex_idx(targets[in_inv]);
 					double norm =
-					    constraints_upper[step_idx[in]] == 0 ? 1 : constraints_upper[step_idx[in]];
+					    constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
 					assert(norm > 0);
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
 					    prob / norm;
@@ -225,7 +225,7 @@ vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamil
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].targets[out] =
 					    wrap_vertex_idx(targets[in_inv]);
 					double norm =
-					    constraints_upper[step_idx[in]] == 0 ? 1 : constraints_upper[step_idx[in]];
+					    constraints[step_idx[in]] == 0 ? 1 : constraints[step_idx[in]];
 					assert(norm > 0);
 					transitions_[targets[in] * max_worm_count_ * leg_count + in].probs[out] =
 					    prob / norm;
