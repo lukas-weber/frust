@@ -59,7 +59,7 @@ else:
     if args.generate:
         shutil.copy(result_file, args.generate)
     else:
-        def compare_results(a, b, tolerance_digits=25):
+        def compare_results(a, b, tolerance_digits=10):
             mismatch = []
             def _compare(a, b, path):
                 if type(a) == dict:
