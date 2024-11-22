@@ -18,6 +18,7 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 
 	for(int y = 0; y < Ly; y++) {
 		for(int x = 0; x < Lx; x++) {
+			int bond_type{};
 			for(auto b : uc.bonds) {
 				assert(b.i < uc_spin_count);
 				assert(b.j.uc < uc_spin_count);
@@ -26,7 +27,8 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 				int j = Lx * uc_spin_count * ((b.j.dy + y) % Ly) +
 				        uc_spin_count * ((b.j.dx + x) % Lx) + b.j.uc;
 
-				bonds.push_back({i, j});
+				bonds.push_back(bond{bond_type, i, j});
+				bond_type++;
 			}
 		}
 	}
@@ -37,7 +39,7 @@ void lattice::to_json(nlohmann::json& out) const {
 	out["Ly"] = Ly;
 	out["uc_spin_count"] = uc.sites.size();
 
-	for(int idx = 0; idx < Lx*Ly*uc.sites.size(); idx++) {
+	for(int idx = 0; idx < static_cast<int>(Lx*Ly*uc.sites.size()); idx++) {
 		out["sites"].push_back({
 		    {"pos", site_pos(idx)},
 		});

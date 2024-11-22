@@ -77,11 +77,13 @@ sse_data cluster_magnet::generate_sse_data() const {
 	}
 	std::vector<sse_data::site> sites;
 	std::vector<sse_data::bond> bonds;
-	std::transform(sites_.begin(), sites_.end(), std::back_inserter(sites), [](const auto& s){
-		return sse_data::site{s.basis.size()};
-	});
+	for(int i = 0; i < lat.Lx*lat.Ly; i++) {
+		std::transform(sites_.begin(), sites_.end(), std::back_inserter(sites), [](const auto& s){
+			return sse_data::site{s.basis.size()};
+		});
+	}
 	std::transform(lat.bonds.begin(), lat.bonds.end(), std::back_inserter(bonds), [](const auto& b){
-		return sse_data::bond{b.i, b.j};
+		return sse_data::bond{b.type, {b.i, b.j}};
 	});
 	
 	return sse_data{vert_data, sites, bonds};

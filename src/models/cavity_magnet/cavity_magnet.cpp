@@ -64,8 +64,8 @@ sse_data cavity_magnet::generate_sse_data() const {
 	bond_idx = 0;
 	for(const auto& b : lat.bonds) {
 		for(int mode_idx = 0; mode_idx < static_cast<int>(modes_.size()); mode_idx++) {
-			
-			sse_bonds.push_back({mode_idx, mode_count + b.i, mode_count + b.j});
+			int bond_type = b.type*mode_count + mode_idx;
+			sse_bonds.push_back({bond_type, {mode_idx, mode_count + b.i, mode_count + b.j}});
 		}
 		bond_idx++;
 	}
@@ -73,10 +73,8 @@ sse_data cavity_magnet::generate_sse_data() const {
 	std::transform(modes_.begin(), modes_.end(), std::back_inserter(sse_sites), [](const auto& m) {
 		return sse_data::site{m.max_bosons};
 	});
-	
-	std::transform(lat.uc.sites.begin(), lat.uc.sites.end(), std::back_inserter(sse_sites), [](const auto&) {
-		return sse_data::site{2};
-	});
+
+	sse_sites.insert(sse_sites.end(), lat.Lx*lat.Ly*lat.uc.sites.size(), {2});
 
 	return sse_data{vert_data, sse_sites, sse_bonds};
 }
