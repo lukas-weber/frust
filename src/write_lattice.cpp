@@ -1,5 +1,6 @@
 #include "write_lattice.h"
-#include "latticedef.h"
+#include "models/model.h"
+#include "models/model_def.h"
 #include <loadleveller/loadleveller.h>
 #include <nlohmann/json.hpp>
 
@@ -18,9 +19,9 @@ void write_lattice(int argc, char **argv) {
 	loadl::parser jobfile{jobfilename};
 	auto task = jobfile["tasks"][taskname];
 
-	lattice lat = lattice_from_param(task, false);
+	std::unique_ptr<model> model = model_from_param(task);
 
 	nlohmann::json out;
-	lat.to_json(out);
+	model->to_json(out);
 	std::cout << out.dump(1) << std::endl;
 }

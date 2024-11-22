@@ -1,88 +1,52 @@
 #include "vertex_data.h"
 
-#include "util.h"
-#include <Eigen/Dense>
 #include <fmt/format.h>
 #include <iostream>
 #include <numeric>
 #include <Highs.h>
 
-static Eigen::MatrixXd onsite_term(const uc_site &s) {
-	const auto &b = s.basis;
+static double calc_energy_offset(const Eigen::MatrixXd &H) {
+	double hmax = 0;
+	double hmin = 0;
 
-	Eigen::MatrixXd res = res.Zero(b.size(), b.size());
-
-	if(static_cast<int>(s.Jin.size()) != b.nspinhalfs * (b.nspinhalfs - 1) / 2) {
-		throw std::runtime_error{"Jin does not have the right shape"};
-	}
-
-	int idx = 0;
-	for(int i = 0; i < b.nspinhalfs; i++) {
-		auto spini = b.spinop(i);
-		res += spini[2] * s.h;
-		for(int j = 0; j < i; j++) {
-			auto spinj = b.spinop(j);
-			res += s.Jin[idx] *
-			       (0.5 * (spini[0] * spinj[1] + spini[1] * spinj[0]) + spini[2] * spinj[2]);
-			idx++;
-		}
-	}
-	return res;
-}
-
-static Eigen::MatrixXd bond_term(const uc_bond &b, const uc_site &si, const uc_site &sj) {
-	assert(static_cast<int>(b.J.size()) == si.basis.nspinhalfs * sj.basis.nspinhalfs);
-
-	int dim = si.basis.size() * sj.basis.size();
-	Eigen::MatrixXd res = Eigen::MatrixXd::Zero(dim, dim);
-
-	for(int i = 0; i < si.basis.nspinhalfs; i++) {
-		auto spini = si.basis.spinop(i);
-		for(int j = 0; j < sj.basis.nspinhalfs; j++) {
-			auto spinj = sj.basis.spinop(j);
-			res += b.J[sj.basis.nspinhalfs * i + j] * scalar_product(spini, spinj);
+	
+	for(double h : H.diagonal()) {
+		if(-h < hmin) {
+			hmin = -h;
 		}
 	}
 
-	return res;
+	for(double h : H.reshaped()) {
+		if(fabs(h) > hmax) {
+			hmax = h;
+		}
+	}
+
+	double epsilon = hmax / 2;
+	return hmin - epsilon;
 }
 
-void vertex_data::construct_vertices(const uc_bond &b, const uc_site &si, const uc_site &sj,
+void vertex_data::construct_vertices(int dim_i, int dim_j, const Eigen::MatrixXd& H,
                                      double tolerance) {
-	int dim = si.basis.size() * sj.basis.size();
-	Eigen::MatrixXd H = Eigen::MatrixXd::Zero(dim, dim);
-	auto Idi = Eigen::MatrixXd::Identity(si.basis.size(), si.basis.size());
-	auto Idj = Eigen::MatrixXd::Identity(sj.basis.size(), sj.basis.size());
-	H += kronecker_prod(onsite_term(si), Idj) / si.coordination;
-	H += kronecker_prod(Idi, onsite_term(sj)) / sj.coordination;
-	H += bond_term(b, si, sj);
+	for(int s = 0; s < H.cols()*H.rows(); s++) {
+		state_idx l0 = s / (dim_j * dim_i * dim_j);
+		state_idx l1 = (s / (dim_i * dim_j)) % dim_j; 
+		state_idx l2 = (s / dim_j) % dim_i;
+		state_idx l3 = s % dim_j;
 
-	H *= -1; // from -β ;)
-
-	double epsilon = fabs(H.maxCoeff()) / 2;
-	energy_offset = H.diagonal().minCoeff() - epsilon;
-	H -= decltype(H)::Identity(dim, dim) * energy_offset;
-
-	assert(H.isApprox(H.transpose()));
-
-	for(state_idx l0 = 0; l0 < si.basis.size(); l0++) {
-		for(state_idx l1 = 0; l1 < sj.basis.size(); l1++) {
-			for(state_idx l2 = 0; l2 < si.basis.size(); l2++) {
-				for(state_idx l3 = 0; l3 < sj.basis.size(); l3++) {
-					double w = H(l0 * sj.basis.size() + l1, l2 * sj.basis.size() + l3);
-					if(fabs(w) > tolerance) {
-						legstates_.push_back({l0, l1, l2, l3});
-						weights_.push_back(fabs(w));
-						signs_.push_back(w >= 0 ? 1 : -1);
-
-						if(l0 == l2 && l1 == l3) {
-							diagonal_vertices_[l0 * site_basis::max_size + l1] =
-							    vertexcode{true, static_cast<uint32_t>(weights_.size() - 1)};
-						}
-					}
-				}
-			}
+		double w = -H(l0*dim_j + l1, l2*dim_j  + l3);
+		if(l0 == l2 && l1 == l3) {
+			w -= energy_offset;
 		}
+
+		if(fabs(w) > tolerance) {
+			if(l0 == l2 && l1 == l3) {
+				diagonal_vertices_[l0 * dim_j + l1] = vertexcode{true, static_cast<uint32_t>(weights_.size())};
+			}
+			legstates_.push_back({l0, l1, l2, l3});
+			weights_.push_back(fabs(w));
+			signs_.push_back(w >= 0 ? 1 : -1);
+		}		
 	}
 }
 
@@ -95,26 +59,16 @@ vertexcode vertex_data::wrap_vertex_idx(int vertex_idx) {
 	return vertexcode{ls[0] == ls[2] && ls[1] == ls[3], static_cast<uint32_t>(vertex_idx)};
 }
 
-int vertex_data::vertex_change_apply(const site_basis &bi, const site_basis &bj, int vertex,
-                                     int leg_in, worm_idx worm_in_idx, int leg_out,
-                                     worm_idx worm_out_idx) const {
+int vertex_data::vertex_change_apply(int dim_i, int dim_j, int vertex,
+                                     int leg_in, worm_idx worm_in, int leg_out,
+                                     worm_idx worm_out) const {
 	auto legstate = legstates_.at(vertex);
 
-	const auto &basis_in = leg_in & 1 ? bj : bi;
-	const auto &basis_out = leg_out & 1 ? bj : bi;
+	int dim_in = leg_in & 1 ? dim_j : dim_i;
+	int dim_out = leg_out & 1 ? dim_j : dim_i;
 
-	const auto &worm_in = basis_in.worms[worm_in_idx];
-	const auto &worm_out = basis_out.worms[worm_out_idx];
-
-	legstate[leg_in] = worm_in.action[legstate[leg_in]];
-	if(legstate[leg_in] == site_basis::invalid) {
-		if(leg_in == leg_out && worm_in_idx == worm_out.inverse_idx) {
-			return vertex;
-		}
-		return -1;
-	}
-
-	legstate[leg_out] = worm_out.action[legstate[leg_out]];
+	legstate[leg_in] = worm_action(worm_in, legstate[leg_in], dim_in);
+	legstate[leg_out] = worm_action(worm_out, legstate[leg_out], dim_out);
 	auto it = std::find(legstates_.begin(), legstates_.end(), legstate);
 	if(it == legstates_.end()) {
 		return -1;
@@ -123,10 +77,11 @@ int vertex_data::vertex_change_apply(const site_basis &bi, const site_basis &bj,
 	return it - legstates_.begin();
 }
 
-vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj) {
+vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamiltonian) 
+	: dim_j_{dim_j}, max_worm_count_{std::max(worm_count(dim_i), worm_count(dim_j))}, diagonal_vertices_(dim_i*dim_j) {
 	const double tolerance = 1e-10;
-	construct_vertices(b, si, sj, tolerance);
-	max_worm_count_ = std::max(si.basis.worms.size(), sj.basis.worms.size());
+	energy_offset = calc_energy_offset(bond_hamiltonian);
+	construct_vertices(dim_i, dim_j, bond_hamiltonian, tolerance);
 
 	transitions_.resize(legstates_.size() * max_worm_count_ * leg_count);
 
@@ -136,11 +91,11 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 
 	for(worm_idx worm = 0; worm < max_worm_count_; worm++) {
 		for(int leg = 0; leg < leg_count; leg++) {
-			const auto &basis = (leg & 1 ? sj : si).basis;
-			if(worm < static_cast<int>(basis.worms.size())) {
+			int dim = leg & 1 ? dim_j : dim_i;
+			if(worm < worm_count(dim)) {
 				steps.push_back(worm * leg_count + leg);
 				step_idx[worm * leg_count + leg] = steps.size() - 1;
-				inv_steps[worm * leg_count + leg] = basis.worms[worm].inverse_idx * leg_count + leg;
+				inv_steps[worm * leg_count + leg] = worm_inverse(worm, dim) * leg_count + leg;
 			}
 		}
 	}
@@ -218,7 +173,7 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 				int leg_in = step_in % leg_count, leg_out = step_out % leg_count;
 				worm_idx worm_in = step_in / leg_count, worm_out = step_out / leg_count;
 				int target =
-				    vertex_change_apply(si.basis, sj.basis, v, leg_in, worm_in, leg_out, worm_out);
+				    vertex_change_apply(dim_i, dim_j, v, leg_in, worm_in, leg_out, worm_out);
 
 				targets[step_out] = target;
 				constraints_upper[step_idx[step_out]] = target >= 0 ? weights_[target] : 0;
@@ -308,7 +263,7 @@ void vertex_data::transition::print() const {
 	std::cout << fmt::format("{:.2f}|{:2d}\n", fmt::join(probs.begin(), probs.end(), " "),
 	                         fmt::join(codes.begin(), codes.end(), " "));
 }
-
+/*
 void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 	for(size_t v = 0; v < legstates_.size(); v++) {
 		for(int in = 0; in < max_worm_count_ * leg_count; in++) {
@@ -334,4 +289,4 @@ void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 		                         bi.states[ls[0]].name, bj.states[ls[1]].name,
 		                         bi.states[ls[2]].name, bj.states[ls[3]].name, weights_[idx]);
 	}
-}
+}*/

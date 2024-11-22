@@ -1,6 +1,6 @@
 #include "frust.h"
+#include "models/model_def.h"
 #include "j_est.h"
-#include "latticedef.h"
 #include "mag_est.h"
 #include "vertex_data.h"
 #include <algorithm>
@@ -8,12 +8,13 @@
 #include "template_selector.h"
 
 frust::frust(const loadl::parser &p)
-    : loadl::mc(p), lat_{lattice_from_param(p, true)}, settings_{p} {
+    : loadl::mc(p), model_{model_from_param(p)}, data_{model_->generate_sse_data()}, settings_{p} {
 	T_ = param.get<double>("T");
-	v_first_.resize(lat_.sites.size());
-	v_last_.resize(lat_.sites.size());
+	v_first_.resize(data_.site_count);
+	v_last_.resize(data_.site_count);
 }
 
+/*
 void frust::print_operators() {
 	int p = -1;
 	for(auto op : operators_) {
@@ -21,28 +22,29 @@ void frust::print_operators() {
 		if(op.identity()) {
 			continue;
 		}
-		const auto &b = lat_.bonds[op.bond()];
-		const auto &ls = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
-		const auto &bi = lat_.get_uc_site(b.i).basis.states;
-		const auto &bj = lat_.get_uc_site(b.j).basis.states;
+		const auto &b = data_.bonds[op.bond()];
+		const auto &ls = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+		const auto &bi = data_.get_site_data(b.i).basis.states;
+		const auto &bj = data_.get_site_data(b.j).basis.states;
 		std::cout << fmt::format("{} {}-{}: {}{}->{}{}\n", 4 * p, b.i, b.j, bi[ls[0]].name,
 		                         bj[ls[1]].name, bi[ls[2]].name, bj[ls[3]].name);
 	}
 	int idx{};
 	for(auto s : spin_) {
-		std::cout << lat_.get_uc_site(idx).basis.states[s].name << ", ";
+		std::cout << data_.get_site_data(idx).basis.states[s].name << ", ";
 	}
 	std::cout << "\n";
-}
+}*/
 
 void frust::init() {
-	spin_.resize(lat_.sites.size());
+	spin_.resize(data_.site_count);
 	for(size_t i = 0; i < spin_.size(); i++) {
-		spin_[i] = lat_.get_uc_site(i).basis.size() * random01();
+		spin_[i] = data_.get_site_data(i).dim * random01();
 	}
 
+	// FIXME: make this (not) depend on the energy scale of the model
 	operators_.resize(
-	    param.get("init_opstring_cutoff", static_cast<int>(lat_.spinhalf_count * T_)));
+	    param.get("init_opstring_cutoff", static_cast<int>(data_.site_count * T_)));
 
 	maxwormlen_ = param.get<int>("maxwormlen", 0);
 	if(maxwormlen_ != 0) {
@@ -75,9 +77,9 @@ int frust::worm_traverse() {
 	} while(vertices_[v0] < 0);
 
 	auto op0 = operators_[v0 / 4];
-	const auto &bond0 = lat_.bonds[op0.bond()];
+	const auto &bond0 = data_.bonds[op0.bond()];
 	int site0 = v0 & 1 ? bond0.j : bond0.i;
-	int wormfunc0 = random01() * lat_.get_uc_site(site0).basis.worms.size();
+	int wormfunc0 = random01() * worm_count(data_.get_site_data(site0).dim);
 
 	int32_t v = v0;
 	int wormfunc = wormfunc0;
@@ -87,14 +89,14 @@ int frust::worm_traverse() {
 		assert(!op.vertex().invalid());
 		int leg_in = v % 4;
 		const auto [leg_out, wormfunc_out, new_vertex] =
-		    lat_.get_vertex_data(op.bond()).scatter(op.vertex(), leg_in, wormfunc, random01());
+		    data_.get_vertex_data(op.bond()).scatter(op.vertex(), leg_in, wormfunc, random01());
 
 		op = opercode{op.bond(), new_vertex};
 
 		int32_t vstep = 4 * (v / 4) + leg_out;
-		const auto &bond = lat_.bonds[op.bond()];
-		const auto &site_out = lat_.get_uc_site(leg_out & 1 ? bond.j : bond.i);
-		if((vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx) ||
+		const auto &bond = data_.bonds[op.bond()];
+		const auto &site_out = data_.get_site_data(leg_out & 1 ? bond.j : bond.i);
+		if((vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim)) ||
 		   worm_too_long(wormlength)) {
 			break;
 		}
@@ -127,7 +129,7 @@ std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
 
 		auto op = operators_[p];
 		if(!op.identity() && (l != 0 || direction0 < 0)) {
-			const auto &bond = lat_.bonds[op.bond()];
+			const auto &bond = data_.bonds[op.bond()];
 			if(bond.i == site0 || bond.j == site0) {
 				/*if(direction0 == 1) {
 				    p0 = p0 ? p0-1 : opsize-1;
@@ -142,7 +144,8 @@ std::optional<int32_t> frust::find_worm_measure_start(int site0, int32_t &p0,
 }
 
 int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
-	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore,
+	throw std::runtime_error{"not implemented"};
+/*	const auto matelem_idx = [](bool switcheroo, const site_basis::state &sbefore,
 	                            const site_basis::state &safter) -> double {
 		const auto &sup = switcheroo ? sbefore : safter;
 		const auto &sdown = switcheroo ? safter : sbefore;
@@ -152,8 +155,9 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		}
 		return -1;
 	};
+	
 
-	assert(lat_.uc.sites.size() == 1); // not implemented
+	//assert(data_.uc.sites.size() == 1); // not implemented
 
 	int wormlength{};
 
@@ -162,7 +166,7 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	}
 
 	int32_t p0 = operators_.size() * random01();
-	int site0 = lat_.sites.size() * random01();
+	int site0 = data_.site_count * random01();
 	int direction0 = 1 - 2 * (random01() > 0.5);
 
 	auto v0opt = find_worm_measure_start(site0, p0, direction0);
@@ -173,8 +177,8 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 	int32_t v1 = vertices_[v0];
 	auto [uc0, x0, y0] = lat_.split_idx(site0);
 
-	const auto &basis0 = lat_.get_uc_site(site0).basis;
-	int wormfunc0 = random01() * basis0.worms.size();
+	int dim0 = data_.get_site_data(site0).dim;
+	int wormfunc0 = random01() * worm_count(dim0);
 
 	int32_t v = v0;
 	int wormfunc = wormfunc0;
@@ -186,20 +190,20 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 		opercode old_op = op;
 
 		int leg_in = v % 4;
-		const auto &vd = lat_.get_vertex_data(op.bond());
+		const auto &vd = data_.get_vertex_data(op.bond());
 		const auto [leg_out, wormfunc_out, new_vertex] =
 		    vd.scatter(op.vertex(), leg_in, wormfunc, random01());
 
 		op = opercode{op.bond(), new_vertex};
 
 		int32_t vstep = 4 * (v / 4) + leg_out;
-		const auto &bond = lat_.bonds[op.bond()];
+		const auto &bond = data_.bonds[op.bond()];
 		int site_idx = leg_out & 1 ? bond.j : bond.i;
-		const auto &site_out = lat_.get_uc_site(site_idx);
+		const auto &site_out = data_.get_site_data(site_idx);
 
 		sign *= vd.get_sign(old_op.vertex()) * vd.get_sign(op.vertex());
 
-		if((vstep == v0 && wormfunc_out == site_out.basis.worms[wormfunc0].inverse_idx)) {
+		if(vstep == v0 && wormfunc_out == worm_inverse(wormfunc0, site_out.dim) {
 			break;
 		}
 
@@ -208,13 +212,15 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		assert(vnext != -1);
 
+
 		bool up = leg_out > 1;
 		if((up && v / 4 <= p0 && p0 < vnext / 4) || (!up && vnext / 4 <= p0 && p0 < v / 4) ||
 		   (up && vnext / 4 <= v / 4 && (p0 >= v / 4 || p0 < vnext / 4)) ||
 		   (!up && v / 4 <= vnext / 4 && (p0 >= vnext / 4 || p0 < v / 4))) {
 			int state_after_idx = vd.get_legstate(op.vertex())[leg_out];
-			int state_before_idx = site_out.basis.worms[site_out.basis.worms[wormfunc].inverse_idx]
-			                           .action[state_after_idx];
+			int state_before_idx = worm_action(worm_inverse(wormfunc, site_out.dim), state_after_idx, site_out.dim);
+
+			// FIXME
 			const auto &state_before = site_out.basis.states[state_before_idx];
 			const auto &state_after = site_out.basis.states[state_after_idx];
 			int matidx = matelem_idx(!up, state_before, state_after);
@@ -222,14 +228,14 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 			if(matidx >= 0 && site_idx != site0) {
 				auto op0 = operators_[v0 / 4];
 				auto op1 = operators_[v1 / 4];
-				const auto &ls0 = lat_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
-				const auto &ls1 = lat_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
+				const auto &ls0 = data_.get_vertex_data(op0.bond()).get_legstate(op0.vertex());
+				const auto &ls1 = data_.get_vertex_data(op1.bond()).get_legstate(op1.vertex());
 				const auto &state_before0 = basis0.states[ls0[v0 % 4]];
 				const auto &state_after0 = basis0.states[ls1[v1 % 4]];
 				double matidx0 = matelem_idx(direction0 > 0, state_before0, state_after0);
 
 				if(matidx0 >= 0) {
-					auto [uc, x, y] = lat_.split_idx(site_idx);
+					auto [uc, x, y] = data_.split_idx(site_idx);
 
 					int idx =
 					    ((y - y0 + lat_.Ly) % lat_.Ly) * lat_.Lx + (x - x0 + lat_.Lx) % lat_.Lx;
@@ -243,7 +249,8 @@ int frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 		v = vnext;
 	} while(v != v0 || wormfunc != wormfunc0);
-	return wormlength;
+	return wormlength;*/
+	return 100;
 }
 
 bool frust::worm_update() {
@@ -277,7 +284,7 @@ bool frust::worm_update() {
 			nworm_ = std::clamp(nworm_, 1., 1. + noper_ / 2.);
 		}
 	} else {
-		int size = settings_.loopcorr_as_strucfac ? 1 : lat_.sites.size();
+		int size = settings_.loopcorr_as_strucfac ? 1 : data_.site_count;
 		std::vector<double> corr(4 * size);
 		double sign = measure_sign();
 
@@ -293,12 +300,12 @@ bool frust::worm_update() {
 
 	for(size_t i = 0; i < spin_.size(); i++) {
 		if(v_first_[i] < 0) {
-			spin_[i] = lat_.get_uc_site(i).basis.size() * random01();
+			spin_[i] = data_.get_site_data(i).dim * random01();
 		} else {
 			int32_t v = v_first_[i];
 			auto op = operators_[v / 4];
 			int leg = v % 4;
-			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+			const auto &leg_state = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
 			spin_[i] = leg_state[leg];
 		}
 	}
@@ -318,7 +325,7 @@ void frust::make_vertex_list() {
 			continue;
 		}
 		int v0 = 4 * p;
-		const auto &b = lat_.bonds[op.bond()];
+		const auto &b = data_.bonds[op.bond()];
 		int v1 = v_last_[b.i];
 		int v2 = v_last_[b.j];
 		if(v1 != -1) {
@@ -358,18 +365,18 @@ void frust::diagonal_update() {
 	auto tmpspin = spin_;
 
 	double opersize = operators_.size();
-	double p_make_bond_raw = lat_.bonds.size() * 1. / T_;
-	double p_remove_bond_raw = T_ / lat_.bonds.size();
+	double p_make_bond_raw = data_.bonds.size() * 1. / T_;
+	double p_remove_bond_raw = T_ / data_.bonds.size();
 
 	for(auto &op : operators_) {
 		if(op.identity()) {
-			uint32_t bond = random01() * lat_.bonds.size();
-			const auto &b = lat_.bonds[bond];
+			uint32_t bond = random01() * data_.bonds.size();
+			const auto &b = data_.bonds[bond];
 			state_idx si = spin_[b.i];
 			state_idx sj = spin_[b.j];
 
-			vertexcode newvert = lat_.get_vertex_data(bond).get_diagonal_vertex(si, sj);
-			double weight = lat_.get_vertex_data(bond).get_weight(newvert);
+			vertexcode newvert = data_.get_vertex_data(bond).get_diagonal_vertex(si, sj);
+			double weight = data_.get_vertex_data(bond).get_weight(newvert);
 			double p_make_bond = p_make_bond_raw / (opersize - noper_);
 
 			if(random01() < p_make_bond * weight) {
@@ -378,7 +385,7 @@ void frust::diagonal_update() {
 			}
 		} else {
 			int bond = op.bond();
-			const auto &vertdata = lat_.get_vertex_data(bond);
+			const auto &vertdata = data_.get_vertex_data(bond);
 			if(op.diagonal()) {
 				double weight = vertdata.get_weight(op.vertex());
 				double p_remove_bond = (opersize - noper_ + 1) * p_remove_bond_raw;
@@ -387,7 +394,7 @@ void frust::diagonal_update() {
 					noper_--;
 				}
 			} else {
-				const auto &b = lat_.bonds[bond];
+				const auto &b = data_.bonds[bond];
 				const auto &leg_state = vertdata.get_legstate(op.vertex());
 				spin_[b.i] = leg_state[2];
 				spin_[b.j] = leg_state[3];
@@ -418,14 +425,14 @@ void frust::opstring_measurement(Ests... ests) {
 		}
 
 		if(!op.diagonal()) {
-			const auto &bond = lat_.bonds[op.bond()];
-			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+			const auto &bond = data_.bonds[op.bond()];
+			const auto &leg_state = data_.get_vertex_data(op.bond()).get_legstate(op.vertex());
 			spin_[bond.i] = leg_state[2];
 			spin_[bond.j] = leg_state[3];
 		}
 
 		if(n < noper_) {
-			auto x2 = {(ests.measure(op, spin_), 0)...};
+			auto x2 = {(ests.measure(op, spin_, data_), 0)...};
 			(void)x2;
 		}
 		n++;
@@ -440,7 +447,7 @@ double frust::measure_sign() const {
 
 	for(auto op : operators_) {
 		if(!op.identity()) {
-			sign += lat_.get_vertex_data(op.bond()).get_sign(op.vertex()) < 0;
+			sign += data_.get_vertex_data(op.bond()).get_sign(op.vertex()) < 0;
 		}
 	}
 	return (sign & 1) ? -1 : 1;
@@ -450,12 +457,12 @@ void frust::do_measurement() {
 	double sign = measure_sign();
 
 	auto obs = std::tuple{
-	    j_est{lat_, sign, settings_.measure_jcorrlen},
-	    mag_est<1, 1, 1>{lat_, T_, sign},
-	    mag_est<1, -1, 1>{lat_, T_, sign},
-	    mag_est<-1, 1, 1>{lat_, T_, sign},
-	    mag_est<-1, -1, 1>{lat_, T_, sign},
-	    mag_est<-1, 1, -1>{lat_, T_, sign},
+	    j_est{*model_, sign, settings_.measure_jcorrlen},
+	    mag_est<1, 1, 1>{*model_, T_, sign},
+	    mag_est<1, -1, 1>{*model_, T_, sign},
+	    mag_est<-1, 1, 1>{*model_, T_, sign},
+	    mag_est<-1, -1, 1>{*model_, T_, sign},
+	    mag_est<-1, 1, -1>{*model_, T_, sign},
 	};
 
 	std::array<bool, 6> flags = {
@@ -474,8 +481,8 @@ void frust::do_measurement() {
 	measure.add("SignNOper", sign * static_cast<double>(noper_));
 	measure.add("SignNOper2", sign * static_cast<double>(noper_) * static_cast<double>(noper_));
 
-	measure.add("SignEnergy", sign * (-static_cast<double>(noper_) * T_ - lat_.energy_offset) /
-	                              lat_.spinhalf_count);
+	measure.add("SignEnergy", sign * (-static_cast<double>(noper_) * T_ - data_.energy_offset) /
+	          model_->normalization_site_count());
 }
 
 void frust::checkpoint_write(const loadl::iodump::group &out) {
@@ -538,30 +545,30 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 
 	double T = p.get<double>("T");
 	measurement_settings settings{p};
-	lattice lat = lattice_from_param(p, false);
+	std::unique_ptr<model> m = model_from_param(p);
 
 	if(settings.measure_j || settings.measure_chirality) {
-		j_est{lat, 0, settings.measure_jcorrlen}.register_evalables(eval);
+		j_est{*m, 0, settings.measure_jcorrlen}.register_evalables(eval);
 	}
 
 	if(settings.measure_mag) {
-		mag_est<1, 1, 1>{lat, T, 0}.register_evalables(eval);
+		mag_est<1, 1, 1>{*m, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_sxmag) {
-		mag_est<-1, 1, 1>{lat, T, 0}.register_evalables(eval);
+		mag_est<-1, 1, 1>{*m, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_symag) {
-		mag_est<1, -1, 1>{lat, T, 0}.register_evalables(eval);
+		mag_est<1, -1, 1>{*m, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_sxsymag) {
-		mag_est<-1, -1, 1>{lat, T, 0}.register_evalables(eval);
+		mag_est<-1, -1, 1>{*m, T, 0}.register_evalables(eval);
 	}
 	
 	if(settings.measure_sxsucmag) {
-		mag_est<-1, 1, -1>{lat, T, 0}.register_evalables(eval);
+		mag_est<-1, 1, -1>{*m, T, 0}.register_evalables(eval);
 	}
 
 	if(settings.measure_chirality) {
@@ -628,8 +635,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 		              double sn = obs[1][0];
 		              double sign = obs[2][0];
 
-		              return std::vector<double>{(sn2 / sign - sn * sn / sign / sign - sn / sign) /
-		                                         lat.spinhalf_count};
+		              return std::vector<double>{(sn2 / sign - sn * sn / sign / sign - sn / sign) / m->normalization_site_count()};
 	              });
 }
 

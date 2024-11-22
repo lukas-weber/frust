@@ -1,6 +1,8 @@
 #pragma once
 
-#include "lattice.h"
+#include "sse_data.h"
+#include "models/model.h"
+#include "models/cluster_magnet.h"
 #include "opercode.h"
 #include <loadleveller/evalable.h>
 #include <loadleveller/measurements.h>
@@ -16,7 +18,7 @@ private:
 	double mag2_{};
 	double mag4_{};
 
-	const lattice &lat_;
+	const cluster_magnet& model_;
 	double T_{};
 	double sign_{};
 	
@@ -24,15 +26,15 @@ private:
 		double sign = 1;
 		
 		if(SignUC < 0) {
-			sign *= lat_.get_uc_site(idx).sublattice_sign;
+			sign *= model_.get_site(idx).sublattice_sign;
 		}
 
-		idx /= lat_.uc.sites.size();
+		idx /= model_.lat.uc.sites.size();
 		if(SignX < 0) {
-			sign *= 2. * ((idx % lat_.Lx) & 1) - 1.;
+			sign *= 2. * ((idx % model_.lat.Lx) & 1) - 1.;
 		}
 		if(SignY < 0) {
-			sign *= 2. * ((idx / lat_.Lx) & 1) - 1.;
+			sign *= 2. * ((idx / model_.lat.Lx) & 1) - 1.;
 		}
 
 		return sign;
@@ -52,13 +54,13 @@ private:
 		return p;
 	}
 public:
-	mag_est(const lattice &lat, double T, double sign) : lat_{lat}, T_{T}, sign_{sign} {}
+	mag_est(const model &model, double T, double sign) : model_{static_cast<const cluster_magnet&>(model)}, T_{T}, sign_{sign} {}
 
 	void init(const std::vector<state_idx> &spin) {
 		tmpmag_ = 0;
 
 		for(uint32_t i = 0; i < spin.size(); i++) {
-			tmpmag_ += stag_sign(i) * lat_.get_uc_site(i).basis.states[spin[i]].m;
+			tmpmag_ += stag_sign(i) * model_.get_site(i).basis.states[spin[i]].m;
 		}
 
 		mag_ = tmpmag_;
@@ -67,17 +69,17 @@ public:
 		mag4_ = mag2_ * mag2_;
 	}
 
-	void measure(opercode op, const std::vector<state_idx> &) {
+	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
 		if(SignX == 1 && SignY == 1) {
 			return;
 		}
 
 		if(!op.diagonal()) {
-			const auto &bond = lat_.bonds[op.bond()];
-			const auto &bi = lat_.get_uc_site(bond.i).basis;
-			const auto &bj = lat_.get_uc_site(bond.j).basis;
+			const auto &bond = model_.lat.bonds[op.bond()];
+			const auto &bi = model_.get_site(bond.i).basis;
+			const auto &bj = model_.get_site(bond.j).basis;
 
-			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
 			double m20 = bi.states[leg_state[2]].m - bi.states[leg_state[0]].m;
 			double m31 = bj.states[leg_state[3]].m - bj.states[leg_state[1]].m;
@@ -96,7 +98,7 @@ public:
 		std::string p = "Sign";
 		p += prefix();
 
-		double norm = 1. / lat_.spinhalf_count;
+		double norm = 1. / model_.spinhalf_count;
 		mag_ *= norm;
 		absmag_ *= norm;
 		mag2_ *= norm * norm;
@@ -107,7 +109,7 @@ public:
 		measure.add(p + "Mag2", sign_ * mag2_ / n_);
 		measure.add(p + "Mag4", sign_ * mag4_ / n_);
 
-		double chi = 1 / T_ / (n_ + 1) / n_ * (mag_ * mag_ + mag2_) * lat_.spinhalf_count;
+		double chi = 1 / T_ / (n_ + 1) / n_ * (mag_ * mag_ + mag2_) * model_.spinhalf_count;
 		measure.add(p + "MagChi", sign_ * chi);
 	}
 
