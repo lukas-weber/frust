@@ -195,14 +195,14 @@ static unitcell make_kagome(const loadl::parser &p) {
 
 		uc.bonds = {
 			{0,{1,0,0}, {0,0,0,
-				     J,0,0,
-				     0,0,0}},
+					 J,0,0,
+					 0,0,0}},
 			{0,{1,1,0}, {0,0,0,
-				     0,0,0,
-				     J,0,0,}},
+					 0,0,0,
+					 J,0,0,}},
 			{0,{0,1,0}, {0,0,0,
-				     0,0,0,
-				     0,J,0}},
+					 0,0,0,
+					 0,J,0}},
 		};
 	} else if(basis == "dimer") {
 		uc.sites = {
@@ -235,6 +235,39 @@ static unitcell make_kagome(const loadl::parser &p) {
 		throw std::runtime_error(fmt::format("unknown basis: {}", basis));
 	}
 	
+	return uc;
+}
+
+static unitcell make_diamond_square(const loadl::parser &p) {
+	unitcell uc;
+
+	uc.a1 = {1,0};
+	uc.a2 = {0,1};
+
+	double J1 = p.get<double>("J1");
+	double J2 = p.get<double>("J2",J1);
+
+
+	double h = p.get<double>("h",0.);
+
+	std::string basis = p.get<std::string>("basis");
+
+	if(basis == "dimer") {
+		uc.sites = {
+			{{0,0}, {}, site_bases::spin,h},
+			{{0.5,0}, {J2}, site_bases::dimer,h},
+			{{0,0.5}, {J2}, site_bases::dimer,h},
+		};
+		uc.bonds = {
+			// Inside unit cell
+			{0, {0,0,1}, {J1, J1}},
+			{0, {0,0,2}, {J1, J1}},
+			{1, {1,0,0}, {J1, J1}},
+			{2, {0,1,0}, {J1, J1}},
+		};
+	} else {
+		throw std::runtime_error(fmt::format("unknown basis: {}", basis));
+	}
 	return uc;
 }
 
@@ -298,11 +331,11 @@ static unitcell make_triangle_square(const loadl::parser &p) {
 
 		uc.bonds = {
 			{0, {1,0,0}, {Jnn,Jnn,Jnn,
-				      Jn, Jnn, Jnn,
-				      Jnn, Jnn, Jnn}},
+					  Jn, Jnn, Jnn,
+					  Jnn, Jnn, Jnn}},
 			{0, {0,1,0}, {Jnn, Jnn, Jnn,
-				      Jnn, Jnn, Jnn,
-				      Jn, Jn, Jnn}},
+					  Jnn, Jnn, Jnn,
+					  Jn, Jn, Jnn}},
 		};
 	} else {
 		throw std::runtime_error("invalid basis! must be 1, 2 or 3");
@@ -323,6 +356,8 @@ lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 		uc = make_triangle_square(p);
 	} else if(name == "square") {
 		uc = make_square(p);
+	} else if(name == "diamond_square") {
+		uc = make_diamond_square(p);
 	} else if(name == "bilayer") {
 		uc = make_bilayer(p);
 	} else if(name == "dimerized_bilayer") {

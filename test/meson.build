@@ -61,6 +61,13 @@ test('ed_triang_square3',
    is_parallel : false,
    suite : 'ed_test')
 
+test('ed_diamond_square_dim_spi',
+   sim_tests,
+   args : [frust, files('testjobs/diamond_square_dim_spi')],
+   timeout : 5000,
+   is_parallel : false,
+   suite : 'ed_test')
+
 test('ed_triang_square4',
    sim_tests,
    args : [frust, files('testjobs/triangle_square4')],
