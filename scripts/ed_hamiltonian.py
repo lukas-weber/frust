@@ -83,7 +83,7 @@ def construct(lat):
     Id = sps.identity(2**N)
 
     def H_heisen_bond(i, j, N=N):
-        return Sx(i,N)@Sx(j,N) + Sy(i,N)@Sy(j,N) + Sz(i,N)@Sz(j,N)
+        return (Sx(i,N)@Sx(j,N) + Sy(i,N)@Sy(j,N) + Sz(i,N)@Sz(j,N)).real
 
     def onsite_term(Jin, site,h):
         res = sps.dok_matrix((2**(N), 2**(N)))
@@ -104,7 +104,6 @@ def construct(lat):
 
     for idx, s in enumerate(lat.sites):
         H += onsite_term(s.Jin, idx,s.h)
-
 
     l_opers = {}
     for nspinhalf in set(s.nspinhalfs for s in lat.sites):
