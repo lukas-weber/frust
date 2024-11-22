@@ -42,7 +42,9 @@ class Model(model_common.Magnet):
             omega = self.model_data.modes[0].omega
             coupling = b.mode_couplings[0]
             H += b.J * sps.kron(
-                downfolded_coupling.matrix(max_photons, omega, coupling),
+                downfolded_coupling.matrix(
+                    max_photons, omega / self.model_data.U, coupling
+                ),
                 (
                     self.lifter.heisen_bond(b.i, b.j)
                     - 0.25 * sps.eye(self.spin_dimension)

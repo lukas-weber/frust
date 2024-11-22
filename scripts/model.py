@@ -33,6 +33,7 @@ class Model:
     def _load_cavity_magnet(self, model):
         self._load_lattice(model)
         self.modes = [Mode(**m) for m in model["modes"]]
+        self.U = model["U"]
 
     def __init__(self, latticedef):
         model = json.loads(latticedef)

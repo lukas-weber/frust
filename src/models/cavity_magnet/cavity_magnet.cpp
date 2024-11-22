@@ -9,9 +9,9 @@
 
 cavity_magnet::cavity_magnet(const lattice &lat, const std::vector<mode> &modes,
                              const std::vector<site> &sites, const std::vector<bond> &bonds,
-                             const cavity_magnet_measurement_settings &settings)
+                             double U, const cavity_magnet_measurement_settings &settings)
     : model{model_type::cavity_magnet}, lat{lat}, modes{modes}, settings{settings}, sites_{sites},
-      bonds_{bonds} {
+      bonds_{bonds}, U_{U} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
 	for(const auto &m : modes) {
@@ -49,7 +49,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 
 		std::vector<downfolded_coupling_params> mode_params(modes.size());
 		for(const auto &m : modes) {
-			mode_params[mode_idx] = {m.omega, b.mode_couplings[mode_idx], m.max_photons};
+			mode_params[mode_idx] = {m.omega / U_, b.mode_couplings[mode_idx], m.max_photons};
 			mode_idx++;
 		}
 
@@ -99,6 +99,8 @@ sse_data cavity_magnet::generate_sse_data() const {
 void cavity_magnet::to_json(nlohmann::json &out) const {
 	out["model"] = "cavity_magnet";
 	lat.to_json(out);
+
+	out["U"] = U_;
 
 	int bond_idx{};
 	for(const auto &b : lat.bonds) {

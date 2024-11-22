@@ -15,9 +15,10 @@ tm.Ly = 2
 tm.measure = ['mag', 'sxsymag']
 
 tm.J = 0.9
+tm.U = 10*tm.J
 
 tm.max_photons = 4
-tm.omega = 0.4
+tm.omega = 0.4*tm.U
 tm.g = 0.3
 tm.phi = 0.3
 
