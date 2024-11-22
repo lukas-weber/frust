@@ -1,5 +1,6 @@
 from . import hamiltonian
 import numpy as np
+import math
 import scipy.sparse as sps
 
 
@@ -10,7 +11,17 @@ class Model:
         self.spin_dimension = np.prod([s.spin_dim for s in model_data.sites])
         self.N = len(model_data.sites)
         self.lifter = hamiltonian.SpinLifter([s.spin_dim for s in model_data.sites])
+        self.boson_lifter = hamiltonian.Lifter([m.max_bosons for m in model_data.modes])
 
+    
+    def _downfolded_coupling(self, mode):
+        def disp_op(n, m, g):
+            return sum((1j * g)**(n+m-2*k) * np.exp(0.5*math.lgamma(1+n) + 0.5*math.lgamma(1+m) - math.lgamma(1+k) - math.lgamma(1+n-k) - math.lgamma(1+m-k)) for k in range(min(n,m)+1))
+        def elem(n, m, omega, g):
+            return 0.5*np.exp(-g**2) * sum((disp_op(n, l, g)*np.conj(disp_op(l, m, g))).real * (1/(1+omega * (l-m)) + 1/(1+omega * (l-n))) for l in range(2*min(n,m) + 20))
+
+        return np.array([[elem(n,m,mode.omega, mode.coupling) for n in range(mode.max_bosons)] for m in range(mode.max_bosons)])
+        
     def hamiltonian(self):
         boson_numbers = []
         dim = 1
@@ -34,12 +45,12 @@ class Model:
         H = sps.dok_matrix((dim, dim))
 
         for b in self.model_data.bonds:
-            spin_dims = [self.model_data.sites[s].spin_dim for s in [b.i, b.j]]
-            H += b.J * sps.kron(boson_identity, self.lifter.heisen_bond(b.i, b.j))
+            assert(len(self.model_data.modes) == 1)
+            H += b.J * sps.kron(self._downfolded_coupling(self.model_data.modes[0]), self.lifter.heisen_bond(b.i, b.j))
 
-        for i, s in enumerate(self.model_data.sites):
-            for j, m in enumerate(self.model_data.modes):
-                H += m.coupling * sps.kron(boson_numbers[j], self.lifter.Sz(i))
+        #for i, s in enumerate(self.model_data.sites):
+        #    for j, m in enumerate(self.model_data.modes):
+        #        H += m.coupling * sps.kron(boson_numbers[j], self.lifter.Sz(i))
 
         for j, m in enumerate(self.model_data.modes):
             H += m.omega * sps.kron(boson_numbers[j], spin_identity)
