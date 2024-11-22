@@ -75,8 +75,8 @@ int vertex_data::vertex_change_apply(int vertex,
                                      worm_idx worm_out) const {
 	std::vector<state_idx> new_legstate(&legstates_[leg_count * vertex], &legstates_[leg_count * vertex] + leg_count);
 
-	int dim_in = dims_[leg_in % (leg_count/2)];
-	int dim_out = dims_[leg_out % (leg_count/2)];
+	int dim_in = dims[leg_in % (leg_count/2)];
+	int dim_out = dims[leg_out % (leg_count/2)];
 
 	new_legstate[leg_in] = worm_action(worm_in, new_legstate[leg_in], dim_in);
 	new_legstate[leg_out] = worm_action(worm_out, new_legstate[leg_out], dim_out);
@@ -93,7 +93,10 @@ int vertex_data::vertex_change_apply(int vertex,
 }
 
 vertex_data::vertex_data(const std::vector<int>& dims, const Eigen::MatrixXd& bond_hamiltonian) 
-	: leg_count{2 * static_cast<int>(dims.size())}, dims_{dims}, max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
+	: leg_count{2 * static_cast<int>(dims.size())}, dims{dims}, max_worm_count_{worm_count(*std::max_element(dims.begin(), dims.end()))} {
+
+	int dim = std::accumulate(dims.begin(), dims.end(), 1, [](int a, int b) {return a*b;});
+	assert(dim == bond_hamiltonian.cols() && dim == bond_hamiltonian.rows());
 
 	const double tolerance = 1e-10;
 	energy_offset = calc_energy_offset(bond_hamiltonian);

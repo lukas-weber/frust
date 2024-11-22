@@ -26,6 +26,7 @@ public:
 	static const transition invalid_transition;
 
 	double energy_offset{};
+	const std::vector<int> dims;
 
 	auto scatter(vertexcode v, int leg_in, worm_idx worm_in, double random) const;
 
@@ -40,7 +41,6 @@ public:
 	void print() const;
 
 private:
-	std::vector<int> dims_;
 	int max_worm_count_{};
 	std::vector<vertexcode>
 	    diagonal_vertices_; // [dims_[0]; dims_[1]; ...]

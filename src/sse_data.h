@@ -31,9 +31,9 @@ public:
 	sse_data(const std::vector<vertex_data> &vert_data, const std::vector<site>& sites, const std::vector<bond>& bonds)
 		: vertex_data_{vert_data}, sites_{sites}, site_count{static_cast<int>(sites.size())}, bond_count{static_cast<int>(bonds.size())} {
 
-		for(const auto &b : bonds) {
-			if(static_cast<int>(b.sites.size()) > nlegs/2) {
-				nlegs = 2 * b.sites.size();
+		for(const auto &vd : vertex_data_) {
+			if(vd.leg_count > nlegs) {
+				nlegs = vd.leg_count;
 			}
 		}
 
@@ -41,9 +41,12 @@ public:
 
 		int i{};
 		for(const auto &b : bonds) {
+			assert(static_cast<int>(b.sites.size()) == vertex_data_[b.type].leg_count/2);
+			
 			int j{};
 			bonds_[i*bonds_stride()] = b.type;
 			for(int s : b.sites) {
+				assert(vertex_data_[b.type].dims[j] == sites[s].dim);
 				assert(s < site_count);
 				
 				bonds_[i*bonds_stride() + j + 1] = s;
