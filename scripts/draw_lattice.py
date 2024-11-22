@@ -27,7 +27,7 @@ maxJ = max([max(b.J) for b in lat.bonds])
 for s in lat.sites:
     idx = np.arange(s.nspinhalfs)
     
-    angle = 2*np.pi/s.nspinhalfs * idx+0.5
+    angle = 2*np.pi/s.nspinhalfs * idx + np.pi
     r = s.nspinhalfs > 1
 
     pos = 10*np.array(s.pos)[:,None] - 2*r*np.array([np.cos(angle),np.sin(angle)])

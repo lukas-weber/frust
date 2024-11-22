@@ -139,6 +139,8 @@ def calc_observables(E, psi):
     obs['Z'] = Z
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
     obs['SpecificHeat'] = Ts**(-2)*(np.sum(E[na,:]**2*ρ,axis=1) - np.sum(E[na,:]*ρ,axis=1)**2)/N
+    obs.update({'S_C' : mean(obs_ops['S_C'])})
+    obs.update({'C' : mean(obs_ops['C'])})
     obs.update(mag_obs('', obs_ops['M']))
     obs.update(mag_obs('StagX', obs_ops['sxM']))
     obs.update(mag_obs('StagY', obs_ops['syM']))

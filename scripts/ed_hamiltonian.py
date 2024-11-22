@@ -70,10 +70,11 @@ def construct(lat):
     def H_heisen_bond(i, j):
         return Sx(i,N)@Sx(j,N) + Sy(i,N)@Sy(j,N) + Sz(i,N)@Sz(j,N)
 
-    def onsite_term(Jin, site):
+    def onsite_term(Jin, site,h):
         res = sps.dok_matrix((2**(N), 2**(N)))
         idx = 0
         for i in full2half[site]:
+            res += Sz(i,N) * h
             for j in full2half[site]:
                 if j < i:
                     res += Jin[idx]*H_heisen_bond(i, j)
@@ -87,7 +88,7 @@ def construct(lat):
                 H += b.J[spini*len(full2half[b.j])+spinj] * H_heisen_bond(i, j)
 
     for idx, s in enumerate(lat.sites):
-        H += onsite_term(s.Jin, idx)
+        H += onsite_term(s.Jin, idx,s.h)
 
 
     l_opers = {}
@@ -96,6 +97,16 @@ def construct(lat):
     
     obs_ops = {}
     obs_ops['M'] = sum(Sz(i, N) for i in range(N))/N
+
+    w = np.exp(1j*2*np.pi/3)
+
+    S_C =  H_heisen_bond(0,1)@( H_heisen_bond(0,1).H +
+            w * H_heisen_bond(1,2).H + w**2 * H_heisen_bond(2,0).H)
+
+    C = H_heisen_bond(0,1) + w * H_heisen_bond(1,2) + w**2 * H_heisen_bond(2,0)
+
+    obs_ops['S_C'] = S_C / N
+    obs_ops['C'] = C / N
 
     for name, q in {'J':0, 'Jq1':2*np.pi/lat.Lx, 'Jq2':4*np.pi/lat.Lx}.items():
         op = sps.dok_matrix((2**N,2**N),dtype=np.complex)
