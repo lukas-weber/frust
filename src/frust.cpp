@@ -155,7 +155,6 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 	const auto &basis0 = lat_.get_uc_site(site0).basis;
 	int wormfunc0 = random01()*basis0.worms.size();
-	assert(basis0.worms.size() == 7);
 
 	uint32_t v = v0;
 	int wormfunc = wormfunc0;
@@ -211,7 +210,7 @@ void frust::worm_traverse_measure(double &sign, std::vector<double> &corr) {
 
 				int idx = ((y-y0+lat_.Ly)%lat_.Ly)*lat_.Lx + (x-x0+lat_.Lx)%lat_.Lx;
 
-				corr[idx] += sign*matelem*matelem0;
+				corr[idx] += basis0.worms.size()*sign*matelem*matelem0;
 			}
 		}
 		
@@ -247,7 +246,7 @@ void frust::worm_update() {
 			worm_traverse_measure(sign, corr);
 		}	
 		for(auto &c : corr) {
-			c *= -7/ceil(nworm_);
+			c *= -1./ceil(nworm_);
 		}
 		measure.add("SignTauZ", corr);
 		//measure.add("SignTauZ1", -(noper_==1)*7*mean/lat_.sites.size()/ceil(nworm_));
@@ -508,7 +507,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 			std::vector<double> result = obs[0];
 			result[0] = obs[1][0];
 			for(auto &r : result) {
-				r /= obs[2][0];
+				r /= -obs[2][0];
 			}
 			return result;
 		});

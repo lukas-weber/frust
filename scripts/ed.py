@@ -36,7 +36,7 @@ job = jobfile.JobFile('./'+os.path.basename(args.jobfile))
 taskname, Ts = extract_jobdata(job)
 
 num_states = job.tasks[taskname].get('ed_num_states', 0)
-lat = lattice.load(job, taskname)
+lat = lattice.load(job, taskname, force_overwrite=True)
 
 N = sum(s.nspinhalfs for s in lat.sites)
 print('dimension = 2**{} = {}'.format(N, 2**N))

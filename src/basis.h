@@ -87,6 +87,16 @@ namespace site_bases {
 			       0,	 0,     0,     0,     0,     0,	       0, 1}).transpose(),
 		generate_xor_worms(1<<3)       
 	};
+	const site_basis trimer_proj = {
+		3,
+		{{'a', 0.5, 0.5, 0}, {'b', 0.5, -0.5, 0},
+		 {'x', 0.5, 0.5, 1}, {'y', 0.5, -0.5, 1}},
+		init_mat(4,8, {0,	 0,  isq_,     0, -isq_,     0,	       0, 0,
+			       0,	 0,     0,  -isq_,     0, isq_,	       0, 0,
+			       0, -2*isq6_, isq6_,     0, isq6_,     0,	       0, 0,
+			       0,	 0,	0, isq6_,     0, isq6_, -2*isq6_, 0}).transpose(),
+		generate_xor_worms(4)
+	};
 }	
 
 
