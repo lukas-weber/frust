@@ -22,8 +22,9 @@ def l_operator(n):
     w, v = np.linalg.eigh(S2)
     assert np.allclose(v@np.diag(w)@v.T,S2)
 
-    return v@np.diag(np.sqrt(w+0.25)+0.5)@v.T
-    
+    return v@np.diag(np.sqrt(w+0.25)-0.5)@v.T
+
+
 
 def chirality(Nfull):
     j = np.exp(2j*np.pi/3)
@@ -92,6 +93,14 @@ def construct(lat):
     obs_ops = {}
     obs_ops['M'] = sum(Sz(i, N) for i in range(N))/N
 
+    for name, q in {'J':0, 'Jq1':2*np.pi/lat.Lx, 'Jq2':4*np.pi/lat.Lx}.items():
+        op = sps.dok_matrix((2**N,2**N),dtype=np.complex)
+        pos = 0
+        for i, s in enumerate(lat.sites):
+            x = (i//lat.uc_spin_count)%lat.Lx
+            op += np.exp(1j*x*q)*sps.kron(sps.kron(sps.identity(2**pos), l_opers[s.nspinhalfs]),sps.identity(2**(N-pos-s.nspinhalfs)))
+            pos += s.nspinhalfs
+        obs_ops[name] = op/len(lat.sites) 
 
     def signed_mag(sx, sy):
         M = sps.dok_matrix((2**N,2**N))

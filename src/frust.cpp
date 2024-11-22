@@ -414,7 +414,7 @@ void frust::do_measurement() {
 	double sign = measure_sign();
 
 	auto obs = std::tuple{
-	    j_est{lat_, sign},
+	    j_est{lat_, sign, settings_.measure_jcorrlen},
 	    mag_est<1, 1>{lat_, T_, sign},
 	    mag_est<1, -1>{lat_, T_, sign},
 	    mag_est<-1, 1>{lat_, T_, sign},
@@ -485,7 +485,7 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	lattice lat = lattice_from_param(p, false);
 
 	if(settings.measure_j || settings.measure_chirality) {
-		j_est{lat,0}.register_evalables(eval);
+		j_est{lat,0,settings.measure_jcorrlen}.register_evalables(eval);
 	}
 	
 	if(settings.measure_mag) {
