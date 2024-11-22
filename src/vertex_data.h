@@ -2,7 +2,6 @@
 
 #include "bond.h"
 #include <vector>
-#include <unordered_map>
 #include "opercode.h"
 
 class vertex_data {
@@ -18,54 +17,62 @@ public:
 		void print() const;
 	private:
 		std::array<double,leg_count*site_basis::worm_count> probs;
-		std::array<int,leg_count*site_basis::worm_count> targets;
+		std::array<vertexcode,leg_count*site_basis::worm_count> targets;
 
 		friend vertex_data;
 	};
 
-	static constexpr transition invalid_transition{};
+	static const transition invalid_transition;
 
-	std::vector<std::array<state_idx,4>> legstates;
 	double energy_offset{};
 
-	const transition &get_transition(opercode op, int leg_in, worm_idx worm_in) const;
-	double get_weight(opercode op) const;
-	int get_sign(opercode op) const;
+	const transition &get_transition(vertexcode v, int leg_in, worm_idx worm_in) const;
+	double get_weight(vertexcode v) const;
+	int get_sign(vertexcode v) const;
+	vertexcode get_diagonal_vertex(state_idx state_i, state_idx state_j) const;
+	const std::array<state_idx, 4> &get_legstate(vertexcode v) const;
 	
 	vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj);
 	void print(const site_basis &bi, const site_basis &bj) const;
 private:
+	std::array<vertexcode,site_basis::max_size*site_basis::max_size> diagonal_vertices_; // [site_basis::max_size * statei + state_j]
 	
 	std::vector<int8_t> signs_;
 	std::vector<double> weights_;
 	std::vector<transition> transitions_; // [vertex*leg_count*worm_count + worm_in*leg_count + leg_in]
-	std::unordered_map<uint32_t, int> code_to_idx_;
 	
+	std::vector<std::array<state_idx,4>> legstates_;
+
 	void construct_vertices(const uc_bond &b, const uc_site &si, const uc_site &sj, double tolerance);
-	void init_code_to_idx();
+
+	vertexcode wrap_vertex_idx(int vertex_idx);
 	int vertex_change_apply(const site_basis &bi, const site_basis &bj, int vertex, int leg_in, worm_idx worm_in_idx, int leg_out, worm_idx worm_out_idx) const;
 };
 
-inline int vertex_data::get_sign(opercode op) const {
-	int v = code_to_idx_.at(op.vertex());
-	return signs_[v];
+inline const vertex_data::transition invalid_transition{};
+
+inline vertexcode vertex_data::get_diagonal_vertex(state_idx state_i, state_idx state_j) const {
+	return diagonal_vertices_[state_i*site_basis::max_size + state_j];
 }
 
-inline const vertex_data::transition &vertex_data::get_transition(opercode op, int leg_in, worm_idx worm_in) const {
-	if(code_to_idx_.count(op.vertex()) == 0) {
-		return vertex_data::invalid_transition;
-	}
-		
-	int v = code_to_idx_.at(op.vertex());
-	return transitions_[v*leg_count*site_basis::worm_count + worm_in*leg_count + leg_in];
+inline int vertex_data::get_sign(vertexcode v) const {
+	return signs_[v.vertex_idx()];
 }
 
-inline double vertex_data::get_weight(opercode op) const {
-	if(code_to_idx_.count(op.vertex()) == 0) {
+inline const vertex_data::transition &vertex_data::get_transition(vertexcode v, int leg_in, worm_idx worm_in) const {
+	int vi = v.vertex_idx();
+	return transitions_[vi*leg_count*site_basis::worm_count + worm_in*leg_count + leg_in];
+}
+
+inline double vertex_data::get_weight(vertexcode v) const {
+	if(v.invalid()) {
 		return 0;
 	}
-	int v = code_to_idx_.at(op.vertex());
-	return weights_[v];
+	return weights_[v.vertex_idx()];
+}
+
+inline const std::array<state_idx, 4> &vertex_data::get_legstate(vertexcode v) const {
+	return legstates_[v.vertex_idx()];
 }
 
 inline auto vertex_data::transition::scatter(double randnum) const {
@@ -82,7 +89,7 @@ inline auto vertex_data::transition::scatter(double randnum) const {
 	int leg = out%leg_count;
 	worm_idx worm_out = out/leg_count;
 
-	assert(targets[out] >= 0);
+	assert(!targets[out].invalid());
 
 	return std::tuple{leg, worm_out, targets[out]};
 }

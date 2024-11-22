@@ -28,7 +28,6 @@ public:
 
 	const vertex_data &get_vertex_data(int bond) const;
 	const uc_site &get_uc_site(int site) const;
-	opercode vertex_idx_opercode(int bond, int vertex_idx) const;
 
 	void vertex_print() const;
 
@@ -48,10 +47,4 @@ inline const vertex_data &lattice::get_vertex_data(int bond) const {
 }
 inline const uc_site &lattice::get_uc_site(int site) const {
 	return uc.sites[site%uc.sites.size()];
-}
-
-inline opercode lattice::vertex_idx_opercode(int bond, int vertex_idx) const {
-	const auto &ls = vertices_[bond%vertices_.size()].legstates[vertex_idx];
-
-	return opercode::make_vertex(bond, ls[0], ls[1], ls[2], ls[3]);
 }

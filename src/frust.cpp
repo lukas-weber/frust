@@ -20,8 +20,8 @@ void frust::print_operators() {
 		if(op.identity()) {
 			continue;
 		}
-		const auto &b = lat_.bonds[op.bond()];
-		std::cout << fmt::format("{}-{}: {}\n", b.i, b.j, op.name(lat_.get_uc_site(b.i).basis, lat_.get_uc_site(b.j).basis));
+		//const auto &b = lat_.bonds[op.bond()];
+		//std::cout << fmt::format("{}-{}: {}\n", b.i, b.j, op.name(lat_.get_uc_site(b.i).basis, lat_.get_uc_site(b.j).basis));
 	}
 	int idx{};
 	for(auto s : spin_) {
@@ -57,7 +57,7 @@ int frust::worm_traverse() {
 	auto op0 = operators_[v0/4];
 	int wormfunc0 = random01()*site_basis::worm_count;
 
-	if(lat_.get_vertex_data(op0.bond()).get_transition(op0, v0%4, wormfunc0).invalid()) {
+	if(lat_.get_vertex_data(op0.bond()).get_transition(op0.vertex(), v0%4, wormfunc0).invalid()) {
 		return 0;
 	}
 
@@ -73,14 +73,14 @@ int frust::worm_traverse() {
 		auto &op = operators_[v/4];
 		//auto oldop = op;
 		int leg_in = v%4;
-		const auto &trans = lat_.get_vertex_data(op.bond()).get_transition(op, leg_in, wormfunc);
+		const auto &trans = lat_.get_vertex_data(op.bond()).get_transition(op.vertex(), leg_in, wormfunc);
 
 		/*if(random01()<1e-4) { // abort long loop
 			return -1;
 		}*/
 
-		auto [leg_out, wormfunc_out, new_vertex_idx] = trans.scatter(random01());
-		op = lat_.vertex_idx_opercode(op.bond(), new_vertex_idx);
+		auto [leg_out, wormfunc_out, new_vertex] = trans.scatter(random01());
+		op = opercode{op.bond(), new_vertex};
 		/*if(wormlength >= noper_) {
 			const auto &si = lat_.sites[bond.i];
 			const auto &sj = lat_.sites[bond.j];
@@ -134,7 +134,8 @@ void frust::worm_update() {
 			uint32_t v = v_first_[i];
 			auto op = operators_[v/4];
 			int leg = v%4;
-			spin_[i] = op.leg_state(leg);
+			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+			spin_[i] = leg_state[leg];
 		}
 	}
 
@@ -192,36 +193,42 @@ void frust::diagonal_update() {
 
 	auto tmpspin = spin_;
 
+	double opersize = operators_.size();
+	double p_make_bond_raw = lat_.bonds.size()*1./T_;
+	double p_remove_bond_raw = T_/lat_.bonds.size();
+
 	for(auto &op : operators_) {
-		double p_make_bond = lat_.bonds.size()*1./T_/(operators_.size()-noper_);
-		double p_remove_bond = (operators_.size()-noper_+1)*T_/lat_.bonds.size();
 
 		if(op.identity()) {
-			int bond = random01() * lat_.bonds.size();
+			uint32_t bond = random01() * lat_.bonds.size();
 			const auto &b = lat_.bonds[bond];
 			state_idx si = spin_[b.i];
 			state_idx sj = spin_[b.j];
 
-			auto newop = opercode::make_vertex(bond, si, sj, si, sj);
-			
-			double weight = lat_.get_vertex_data(bond).get_weight(newop);
+			vertexcode newvert = lat_.get_vertex_data(bond).get_diagonal_vertex(si, sj);
+			double weight = lat_.get_vertex_data(bond).get_weight(newvert);
+			double p_make_bond = p_make_bond_raw/(opersize-noper_);
 
 			if(random01() < p_make_bond * weight) {
-				op = newop;
+				op = opercode{bond, newvert};
 				noper_++;
 			}
 		} else {
 			int bond = op.bond();
 			const auto &b = lat_.bonds[bond];
+
+			const auto &vertdata = lat_.get_vertex_data(bond);
 			if(op.diagonal()) {
-				double weight = lat_.get_vertex_data(bond).get_weight(op);
+				double weight = vertdata.get_weight(op.vertex());
+				double p_remove_bond = (opersize-noper_+1)*p_remove_bond_raw;
 				if(random01()*weight < p_remove_bond) {
 					op = opercode::make_identity();
 					noper_--;
 				}
 			} else {
-				spin_[b.i] = op.leg_state(2);
-				spin_[b.j] = op.leg_state(3);
+				const auto &leg_state = vertdata.get_legstate(op.vertex());
+				spin_[b.i] = leg_state[2];
+				spin_[b.j] = leg_state[3];
 			}
 		}
 	}
@@ -247,8 +254,9 @@ void frust::opstring_measurement(Ests... ests) {
 
 		if(!op.diagonal()) {
 			const auto &bond = lat_.bonds[op.bond()];
-			spin_[bond.i] = op.leg_state(2);
-			spin_[bond.j] = op.leg_state(3);
+			const auto &leg_state = lat_.get_vertex_data(op.bond()).get_legstate(op.vertex());
+			spin_[bond.i] = leg_state[2];
+			spin_[bond.j] = leg_state[3];
 		}
 
 		if(n < noper_) {
@@ -267,7 +275,7 @@ double frust::measure_sign() const {
 
 	for(auto op : operators_) {
 		if(!op.identity()) {
-			sign += lat_.get_vertex_data(op.bond()).get_sign(op) < 0;
+			sign += lat_.get_vertex_data(op.bond()).get_sign(op.vertex()) < 0;
 		}
 	}
 	return (sign&1) ? -1 : 1;

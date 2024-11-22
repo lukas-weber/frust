@@ -27,8 +27,10 @@ public:
 	};
 
 	static const worm_idx worm_count = 3;
-	static const uint32_t state_bits = 3; // max number of bits the state occupies
-	static const state_idx invalid = 1<<state_bits;
+	static const uint32_t state_bits = 2; // max number of bits the state occupies
+	static const uint32_t max_size = 4;
+	static const state_idx invalid = max_size;
+	
 
 	int nspinhalfs{};
 	std::vector<state> states;

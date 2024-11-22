@@ -61,9 +61,13 @@ void vertex_data::construct_vertices(const uc_bond &b, const uc_site &si, const 
 				for(state_idx l3 = 0; l3 < sj.basis.size(); l3++) {
 					double w = H(l0 * sj.basis.size() + l1, l2 * sj.basis.size() + l3);
 					if(fabs(w) > tolerance) {
-						legstates.push_back({l0, l1, l2, l3});
+						legstates_.push_back({l0, l1, l2, l3});
 						weights_.push_back(fabs(w));
 						signs_.push_back(w >= 0 ? 1 : -1);
+
+						if(l0 == l2 && l1 == l3) {
+							diagonal_vertices_[l0*site_basis::max_size + l1] = vertexcode{true, static_cast<uint32_t>(weights_.size()-1)};
+						}
 					}
 				}
 			}
@@ -71,8 +75,17 @@ void vertex_data::construct_vertices(const uc_bond &b, const uc_site &si, const 
 	}
 }
 
+vertexcode vertex_data::wrap_vertex_idx(int vertex_idx) {
+	if(vertex_idx < 0) {
+		return vertexcode{};
+	}
+	
+	const auto &ls = legstates_[vertex_idx];
+	return vertexcode{ls[0]==ls[2] && ls[1] == ls[3], static_cast<uint32_t>(vertex_idx)};
+}
+
 int vertex_data::vertex_change_apply(const site_basis &bi, const site_basis &bj, int vertex, int leg_in, worm_idx worm_in_idx, int leg_out, worm_idx worm_out_idx) const {
-	auto legstate = legstates.at(vertex);
+	auto legstate = legstates_.at(vertex);
 	
 	const auto &basis_in = leg_in&1 ? bj : bi;
 	const auto &basis_out = leg_out&1 ? bj : bi;
@@ -91,25 +104,18 @@ int vertex_data::vertex_change_apply(const site_basis &bi, const site_basis &bj,
 		
 	legstate[leg_out] = worm_out.action[legstate[leg_out]];
 
-	auto it = std::find(legstates.begin(), legstates.end(), legstate);
-	if(it == legstates.end()) {
+	auto it = std::find(legstates_.begin(), legstates_.end(), legstate);
+	if(it == legstates_.end()) {
 		return -1;
 	}
 
-	return it - legstates.begin();
-}
-
-void vertex_data::init_code_to_idx() {
-	for(size_t i = 0; i < legstates.size(); i++) {
-		const auto &ls = legstates[i];
-		code_to_idx_[opercode::make_vertex(0,ls[0],ls[1],ls[2],ls[3]).vertex()] = i;
-	}
+	return it - legstates_.begin();
 }
 
 vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj) {
 	const double tolerance = 1e-10;
 	construct_vertices(b, si, sj, tolerance);
-	transitions_.resize(legstates.size() * site_basis::worm_count * leg_count);
+	transitions_.resize(legstates_.size() * site_basis::worm_count * leg_count);
 
 	struct vertex_change {
 		const site_basis &bi;
@@ -204,7 +210,7 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 
 					if(targets[in] >= 0) {
 						transitions_[targets[in] * site_basis::worm_count * leg_count + in].targets[out] =
-						    targets[in_inv];
+						    wrap_vertex_idx(targets[in_inv]);
 						double norm = constraints[in].rhs == 0 ? 1 : constraints[in].rhs;
 						assert(norm > 0);
 						transitions_[targets[in] * site_basis::worm_count * leg_count + in].probs[out] =
@@ -217,7 +223,7 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 
 					if(targets[in] >= 0) {
 						transitions_[targets[in] * site_basis::worm_count * leg_count + in].targets[out] =
-						    targets[in_inv];
+						    wrap_vertex_idx(targets[in_inv]);
 						double norm = constraints[in].rhs == 0 ? 1 : constraints[in].rhs;
 						assert(norm > 0);
 						transitions_[targets[in] * site_basis::worm_count * leg_count + in].probs[out] =
@@ -233,8 +239,6 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 		assert(t.probs.back() < 1.0000000001);
 		assert(!t.invalid());
 	}
-
-	init_code_to_idx();
 }
 
 void vertex_data::transition::print() const {
@@ -245,14 +249,14 @@ void vertex_data::transition::print() const {
 				tmp[i] = fabs(tmp[i]);
 			}
 		}
-		std::cout << fmt::format("{:.2f}|{:2d}\n",
-		                         fmt::join(tmp.begin(), tmp.end(), " "),
-		                         fmt::join(targets.begin(), targets.end(), " "));
+		//std::cout << fmt::format("{:.2f}|{:2d}\n",
+		//                         fmt::join(tmp.begin(), tmp.end(), " "),
+		//                         fmt::join(targets.begin(), targets.end(), " "));
 }
 	
 
 void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
-	for(size_t v = 0; v < legstates.size(); v++) {
+	for(size_t v = 0; v < legstates_.size(); v++) {
 		for(size_t in = 0; in < site_basis::worm_count * leg_count; in++) {
 			const auto &trans = transitions_[v * site_basis::worm_count * leg_count + in];
 			trans.print();
@@ -263,7 +267,7 @@ void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 	std::cout << "\nlegstates:\n";
 	std::vector<int> idxs(weights_.size());
 	int idx{};
-	for(const auto &ls : legstates) {
+	for(const auto &ls : legstates_) {
 		(void)(ls);
 		idxs[idx] = idx;
 		idx++;
@@ -272,7 +276,7 @@ void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 
 
 	for(const auto &idx : idxs) {
-		const auto &ls = legstates[idx];
+		const auto &ls = legstates_[idx];
 		std::cout << fmt::format("{}({}): [{}{} {}{}] ~ {}\n", idx, signs_[idx] > 0 ? '+' : '-', bi.states[ls[0]].name, bj.states[ls[1]].name, bi.states[ls[2]].name, bj.states[ls[3]].name, weights_[idx]);
 	}
 

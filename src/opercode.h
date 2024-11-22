@@ -5,21 +5,47 @@
 #include "bond.h"
 #include "basis.h"
 
+class vertexcode {
+public:
+
+	static const uint32_t maxbits = 4*site_basis::state_bits+1;
+	bool diagonal() const {
+		return code_&1;
+	}
+
+	vertexcode() = default;
+
+	explicit vertexcode(bool diagonal, uint32_t vertex_idx)
+		: code_{diagonal | (vertex_idx << 1)} {
+	}
+
+	explicit vertexcode(uint32_t code)
+		:code_{code} {
+		}
+
+	uint32_t vertex_idx() const {
+		return code_ >> 1;
+	}
+
+	uint32_t code() const {
+		return code_;
+	}
+
+	bool invalid() const {
+		return code_ > 1<<maxbits;
+	}
+private:
+	uint32_t code_{(1<<maxbits)+1};
+};
+
 class opercode {
 public:
-	using vertex_leg = uint32_t;
-	using vertex_idx = uint32_t;
-
 	static opercode make_identity();
-	static opercode make_vertex(uint32_t bond, state_idx s0, state_idx s1, state_idx s2, state_idx s3);
 
-	std::string name(const site_basis &si, const site_basis &sj) const;
 
 	uint32_t code() const;
-	vertex_idx vertex() const;
-	int bond() const;
-
-	state_idx leg_state(vertex_leg l) const;
+	vertexcode vertex() const;
+	uint32_t bond() const;
 
 	bool identity() const;
 	bool diagonal() const;
@@ -28,42 +54,34 @@ public:
 	explicit opercode(uint32_t code)
 		: code_{code} {
 	}
+	explicit opercode(uint32_t bond, vertexcode vertex);
 private:
 	uint32_t code_{};
 };
-
-inline std::string opercode::name(const site_basis &bi, const site_basis &bj) const {
-	if(identity()) {
-		return "[ident]";
-	}
-	return fmt::format("[{}{}>{}{}]", bi.states[leg_state(0)].name, bj.states[leg_state(1)].name, bi.states[leg_state(2)].name, bj.states[leg_state(3)].name);
-}
-
-inline state_idx opercode::leg_state(vertex_leg leg) const {
-	assert(leg < 4);
-	return (vertex()>>(site_basis::state_bits*leg))&((1<<site_basis::state_bits)-1);
-}
 
 inline opercode opercode::make_identity() {
 	return opercode{0};
 }
 
-inline opercode opercode::make_vertex(uint32_t bond, state_idx s0, state_idx s1, state_idx s2, state_idx s3) {
-	const uint32_t bits = site_basis::state_bits;
-	assert(bond < (1<<(8*sizeof(code_)-1-4*bits)));
-	return opercode{1 | s0 << 1 | s1 << (1+bits) | s2 << (1+2*bits) | s3 << (1+3*bits) | bond << (1+4*bits)};
-}
+inline opercode::opercode(uint32_t bond, vertexcode vertex) {
+	uint32_t v = vertex.code();
 
+	assert(v < (1<<vertexcode::maxbits));
+	assert(bond < (1<<(8*sizeof(code_)-vertexcode::maxbits-1)));
+
+	code_ = 1 | v << 1 | bond << (1+vertexcode::maxbits);
+}
+	
 inline uint32_t opercode::code() const {
 	return code_;
 }
 
-inline int opercode::bond() const {
-	return code_>>(1+4*site_basis::state_bits);
+inline uint32_t opercode::bond() const {
+	return code_>>(1+vertexcode::maxbits);
 }
 
-inline opercode::vertex_idx opercode::vertex() const {
-	return (code_&((1<<(1+4*site_basis::state_bits))-1))>>1;
+inline vertexcode opercode::vertex() const {
+	return vertexcode{(code_&((1<<(1+4*site_basis::state_bits))-1))>>1};
 }
 
 inline bool opercode::identity() const {
@@ -71,6 +89,6 @@ inline bool opercode::identity() const {
 }
 
 inline bool opercode::diagonal() const {
-	return leg_state(0) == leg_state(2) && leg_state(1) == leg_state(3);
+	return vertex().diagonal();
 }
 
