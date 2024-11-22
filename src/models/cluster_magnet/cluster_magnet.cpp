@@ -1,4 +1,6 @@
 #include "cluster_magnet.h"
+#include "../common/mag_est.h"
+#include "j_est.h"
 
 #include "util/kronecker_product.h"
 #include <Eigen/Dense>
@@ -46,8 +48,10 @@ static Eigen::MatrixXd bond_term(const cluster_bond &b, const cluster_site &si,
 }
 
 cluster_magnet::cluster_magnet(const lattice &lat, const std::vector<cluster_site> &sites,
-                               const std::vector<cluster_bond> &bonds)
-    : model{model::model_type::cluster_magnet}, lat{lat}, bonds_{bonds}, sites_{sites} {
+                               const std::vector<cluster_bond> &bonds,
+                               const cluster_magnet_measurement_settings &settings)
+    : model{model::model_type::cluster_magnet}, lat{lat}, settings{settings}, bonds_{bonds},
+      sites_{sites} {
 	assert(bonds_.size() == lat.uc.bonds.size());
 	assert(sites_.size() == lat.uc.sites.size());
 
@@ -106,5 +110,104 @@ void cluster_magnet::to_json(nlohmann::json &out) const {
 
 	for(int i = 0; i < static_cast<int>(lat.bonds.size()); i++) {
 		out["bonds"][i]["J"] = get_bond(i).J;
+	}
+}
+
+template<int CoeffDim0, int CoeffDim1, int CoeffM>
+static double corrfunc_matrix(const std::vector<double> &corr, int idx) {
+	double result = 0;
+	for(int jdimi = 0; jdimi < 2; jdimi++) {
+		for(int jdimj = 0; jdimj < 2; jdimj++) {
+			int matidx = 2 * jdimi + jdimj;
+			double coeff = (CoeffDim0 + (CoeffDim1 - CoeffDim0) * jdimi) *
+			               (CoeffDim0 + (CoeffDim1 - CoeffDim0) * jdimj);
+			result += coeff * corr[4 * idx + matidx];
+		}
+	}
+	return result;
+}
+
+void cluster_magnet::register_evalables(loadl::evaluator &eval, double T) const {
+	using M = cluster_magnet;
+
+	if(settings.measure_j || settings.measure_chirality) {
+		j_est{*this, 0, settings.measure_jcorrlen}.register_evalables(eval);
+	}
+
+	if(settings.measure_mag) {
+		mag_est<mag_sign::none, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxmag) {
+		mag_est<mag_sign::x, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_symag) {
+		mag_est<mag_sign::y, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxsymag) {
+		mag_est<mag_sign::x | mag_sign::y, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_sxsucmag) {
+		mag_est<mag_sign::x | mag_sign::uc, M>{*this, T, 0}.register_evalables(eval);
+	}
+
+	if(settings.measure_chirality) {
+		if(settings.loopcorr_as_strucfac) {
+			eval.evaluate(
+			    "NematicityStruc",
+			    {"SignJDimOffCorr", "SignChiralityOnsite", "Sign", "SignNematicityDiagStruc"},
+			    [](const std::vector<std::vector<double>> &obs) {
+				    double result = 9.0 / 16.0 *
+				                    (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0) + obs[3][0]) /
+				                    obs[2][0];
+				    return std::vector<double>{result};
+			    });
+			eval.evaluate("TauZStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+			              [](const std::vector<std::vector<double>> &obs) {
+				              double result =
+				                  (obs[1][0] + corrfunc_matrix<-1, 1, 1>(obs[0], 0)) / obs[2][0];
+				              return std::vector<double>{result};
+			              });
+			eval.evaluate("TauYStruc", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+			              [](const std::vector<std::vector<double>> &obs) {
+				              double result =
+				                  (obs[1][0] + corrfunc_matrix<1, 1, 1>(obs[0], 0)) / obs[2][0];
+
+				              return std::vector<double>{result};
+			              });
+		} else {
+			eval.evaluate("NematicityOffCorr", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+			              [](const std::vector<std::vector<double>> &obs) {
+				              std::vector<double> result(obs[0].size() / 4, 0);
+				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
+					              result[i] =
+					                  9.0 / 16.0 * corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
+				              }
+				              result[0] += 9.0 / 16.0 * obs[1][0] / obs[2][0];
+				              return result;
+			              });
+			eval.evaluate("TauZ", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+			              [](const std::vector<std::vector<double>> &obs) {
+				              std::vector<double> result(obs[0].size() / 4, 0);
+				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
+					              result[i] = corrfunc_matrix<-1, 1, 1>(obs[0], i) / obs[2][0];
+				              }
+				              result[0] += obs[1][0] / obs[2][0];
+				              return result;
+			              });
+			eval.evaluate("TauY", {"SignJDimOffCorr", "SignChiralityOnsite", "Sign"},
+			              [](const std::vector<std::vector<double>> &obs) {
+				              std::vector<double> result(obs[0].size() / 4, 0);
+				              for(int i = 1; i < static_cast<int>(result.size()); i++) {
+					              result[i] = corrfunc_matrix<1, 1, 1>(obs[0], i) / obs[2][0];
+				              }
+				              result[0] += obs[1][0] / obs[2][0];
+
+				              return result;
+			              });
+		}
 	}
 }

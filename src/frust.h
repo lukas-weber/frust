@@ -5,7 +5,6 @@
 #include <optional>
 #include <vector>
 
-#include "measurement_settings.h"
 #include "models/model.h"
 #include "opercode.h"
 #include "sse_data.h"
@@ -41,8 +40,6 @@ private:
 
 	const std::unique_ptr<model> model_;
 	const sse_data data_;
-
-	measurement_settings settings_;
 
 	void diagonal_update();
 

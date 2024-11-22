@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../sse_data.h"
+#include <loadleveller/loadleveller.h>
 #include <nlohmann/json.hpp>
 #include <vector>
 
@@ -14,6 +15,8 @@ public:
 	virtual ~model() = default;
 	virtual sse_data generate_sse_data() const = 0;
 	virtual void to_json(nlohmann::json &out) const = 0;
+
+	virtual void register_evalables(loadl::evaluator &eval, double T) const = 0;
 
 	// The site count used for normalization, e.g. in the energy.
 	// Some models have multiple physical degrees of freedom per computational

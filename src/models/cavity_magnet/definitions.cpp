@@ -1,5 +1,6 @@
 #include "definitions.h"
 #include "cavity_magnet.h"
+#include "measurement_settings.h"
 
 struct cavity_magnet_proto {
 	unitcell uc;
@@ -42,5 +43,5 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 	}
 
 	return std::make_unique<cavity_magnet>(lattice{proto.uc, Lx, Ly}, modes, proto.sites,
-	                                       proto.bonds);
+	                                       proto.bonds, cavity_magnet_measurement_settings{p});
 }

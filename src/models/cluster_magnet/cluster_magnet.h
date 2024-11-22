@@ -3,6 +3,7 @@
 #include "../common/lattice.h"
 #include "../model.h"
 #include "basis.h"
+#include "measurement_settings.h"
 #include <nlohmann/json.hpp>
 #include <optional>
 
@@ -25,16 +26,20 @@ struct cluster_site {
 class cluster_magnet : public model {
 public:
 	lattice lat;
+	cluster_magnet_measurement_settings settings;
 	int spinhalf_count{};
 
 	cluster_magnet(const lattice &lat, const std::vector<cluster_site> &sites,
-	               const std::vector<cluster_bond> &bonds);
+	               const std::vector<cluster_bond> &bonds,
+	               const cluster_magnet_measurement_settings &settings);
 
 	const cluster_bond &get_bond(int bond_idx) const;
 	const cluster_site &get_site(int site_idx) const;
 
 	const site_basis &get_basis(int site_idx) const;
 	std::optional<lattice::site_idx> get_lattice_site_idx(int site_idx) const;
+
+	void register_evalables(loadl::evaluator &eval, double T) const override;
 
 	sse_data generate_sse_data() const override;
 	void to_json(nlohmann::json &out) const override;
