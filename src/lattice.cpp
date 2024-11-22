@@ -2,7 +2,7 @@
 #include <tuple>
 
 
-lattice::lattice(const unitcell &ucell, int Lx, int Ly)
+lattice::lattice(const unitcell &ucell, int Lx, int Ly, bool with_vertex_data)
     : uc{ucell}, Lx{Lx}, Ly{Ly}  {
 	int uc_spin_count = uc.sites.size();
 
@@ -32,7 +32,9 @@ lattice::lattice(const unitcell &ucell, int Lx, int Ly)
 		}
 	}
 
-	init_vertex_data(uc);
+	if(with_vertex_data) {
+		init_vertex_data(uc);
+	}
 }
 
 void lattice::init_vertex_data(const unitcell &uc) {

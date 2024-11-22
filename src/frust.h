@@ -18,7 +18,7 @@ public:
 	void checkpoint_write(const loadl::iodump::group &out) override;
 	void checkpoint_read(const loadl::iodump::group &in) override;
 
-	void register_evalables(loadl::evaluator &eval) override;
+	static void register_evalables(loadl::evaluator &eval, const loadl::parser &p);
 	double pt_weight_ratio(const std::string &param_name, double new_param) override;
 	void pt_update_param(const std::string &param_name, double new_param) override;
 

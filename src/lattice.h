@@ -31,7 +31,7 @@ public:
 
 	void vertex_print() const;
 
-	lattice(const unitcell &uc, int Lx, int Ly);
+	lattice(const unitcell &uc, int Lx, int Ly, bool with_vertex_data);
 
 	void to_json(nlohmann::json &out);
 private:
@@ -42,6 +42,7 @@ private:
 };
 
 inline const vertex_data &lattice::get_vertex_data(int bond) const {
+	assert(vertices_.size());
 	return vertices_[bond % vertices_.size()];
 }
 inline const uc_site &lattice::get_uc_site(int site) const {
