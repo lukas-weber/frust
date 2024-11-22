@@ -1,8 +1,15 @@
 #include "frust.h"
+#include "vertices.h"
 
 frust::frust(const loadl::parser &p)
 	: loadl::mc(p) {
 	T_ = param.get<double>("T");
+}
+
+void frust::init() {
+}
+
+void frust::worm_update() {
 }
 
 void frust::make_vertex_list() {
@@ -48,13 +55,14 @@ void frust::make_vertex_list() {
 }
 
 void frust::diagonal_update() {
-	if(noper_ > operators_.size() * 0.5) {
+/*	if(noper_ > operators_.size() * 0.5) {
 		operators_.resize(operators_.size() * 1.5 + 10, opercode::make_identity());
 	}
 
 	for(auto &op : operators_) {
 		double p_make_bond = lat_->bonds.size()*1./T_/(operators_.size()-noper_);
 		double p_remove_bond = (operators_.size()-noper_+1)*T_/lat_->bonds.size();
+
 		int bond = random01() * lat_->bonds.size();
 		const auto &b = lat_->bonds[bond];
 		if(op.identity()) {
@@ -83,7 +91,7 @@ void frust::diagonal_update() {
 				spin_[b.i].apply(op.action(1));
 			}
 		}
-	}
+	}*/
 }
 
 void frust::do_update() {
@@ -119,12 +127,12 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 	in.read("operators", saveops);
 
 	operators_.resize(saveops.size());
-	std::copy(saveops.begin(), saveops.end(), operators_.begin());
+	std::transform(saveops.begin(), saveops.end(), operators_.begin(), [](uint32_t c) { return opercode{c}; });
 	
 
 	in.read("spin", savespins);
 	spin_.resize(savespins.size());
-	std::copy(savespins.begin(), savespins.end(), spin_.begin());
+	std::transform(savespins.begin(), savespins.end(), spin_.begin(), [](uint32_t c) { return jm{c}; });
 }
 
 void frust::register_evalables(loadl::evaluator &eval) {

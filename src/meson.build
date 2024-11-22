@@ -2,7 +2,8 @@
 frust_sources = files([
   'main.cpp',
   'frust.cpp',
-  'lattice.cpp'
+  'lattice.cpp',
+  'vertices.cpp',
 ])
 
 frust = executable('frust',
