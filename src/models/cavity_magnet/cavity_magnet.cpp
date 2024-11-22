@@ -67,7 +67,7 @@ sse_data cavity_magnet::generate_sse_data() const {
 		    Eigen::MatrixXd::Identity(spin_dim_i * spin_dim_j, spin_dim_i * spin_dim_j);
 
 		std::vector<double> exchange_photon_coupling =
-		    downfolded_peierls_coupling::matrix(mode_params);
+		    downfolded_peierls_coupling::generator(mode_params).matrix();
 		auto mapped_exchange_photon_coupling =
 		    Eigen::Map<Eigen::MatrixXd>(exchange_photon_coupling.data(), photon_dim, photon_dim);
 

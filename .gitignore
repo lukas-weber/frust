@@ -2,4 +2,5 @@ build
 subprojects/*
 !subprojects/*.wrap
 !subprojects/packagefiles
+!subprojects/downfolded_peierls_coupling
 __pycache__
