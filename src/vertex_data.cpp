@@ -7,10 +7,10 @@
 
 static double calc_energy_offset(const Eigen::MatrixXd &H) {
 	double hmin = H.diagonal().minCoeff();
-	double hmax = std::max(fabs(hmin), fabs(H.maxCoeff()));
+	double hmax = H.diagonal().maxCoeff();
 
-	double epsilon = hmax / 2;
-	return hmin - epsilon;
+	double epsilon = (hmax - hmin) * 0.25;
+	return -(hmax + epsilon);
 }
 
 static auto construct_vertices(const std::vector<int> &dims, const Eigen::MatrixXd &H,

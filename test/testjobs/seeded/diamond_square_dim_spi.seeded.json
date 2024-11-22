@@ -27,11 +27,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.056046455890500044
+    0.05664109504149187
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3464829582363683
+    0.3390262265372662
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -39,11 +39,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.046930782609546494
+    0.04506065262596404
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.15325258102865122
+    -0.11282051282051295
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -51,11 +51,11 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.019270298088986698
+    0.030469016575794115
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.6837606837606832
+    0.6068376068376055
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -63,11 +63,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.025736474240573758
+    0.03456801537712177
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.47720797720797786
+    0.39601139601139584
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -99,11 +99,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.0022144774579982937
+    0.005966206967297754
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.017806267806267793
+    0.0306267806267806
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -111,11 +111,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.025736474240573758
+    0.03456801537712177
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.47720797720797786
+    0.39601139601139584
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -123,11 +123,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.002441392270801077
+    0.005374444231312081
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.010050648939538762
+    0.02868787591009825
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -135,11 +135,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.0201626087386076
+    0.0211441314134239
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.046153846153846156
+    -0.010256410256410303
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -147,11 +147,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.004647325374459451
+    0.0035312697880536086
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018461538461538467
+    0.017948717948717954
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -159,11 +159,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.00037272650738801066
+    0.0003069613825534681
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0009538461538461561
+    0.00091794871794872
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -171,11 +171,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.0464732537445945
+    0.03531269788053606
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.18461538461538454
+    0.17948717948717943
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -183,11 +183,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.19347540380414302
+    0.3437847598958965
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.055555555555555
+    4.952991452991453
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -205,9 +205,9 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.6632174392935972,
+   "autocorr_time": 0.4539823008849554,
    "error": [
-    0.016650221998955685
+    0.013323467750529824
    ],
    "internal_bin_len": 1,
    "mean": [
@@ -217,49 +217,49 @@
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.7289308176100632,
+   "autocorr_time": 0.6354166666666672,
    "error": [
-    0.01927029808898673
+    0.030469016575794074
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.816239316239316
+    0.8931623931623932
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.5765398550724636,
+   "autocorr_time": 0.5778839209506927,
    "error": [
-    0.04693078260954648
+    0.04506065262596404
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.15325258102865108
+    -0.11282051282051281
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.7289308176100632,
+   "autocorr_time": 0.6354166666666672,
    "error": [
-    0.01927029808898673
+    0.030469016575794074
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.683760683760684
+    0.6068376068376068
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.691599293745934,
+   "autocorr_time": 0.6218321013727565,
    "error": [
-    0.025736474240573758
+    0.0345680153771218
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4772079772079771
+    0.39601139601139607
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -277,237 +277,237 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.5247619047619048,
+   "autocorr_time": 0.7842156862745098,
    "error": [
-    0.002214477457998294
+    0.0059662069672977505
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.01780626780626781
+    0.030626780626780627
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.691599293745934,
+   "autocorr_time": 0.6218321013727565,
    "error": [
-    0.025736474240573758
+    0.0345680153771218
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4772079772079771
+    0.39601139601139607
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.47296027911969923,
+   "autocorr_time": 0.4760501105379513,
    "error": [
-    0.020162608738607608
+    0.0211441314134239
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.04615384615384616
+    -0.010256410256410258
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.6694015444015448,
+   "autocorr_time": 0.3976679173103806,
    "error": [
-    0.004647325374459452
+    0.0035312697880536077
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.018461538461538467
+    0.017948717948717958
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.5737027796354406,
+   "autocorr_time": 0.3889368173174617,
    "error": [
-    0.0003727265073880107
+    0.0003069613825534681
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0009538461538461544
+    0.0009179487179487182
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.6694015444015444,
+   "autocorr_time": 0.39766791731038037,
    "error": [
-    0.04647325374459451
+    0.03531269788053607
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.1846153846153846
+    0.17948717948717952
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.576539855072464,
+   "autocorr_time": 0.5778839209506924,
    "error": [
-    0.46930782609546473
+    0.45060652625964037
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.153846153846153
+    6.128205128205128
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.5125146005706833,
+   "autocorr_time": 0.5670593186405501,
    "error": [
-    6.6034975690645705
+    7.268201889833146
    ],
    "internal_bin_len": 1,
    "mean": [
-    45.128205128205124
+    44.230769230769226
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.7583966244725739,
+   "autocorr_time": 0.6418664258420161,
    "error": [
-    0.19347540380414338
+    0.3437847598958963
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.055555555555555
+    4.952991452991451
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.6259208650190113,
+   "autocorr_time": 0.5448521012644079,
    "error": [
-    0.014513313794683281
+    0.012268064656863736
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0888888888888889
+    0.09886339151045037
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 1.0078759504045305,
+   "autocorr_time": 0.33972801597066515,
    "error": [
-    0.026677534645878034
+    0.015950642912275853
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.01360398860398861
+    -0.010462903109961938
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag2": {
-   "autocorr_time": 0.7151217765790393,
+   "autocorr_time": 0.5299276626878441,
    "error": [
-    0.004106710867242231
+    0.0025518074709409712
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.014957264957264961
+    0.015706744236156006
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag4": {
-   "autocorr_time": 0.624298539168639,
+   "autocorr_time": 0.5617725396740764,
    "error": [
-    0.0003253681922311132
+    0.00012454890100152785
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0006982905982905984
+    0.0005326653738418446
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMagChi": {
-   "autocorr_time": 0.6536936905869687,
+   "autocorr_time": 0.5492458570668407,
    "error": [
-    0.03913621594596322
+    0.026230948647298927
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.13732970732970734
+    0.14502813091048383
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.6259208650190113,
+   "autocorr_time": 0.5448521012644079,
    "error": [
-    0.014513313794683281
+    0.012268064656863736
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0888888888888889
+    0.09886339151045037
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag": {
-   "autocorr_time": 1.0078759504045305,
+   "autocorr_time": 0.33972801597066515,
    "error": [
-    0.026677534645878034
+    0.015950642912275853
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.01360398860398861
+    0.010462903109961938
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag2": {
-   "autocorr_time": 0.7151217765790393,
+   "autocorr_time": 0.5299276626878441,
    "error": [
-    0.004106710867242231
+    0.0025518074709409712
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.014957264957264961
+    0.015706744236156006
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag4": {
-   "autocorr_time": 0.624298539168639,
+   "autocorr_time": 0.5617725396740764,
    "error": [
-    0.0003253681922311132
+    0.00012454890100152785
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0006982905982905984
+    0.0005326653738418446
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMagChi": {
-   "autocorr_time": 0.6536936905869687,
+   "autocorr_time": 0.5492458570668407,
    "error": [
-    0.03913621594596322
+    0.026230948647298927
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.13732970732970734
+    0.14502813091048383
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYAbsMag": {
-   "autocorr_time": 0.6632174392935976,
+   "autocorr_time": 0.4539823008849554,
    "error": [
-    0.016650221998955685
+    0.013323467750529824
    ],
    "internal_bin_len": 1,
    "mean": [
@@ -517,49 +517,49 @@
    "rebin_len": 3
   },
   "SignStagYMag": {
-   "autocorr_time": 0.47296027911969923,
+   "autocorr_time": 0.4760501105379513,
    "error": [
-    0.020162608738607608
+    0.0211441314134239
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.04615384615384616
+    0.010256410256410263
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag2": {
-   "autocorr_time": 0.6694015444015448,
+   "autocorr_time": 0.3976679173103805,
    "error": [
-    0.004647325374459452
+    0.0035312697880536073
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.018461538461538467
+    0.017948717948717954
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.5737027796354404,
+   "autocorr_time": 0.3889368173174616,
    "error": [
-    0.0003727265073880107
+    0.0003069613825534681
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0009538461538461544
+    0.0009179487179487182
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.6694015444015444,
+   "autocorr_time": 0.39766791731038026,
    "error": [
-    0.0464732537445945
+    0.035312697880536065
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.18461538461538457
+    0.1794871794871795
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -567,11 +567,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.157242084870037
+    0.23800339537173157
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.13247863247863997
+    0.07507122507121838
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -579,11 +579,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.03841648032065135
+    0.05550301392416718
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3021778966130898
+    0.45911585638242153
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -591,11 +591,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.026677534645878034
+    0.015950642912275853
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.013603988603988634
+    -0.010462903109961948
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -603,11 +603,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.00410671086724223
+    0.00255180747094097
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.01495726495726496
+    0.01570674423615606
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -615,11 +615,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.00032536819223111333
+    0.00012454890100152785
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0006982905982905977
+    0.0005326653738418447
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -627,11 +627,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.03913621594596319
+    0.026230948647298927
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.1373297073297077
+    0.14502813091048375
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -639,11 +639,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.03841648032065135
+    0.05550301392416718
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3021778966130898
+    0.45911585638242153
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -651,11 +651,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.026677534645878034
+    0.015950642912275853
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.013603988603988634
+    0.010462903109961948
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -663,11 +663,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.00410671086724223
+    0.00255180747094097
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.01495726495726496
+    0.01570674423615606
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -675,11 +675,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.00032536819223111333
+    0.00012454890100152785
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0006982905982905977
+    0.0005326653738418447
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -687,11 +687,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.03913621594596319
+    0.026230948647298927
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.1373297073297077
+    0.14502813091048375
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -699,11 +699,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.05604645589049998
+    0.05664109504149187
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3464829582363692
+    0.3390262265372662
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -711,11 +711,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.0201626087386076
+    0.0211441314134239
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.046153846153846156
+    0.010256410256410303
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -723,11 +723,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.004647325374459451
+    0.0035312697880536086
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018461538461538467
+    0.017948717948717954
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -735,11 +735,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.00037272650738801077
+    0.00030696138255346814
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0009538461538461558
+    0.00091794871794872
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -747,65 +747,65 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.04647325374459449
+    0.035312697880536065
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.1846153846153847
+    0.17948717948717952
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.7957171942808933,
+   "autocorr_time": 0.8090153102798419,
    "error": [
-    1.1240757212720095e-06
+    1.145623539481593e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.558358974358974e-06
+    5.897538461538462e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.4770613130596503,
+   "autocorr_time": 0.7095529482951571,
    "error": [
-    3.380141733947488e-07
+    8.867212578291601e-08
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.373923076923078e-06
+    2.8058461538461536e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.576539855072464,
+   "autocorr_time": 0.5778839209506924,
    "error": [
-    0.46930782609546473
+    0.45060652625964037
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.153846153846153
+    6.128205128205128
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.45426951245846564,
+   "autocorr_time": 0.5355287191459426,
    "error": [
-    0.23966899886790538
+    0.25576734656303507
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.001019351019351
+    3.578888703888703
    ],
    "rebin_count": 13,
    "rebin_len": 3
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0001"
+ "task": "diamond_square_dim_spi_seeded.data/task0001"
 },
 {
  "parameters": {
@@ -836,11 +836,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.03837275791926284
+    0.04824063088106007
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.37262310205705823
+    0.36225583700848
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -848,11 +848,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.0635919836936562
+    0.06890133889604763
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.2053893331654034
+    -0.09700854700854701
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -860,7 +860,7 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.02785983933847285
+    0.03183688979861399
    ],
    "internal_bin_len": 0,
    "mean": [
@@ -872,11 +872,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.034906340928528096
+    0.03988709976885108
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.43162393162393237
+    0.4344729344729333
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -908,11 +908,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.004821960116711755
+    0.0041224490394552084
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.020655270655270654
+    0.017806267806267793
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -920,11 +920,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.034906340928528096
+    0.03988709976885108
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.43162393162393237
+    0.4344729344729333
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -932,11 +932,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.0034545485300400474
+    0.0040056896361837105
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.021486229819563107
+    0.024572649572648597
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -944,11 +944,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.017516155155486487
+    0.02152930208172649
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.046153846153846156
+    -0.020512820512820516
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -956,11 +956,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.003983309469309764
+    0.0035698471812747198
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.021025641025641008
+    0.016923076923076985
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -968,11 +968,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0003607222404231813
+    0.0002886390716745208
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0011641025641025637
+    0.000753846153846154
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -980,11 +980,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.021727142559871425
+    0.019471893716043933
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.11468531468531477
+    0.09230769230769227
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -992,11 +992,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.2935319906536559
+    0.33541337281707156
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.551282051282065
+    4.5683760683760655
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1014,61 +1014,61 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.37638668779714757,
+   "autocorr_time": 0.5689596167008897,
    "error": [
-    0.012820512820512824
+    0.013847736535059533
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11282051282051285
+    0.1025641025641026
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.7120811287477953,
+   "autocorr_time": 0.8174418604651159,
    "error": [
-    0.027859839338472858
+    0.031836889798613974
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8589743589743589
+    0.8589743589743588
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.6324117861040375,
+   "autocorr_time": 0.7843645913399948,
    "error": [
-    0.06359198369365619
+    0.06890133889604763
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.20538933316540336
+    -0.09700854700854705
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.7120811287477956,
+   "autocorr_time": 0.8174418604651165,
    "error": [
-    0.02785983933847286
+    0.031836889798613974
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.6410256410256409
+    0.641025641025641
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.6974603902389324,
+   "autocorr_time": 0.7871696301971868,
    "error": [
-    0.03490634092852814
+    0.03988709976885109
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.43162393162393164
+    0.4344729344729344
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -1086,289 +1086,289 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.5140692640692641,
+   "autocorr_time": 0.36288483466362587,
    "error": [
-    0.004821960116711753
+    0.0041224490394552084
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.02065527065527066
+    0.017806267806267807
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.6974603902389324,
+   "autocorr_time": 0.7871696301971868,
    "error": [
-    0.03490634092852814
+    0.03988709976885109
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.43162393162393164
+    0.4344729344729344
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.3085131060078866,
+   "autocorr_time": 0.5336653386454184,
    "error": [
-    0.017516155155486494
+    0.021529302081726497
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.04615384615384618
+    -0.020512820512820513
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.4175317185697809,
+   "autocorr_time": 0.5179793717768402,
    "error": [
-    0.00398330946930976
+    0.0035698471812747193
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.02102564102564104
+    0.016923076923076933
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.42346798199679414,
+   "autocorr_time": 0.48542275717924416,
    "error": [
-    0.0003607222404231813
+    0.0002886390716745208
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0011641025641025645
+    0.0007538461538461538
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.4175317185697808,
+   "autocorr_time": 0.5179793717768402,
    "error": [
-    0.021727142559871414
+    0.019471893716043923
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11468531468531473
+    0.09230769230769233
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.6324117861040377,
+   "autocorr_time": 0.7843645913399946,
    "error": [
-    0.34686536560176107
+    0.3758254848875325
    ],
    "internal_bin_len": 1,
    "mean": [
-    3.641025641025641
+    3.2564102564102564
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.5793845140778773,
+   "autocorr_time": 0.7342016276588404,
    "error": [
-    2.7918120159989055
+    2.8895778776836547
    ],
    "internal_bin_len": 1,
    "mean": [
-    16.871794871794872
+    14.025641025641026
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.7168468670196031,
+   "autocorr_time": 0.8356286798128499,
    "error": [
-    0.2935319906536558
+    0.33541337281707156
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.55128205128205
+    4.568376068376068
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.8617080756628631,
+   "autocorr_time": 0.7988978122155408,
    "error": [
-    0.01893892943279365
+    0.01911373058716243
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.10432234432234434
+    0.12461538461538461
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 0.5824983843403111,
+   "autocorr_time": 0.680833613984184,
    "error": [
-    0.02307402974714788
+    0.02901741477183104
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.016788766788766788
+    0.008758648758648761
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag2": {
-   "autocorr_time": 0.8217541052493852,
+   "autocorr_time": 0.7586607653471152,
    "error": [
-    0.005594405525397589
+    0.0053685329404090515
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.02021733821733822
+    0.024666666666666677
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag4": {
-   "autocorr_time": 0.5943443115668922,
+   "autocorr_time": 0.7379436709903978,
    "error": [
-    0.0005663517941442611
+    0.0004688902650913081
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0012874481074481082
+    0.001348205128205129
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMagChi": {
-   "autocorr_time": 0.801581210288495,
+   "autocorr_time": 0.7646658163182873,
    "error": [
-    0.02994931216170584
+    0.02982947699044195
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.09866133866133868
+    0.12947940947940956
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.8617080756628631,
+   "autocorr_time": 0.7988978122155408,
    "error": [
-    0.01893892943279365
+    0.01911373058716243
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.10432234432234434
+    0.12461538461538461
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag": {
-   "autocorr_time": 0.5824983843403111,
+   "autocorr_time": 0.680833613984184,
    "error": [
-    0.02307402974714788
+    0.02901741477183104
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.016788766788766788
+    -0.008758648758648761
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag2": {
-   "autocorr_time": 0.8217541052493852,
+   "autocorr_time": 0.7586607653471152,
    "error": [
-    0.005594405525397589
+    0.0053685329404090515
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.02021733821733822
+    0.024666666666666677
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag4": {
-   "autocorr_time": 0.5943443115668922,
+   "autocorr_time": 0.7379436709903978,
    "error": [
-    0.0005663517941442611
+    0.0004688902650913081
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0012874481074481082
+    0.001348205128205129
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMagChi": {
-   "autocorr_time": 0.801581210288495,
+   "autocorr_time": 0.7646658163182873,
    "error": [
-    0.02994931216170584
+    0.02982947699044195
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.09866133866133868
+    0.12947940947940956
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYAbsMag": {
-   "autocorr_time": 0.37638668779714757,
+   "autocorr_time": 0.5689596167008897,
    "error": [
-    0.012820512820512824
+    0.01384773653505953
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11282051282051285
+    0.1025641025641026
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag": {
-   "autocorr_time": 0.3085131060078866,
+   "autocorr_time": 0.5336653386454182,
    "error": [
-    0.017516155155486494
+    0.021529302081726494
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.04615384615384618
+    0.020512820512820506
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag2": {
-   "autocorr_time": 0.4175317185697809,
+   "autocorr_time": 0.5179793717768402,
    "error": [
-    0.00398330946930976
+    0.0035698471812747193
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.02102564102564104
+    0.016923076923076933
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.42346798199679403,
+   "autocorr_time": 0.4854227571792444,
    "error": [
-    0.0003607222404231813
+    0.0002886390716745208
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0011641025641025648
+    0.0007538461538461539
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.4175317185697808,
+   "autocorr_time": 0.5179793717768402,
    "error": [
-    0.021727142559871414
+    0.019471893716043923
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11468531468531473
+    0.09230769230769234
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -1376,11 +1376,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.061586832709321394
+    0.060731914638331524
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.009401709401704629
+    0.030626780626779735
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1388,11 +1388,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.05495901941431075
+    0.06156325122445294
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3012295828003381
+    0.4383544598368956
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1400,11 +1400,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02307402974714788
+    0.029017414771831042
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.016788766788766774
+    0.00875864875864875
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1412,11 +1412,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005594405525397588
+    0.005368532940409053
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.020217338217338225
+    0.02466666666666667
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1424,11 +1424,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.000566351794144261
+    0.0004688902650913081
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0012874481074481078
+    0.0013482051282051287
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1436,11 +1436,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.02994931216170583
+    0.029829476990441958
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.09866133866133887
+    0.12947940947940942
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1448,11 +1448,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.05495901941431075
+    0.06156325122445294
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3012295828003381
+    0.4383544598368956
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1460,11 +1460,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02307402974714788
+    0.029017414771831042
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.016788766788766774
+    -0.00875864875864875
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1472,11 +1472,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005594405525397588
+    0.005368532940409053
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.020217338217338225
+    0.02466666666666667
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1484,11 +1484,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.000566351794144261
+    0.0004688902650913081
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0012874481074481078
+    0.0013482051282051287
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1496,11 +1496,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.02994931216170583
+    0.029829476990441958
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.09866133866133887
+    0.12947940947940942
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1508,11 +1508,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.03837275791926284
+    0.04824063088106007
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.37262310205705823
+    0.36225583700848
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1520,11 +1520,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.017516155155486487
+    0.02152930208172649
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.046153846153846156
+    0.020512820512820516
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1532,11 +1532,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.003983309469309764
+    0.0035698471812747198
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.021025641025641008
+    0.016923076923076985
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1544,11 +1544,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0003607222404231813
+    0.0002886390716745208
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0011641025641025637
+    0.000753846153846154
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1556,65 +1556,65 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.02172714255987142
+    0.019471893716043923
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.11468531468531451
+    0.09230769230769223
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.8974256152340734,
+   "autocorr_time": 0.8762982199977553,
    "error": [
-    7.059935202581569e-07
+    6.483277475848205e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.24474358974359e-06
+    4.4818717948717945e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 1.2143961026025887,
+   "autocorr_time": 0.7396321579019371,
    "error": [
-    2.3718148393707887e-07
+    8.317584592660277e-08
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.04620512820513e-06
+    2.3864358974358974e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.6324117861040377,
+   "autocorr_time": 0.7843645913399946,
    "error": [
-    0.34686536560176107
+    0.3758254848875325
    ],
    "internal_bin_len": 1,
    "mean": [
-    3.641025641025641
+    3.2564102564102564
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.4973121850518043,
+   "autocorr_time": 0.669776907947772,
    "error": [
-    0.3196237222504415
+    0.503807126553471
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.591300366300366
+    5.158333333333332
    ],
    "rebin_count": 13,
    "rebin_len": 3
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0002"
+ "task": "diamond_square_dim_spi_seeded.data/task0002"
 },
 {
  "parameters": {
@@ -1645,11 +1645,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07156533295199195
+    0.08701338831028238
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.4727984044551426
+    0.3652133110374897
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1657,11 +1657,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.07695472599947183
+    0.06984183907028861
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.07803890581497601
+    -0.053846153846154154
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1669,11 +1669,11 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.025040449902061113
+    0.027750369998259555
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.6752136752136765
+    0.6068376068376072
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1681,11 +1681,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.03249143797138757
+    0.03421152050191596
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.47293447293447466
+    0.3903133903133897
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1717,11 +1717,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.006744478970247758
+    0.004380969156516128
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.030626780626780665
+    0.019230769230769232
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1729,11 +1729,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.03249143797138757
+    0.03421152050191596
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.47293447293447466
+    0.3903133903133897
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1741,11 +1741,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.0033024521625077347
+    0.0038302684828766995
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.017647989870212544
+    0.022831592276036983
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1753,11 +1753,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02450473707150675
+    0.020459331971941577
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.07435897435897441
+    0.010256410256410258
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1765,11 +1765,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.004531526886089427
+    0.0031922819482022376
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02589743589743588
+    0.015384615384615375
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1777,11 +1777,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.00036107747782481494
+    0.00021319090413103416
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0013974358974358986
+    0.0006153846153846155
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1789,11 +1789,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.016993225822835353
+    0.011971057305758395
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0971153846153847
+    0.05769230769230771
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1801,11 +1801,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.2570149564744431
+    0.2963596387476008
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.183760683760702
+    4.918803418803426
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -1823,61 +1823,61 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.6295465869456899,
+   "autocorr_time": 0.5581098339719032,
    "error": [
-    0.017072636201229213
+    0.01419935703062919
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.13076923076923078
+    0.09230769230769235
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.6999284692417743,
+   "autocorr_time": 0.6632174392935982,
    "error": [
-    0.02504044990206118
+    0.027750369998259486
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8247863247863245
+    0.893162393162393
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.7437165224557066,
+   "autocorr_time": 0.5599811676082862,
    "error": [
-    0.07695472599947184
+    0.06984183907028861
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.07803890581497595
+    -0.053846153846153905
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.6999284692417749,
+   "autocorr_time": 0.663217439293599,
    "error": [
-    0.025040449902061186
+    0.027750369998259482
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.6752136752136753
+    0.6068376068376069
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.691096273509054,
+   "autocorr_time": 0.6887713950516414,
    "error": [
-    0.03249143797138758
+    0.03421152050191596
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.47293447293447277
+    0.39031339031339035
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -1895,289 +1895,289 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.6463075366717249,
+   "autocorr_time": 0.5705026455026456,
    "error": [
-    0.006744478970247764
+    0.004380969156516128
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.03062678062678062
+    0.019230769230769232
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.691096273509054,
+   "autocorr_time": 0.6887713950516414,
    "error": [
-    0.03249143797138758
+    0.03421152050191596
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.47293447293447277
+    0.39031339031339035
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.5601463309662147,
+   "autocorr_time": 0.5205106138841079,
    "error": [
-    0.024504737071506758
+    0.020459331971941577
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.07435897435897437
+    0.01025641025641026
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.5368494059465649,
+   "autocorr_time": 0.5112847222222222,
    "error": [
-    0.004531526886089423
+    0.00319228194820224
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.025897435897435914
+    0.015384615384615394
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.4397534207137493,
+   "autocorr_time": 0.4549286505957331,
    "error": [
-    0.0003610774778248149
+    0.00021319090413103418
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0013974358974358986
+    0.0006153846153846154
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.5368494059465652,
+   "autocorr_time": 0.5112847222222224,
    "error": [
-    0.01699322582283534
+    0.011971057305758398
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.09711538461538462
+    0.0576923076923077
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.743716522455707,
+   "autocorr_time": 0.5599811676082865,
    "error": [
-    0.2885802224980193
+    0.2619068965135823
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.0256410256410255
+    2.0769230769230766
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.8539071268237927,
+   "autocorr_time": 0.5587040748162991,
    "error": [
-    1.6757804727516006
+    1.389040096962954
    ],
    "internal_bin_len": 1,
    "mean": [
-    6.230769230769231
+    6.6410256410256405
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.7004831410282553,
+   "autocorr_time": 0.6419430003278529,
    "error": [
-    0.2570149564744427
+    0.2963596387476003
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.183760683760683
+    4.918803418803417
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.38515901060070656,
+   "autocorr_time": 0.3565121412803532,
    "error": [
-    0.012619506889088377
+    0.012207569963321112
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.15042735042735045
+    0.1358974358974359
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 0.8806038426349496,
+   "autocorr_time": 0.8778561827956985,
    "error": [
-    0.03749984780936805
+    0.03471811284032462
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.011965811965811972
+    -0.01794871794871795
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag2": {
-   "autocorr_time": 0.4092994190438258,
+   "autocorr_time": 0.3274241424802111,
    "error": [
-    0.004787087851261693
+    0.003706880075589991
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.030940170940170954
+    0.026410256410256423
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag4": {
-   "autocorr_time": 0.4579327414219839,
+   "autocorr_time": 0.33469512945556373,
    "error": [
-    0.0006903195045309747
+    0.00034706432964968825
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.002094017094017096
+    0.0014948717948717965
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMagChi": {
-   "autocorr_time": 0.403821178414037,
+   "autocorr_time": 0.32742414248021096,
    "error": [
-    0.017652152992760517
+    0.013900800283462458
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11465201465201467
+    0.09903846153846155
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.38515901060070656,
+   "autocorr_time": 0.3565121412803532,
    "error": [
-    0.012619506889088377
+    0.012207569963321112
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.15042735042735045
+    0.1358974358974359
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag": {
-   "autocorr_time": 0.8806038426349496,
+   "autocorr_time": 0.8778561827956985,
    "error": [
-    0.03749984780936805
+    0.03471811284032462
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.011965811965811972
+    0.01794871794871795
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag2": {
-   "autocorr_time": 0.4092994190438258,
+   "autocorr_time": 0.3274241424802111,
    "error": [
-    0.004787087851261693
+    0.003706880075589991
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.030940170940170954
+    0.026410256410256423
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag4": {
-   "autocorr_time": 0.4579327414219839,
+   "autocorr_time": 0.33469512945556373,
    "error": [
-    0.0006903195045309747
+    0.00034706432964968825
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.002094017094017096
+    0.0014948717948717965
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMagChi": {
-   "autocorr_time": 0.403821178414037,
+   "autocorr_time": 0.32742414248021096,
    "error": [
-    0.017652152992760517
+    0.013900800283462458
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11465201465201467
+    0.09903846153846155
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYAbsMag": {
-   "autocorr_time": 0.6295465869456897,
+   "autocorr_time": 0.5581098339719032,
    "error": [
-    0.017072636201229213
+    0.01419935703062919
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.13076923076923078
+    0.09230769230769235
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag": {
-   "autocorr_time": 0.5601463309662145,
+   "autocorr_time": 0.5205106138841079,
    "error": [
-    0.024504737071506754
+    0.02045933197194158
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.07435897435897437
+    -0.010256410256410258
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag2": {
-   "autocorr_time": 0.5368494059465652,
+   "autocorr_time": 0.5112847222222222,
    "error": [
-    0.004531526886089424
+    0.00319228194820224
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.025897435897435907
+    0.015384615384615394
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.4397534207137494,
+   "autocorr_time": 0.4549286505957331,
    "error": [
-    0.00036107747782481494
+    0.00021319090413103418
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0013974358974358986
+    0.0006153846153846154
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.5368494059465652,
+   "autocorr_time": 0.5112847222222227,
    "error": [
-    0.01699322582283534
+    0.011971057305758398
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.09711538461538462
+    0.0576923076923077
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -2185,11 +2185,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.042140711307031044
+    0.034467194784825475
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018518518518519406
+    0.031908831908830676
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2197,11 +2197,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.08086489259047784
+    0.04355111765051353
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.4333804871111342
+    0.4609892112797027
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2209,11 +2209,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.037499847809368055
+    0.03471811284032462
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.011965811965811977
+    -0.017948717948717993
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2221,11 +2221,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0047870878512616885
+    0.003706880075589991
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03094017094017097
+    0.02641025641025643
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2233,11 +2233,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0006903195045309748
+    0.00034706432964968814
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0020940170940170933
+    0.0014948717948717882
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2245,11 +2245,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.017652152992760524
+    0.013900800283462456
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.11465201465201451
+    0.09903846153846148
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2257,11 +2257,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.08086489259047784
+    0.04355111765051353
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.4333804871111342
+    0.4609892112797027
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2269,11 +2269,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.037499847809368055
+    0.03471811284032462
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.011965811965811977
+    0.017948717948717993
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2281,11 +2281,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0047870878512616885
+    0.003706880075589991
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03094017094017097
+    0.02641025641025643
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2293,11 +2293,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0006903195045309748
+    0.00034706432964968814
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0020940170940170933
+    0.0014948717948717882
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2305,11 +2305,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.017652152992760524
+    0.013900800283462456
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.11465201465201451
+    0.09903846153846148
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2317,11 +2317,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07156533295199195
+    0.08701338831028238
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.4727984044551426
+    0.3652133110374897
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2329,11 +2329,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02450473707150675
+    0.02045933197194158
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.07435897435897453
+    -0.010256410256410258
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2341,11 +2341,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.004531526886089427
+    0.0031922819482022376
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02589743589743588
+    0.015384615384615375
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2353,11 +2353,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.00036107747782481494
+    0.00021319090413103416
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0013974358974358986
+    0.0006153846153846155
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2365,65 +2365,65 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.016993225822835353
+    0.011971057305758403
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0971153846153847
+    0.05769230769230773
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.9180042596474552,
+   "autocorr_time": 0.9647607024354828,
    "error": [
-    7.112300193103344e-07
+    8.88158000158571e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.800871794871796e-06
+    5.6714615384615405e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.3651334411279477,
+   "autocorr_time": 0.782915939720627,
    "error": [
-    5.52055271699471e-08
+    7.002988154044619e-08
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.494692307692307e-06
+    9.53769230769231e-07
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.743716522455707,
+   "autocorr_time": 0.5599811676082865,
    "error": [
-    0.2885802224980193
+    0.2619068965135823
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.0256410256410255
+    2.0769230769230766
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.5096244102946625,
+   "autocorr_time": 0.5164498604379728,
    "error": [
-    0.22363987323240972
+    0.28385141686043797
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.842735042735043
+    3.2085470085470083
    ],
    "rebin_count": 13,
    "rebin_len": 3
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0003"
+ "task": "diamond_square_dim_spi_seeded.data/task0003"
 },
 {
  "parameters": {
@@ -2454,11 +2454,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07496006695189006
+    0.050364344917480826
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.4046420488899107
+    0.3082322122702996
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2466,11 +2466,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.0652315117143144
+    0.08545298974324775
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.04043206820813832
+    -0.10128205128205117
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2478,11 +2478,11 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.030816677568068288
+    0.027695473070119055
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.6111111111111112
+    0.6282051282051279
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2490,11 +2490,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.03698678013269205
+    0.03364709354062905
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3938746438746439
+    0.4166666666666662
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2526,11 +2526,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.004193618644979987
+    0.004371308793808639
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018518518518518507
+    0.021367521367521396
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2538,11 +2538,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.03698678013269205
+    0.03364709354062905
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3938746438746439
+    0.4166666666666662
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2550,11 +2550,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.003852795947030127
+    0.002668080844372435
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02136752136752096
+    0.022792022792022526
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2562,11 +2562,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.020135417075879913
+    0.02083086770419477
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0025641025641025645
+    0.03076923076923075
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2574,11 +2574,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0033660459260709797
+    0.003471811284032463
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018717948717948737
+    0.01846153846153845
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2586,11 +2586,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0002625211970820243
+    0.00032875888114019955
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0008333333333333335
+    0.0010769230769230745
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2598,11 +2598,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.009617274074488508
+    0.009919460811521327
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.05347985347985346
+    0.052747252747252775
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2610,11 +2610,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.3345547059048652
+    0.2973593410989758
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.8632478632478735
+    4.6923076923076845
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -2632,61 +2632,61 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.5521042084168333,
+   "autocorr_time": 0.37609970674486803,
    "error": [
-    0.01380811489008847
+    0.013323467750529824
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11025641025641027
+    0.09743589743589748
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.8837209302325582,
+   "autocorr_time": 0.6616915422885575,
    "error": [
-    0.030816677568068284
+    0.027695473070119065
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8888888888888892
+    0.8717948717948718
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.48030303030303045,
+   "autocorr_time": 0.6505538771399798,
    "error": [
-    0.06523151171431439
+    0.08545298974324778
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.0404320682081383
+    -0.10128205128205131
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.8837209302325582,
+   "autocorr_time": 0.6616915422885579,
    "error": [
-    0.030816677568068284
+    0.027695473070119065
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.611111111111111
+    0.6282051282051282
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.8444583621760005,
+   "autocorr_time": 0.6358024691358033,
    "error": [
-    0.036986780132692104
+    0.033647093540629065
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.3938746438746439
+    0.41666666666666663
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -2704,289 +2704,289 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.5170068027210883,
+   "autocorr_time": 0.4275189167662289,
    "error": [
-    0.004193618644979985
+    0.004371308793808635
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.01851851851851852
+    0.02136752136752137
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.8444583621760005,
+   "autocorr_time": 0.6358024691358033,
    "error": [
-    0.036986780132692104
+    0.033647093540629065
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.3938746438746439
+    0.41666666666666663
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.4116889201218084,
+   "autocorr_time": 0.4707207207207212,
    "error": [
-    0.02013541707587991
+    0.020830867704194775
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.002564102564102565
+    0.030769230769230767
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.44573010255014084,
+   "autocorr_time": 0.3111230201262356,
    "error": [
-    0.0033660459260709784
+    0.0034718112840324625
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.01871794871794873
+    0.01846153846153847
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.40095088545755864,
+   "autocorr_time": 0.3479572815245565,
    "error": [
-    0.0002625211970820241
+    0.00032875888114019955
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0008333333333333337
+    0.0010769230769230777
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.4457301025501405,
+   "autocorr_time": 0.31112302012623544,
    "error": [
-    0.009617274074488508
+    0.00991946081152132
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.053479853479853456
+    0.052747252747252726
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.48030303030303034,
+   "autocorr_time": 0.6505538771399798,
    "error": [
-    0.18637574775518398
+    0.2441513992664222
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.435897435897436
+    1.7179487179487178
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.48149722735674655,
+   "autocorr_time": 0.6306685366993922,
    "error": [
-    0.6713347416197971
+    1.0584496123359124
    ],
    "internal_bin_len": 1,
    "mean": [
-    3.4358974358974357
+    4.6923076923076925
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.9026578399301306,
+   "autocorr_time": 0.6698975158144114,
    "error": [
-    0.33455470590486475
+    0.29735934109897577
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.86324786324786
+    4.6923076923076925
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.719025401762571,
+   "autocorr_time": 0.4691358024691359,
    "error": [
-    0.01788756370637295
+    0.015097027121927946
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.09743589743589746
+    0.10000000000000003
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 0.406706260826528,
+   "autocorr_time": 0.32371349095966623,
    "error": [
-    0.019471428632298317
+    0.01794871794871795
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.015384615384615384
+    0.017948717948717958
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag2": {
-   "autocorr_time": 0.6436391944151473,
+   "autocorr_time": 0.46437726509325505,
    "error": [
-    0.005437268009767154
+    0.00492325498253493
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.017948717948717954
+    0.01923076923076924
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag4": {
-   "autocorr_time": 0.5323327997854801,
+   "autocorr_time": 0.46592122269114034,
    "error": [
-    0.0007006696649631111
+    0.0006774117635148036
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0011948717948717952
+    0.001361538461538463
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMagChi": {
-   "autocorr_time": 0.6436391944151475,
+   "autocorr_time": 0.4643772650932556,
    "error": [
-    0.015535051456477583
+    0.014066442807242655
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.051282051282051266
+    0.054945054945054916
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.719025401762571,
+   "autocorr_time": 0.4691358024691359,
    "error": [
-    0.01788756370637295
+    0.015097027121927946
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.09743589743589746
+    0.10000000000000003
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag": {
-   "autocorr_time": 0.406706260826528,
+   "autocorr_time": 0.32371349095966623,
    "error": [
-    0.019471428632298317
+    0.01794871794871795
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.015384615384615384
+    -0.017948717948717958
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag2": {
-   "autocorr_time": 0.6436391944151473,
+   "autocorr_time": 0.46437726509325505,
    "error": [
-    0.005437268009767154
+    0.00492325498253493
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.017948717948717954
+    0.01923076923076924
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag4": {
-   "autocorr_time": 0.5323327997854801,
+   "autocorr_time": 0.46592122269114034,
    "error": [
-    0.0007006696649631111
+    0.0006774117635148036
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0011948717948717952
+    0.001361538461538463
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMagChi": {
-   "autocorr_time": 0.6436391944151475,
+   "autocorr_time": 0.4643772650932556,
    "error": [
-    0.015535051456477583
+    0.014066442807242655
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.051282051282051266
+    0.054945054945054916
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYAbsMag": {
-   "autocorr_time": 0.5521042084168335,
+   "autocorr_time": 0.3760997067448682,
    "error": [
-    0.013808114890088471
+    0.013323467750529828
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11025641025641027
+    0.09743589743589748
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag": {
-   "autocorr_time": 0.4116889201218084,
+   "autocorr_time": 0.4707207207207212,
    "error": [
-    0.02013541707587991
+    0.020830867704194775
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.002564102564102564
+    -0.030769230769230767
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag2": {
-   "autocorr_time": 0.44573010255014084,
+   "autocorr_time": 0.3111230201262356,
    "error": [
-    0.0033660459260709784
+    0.0034718112840324625
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.01871794871794873
+    0.01846153846153847
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.40095088545755864,
+   "autocorr_time": 0.3479572815245563,
    "error": [
-    0.0002625211970820241
+    0.00032875888114019955
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0008333333333333337
+    0.0010769230769230777
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.4457301025501404,
+   "autocorr_time": 0.31112302012623544,
    "error": [
-    0.009617274074488508
+    0.00991946081152132
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.053479853479853456
+    0.052747252747252726
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -2994,11 +2994,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.025636623157982937
+    0.03353576590525063
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.0027065527065529144
+    0.008262108262107208
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3006,11 +3006,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.08660359270232824
+    0.09522318431058548
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.21364132909591127
+    0.2305637472446399
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3018,11 +3018,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.019471428632298313
+    0.017948717948717947
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.015384615384615396
+    0.017948717948717954
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3030,11 +3030,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005437268009767154
+    0.004923254982534933
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.017948717948717965
+    0.01923076923076922
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3042,11 +3042,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0007006696649631112
+    0.0006774117635148035
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0011948717948717952
+    0.001361538461538468
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3054,11 +3054,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.01553505145647758
+    0.014066442807242657
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.051282051282051315
+    0.05494505494505499
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3066,11 +3066,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.08660359270232824
+    0.09522318431058548
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.21364132909591127
+    0.2305637472446399
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3078,11 +3078,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.019471428632298313
+    0.017948717948717947
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.015384615384615396
+    -0.017948717948717954
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3090,11 +3090,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005437268009767154
+    0.004923254982534933
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.017948717948717965
+    0.01923076923076922
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3102,11 +3102,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0007006696649631112
+    0.0006774117635148035
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0011948717948717952
+    0.001361538461538468
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3114,11 +3114,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.01553505145647758
+    0.014066442807242657
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.051282051282051315
+    0.05494505494505499
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3126,11 +3126,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07496006695189006
+    0.050364344917480826
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.4046420488899107
+    0.3082322122702996
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3138,11 +3138,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02013541707587991
+    0.02083086770419477
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.0025641025641025684
+    -0.03076923076923075
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3150,11 +3150,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0033660459260709797
+    0.003471811284032463
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018717948717948737
+    0.01846153846153845
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3162,11 +3162,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0002625211970820243
+    0.00032875888114019955
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0008333333333333335
+    0.0010769230769230745
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3174,65 +3174,65 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.009617274074488508
+    0.009919460811521327
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.05347985347985346
+    0.052747252747252775
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 1.0007554137007966,
+   "autocorr_time": 0.9903009134632653,
    "error": [
-    7.280019463443891e-07
+    7.268493963171349e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.5268974358974356e-06
+    4.697538461538461e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.5518375401935139,
+   "autocorr_time": 0.4146871097914212,
    "error": [
-    5.460473292060592e-08
+    3.770724310177268e-08
    ],
    "internal_bin_len": 1,
    "mean": [
-    8.992564102564102e-07
+    8.329999999999999e-07
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.48030303030303034,
+   "autocorr_time": 0.6505538771399798,
    "error": [
-    0.18637574775518398
+    0.2441513992664222
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.435897435897436
+    1.7179487179487178
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.5783545059896433,
+   "autocorr_time": 0.37814484794508396,
    "error": [
-    0.2431019256979127
+    0.20639587817770416
    ],
    "internal_bin_len": 1,
    "mean": [
-    3.7158119658119664
+    3.4452991452991455
    ],
    "rebin_count": 13,
    "rebin_len": 3
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0004"
+ "task": "diamond_square_dim_spi_seeded.data/task0004"
 },
 {
  "parameters": {
@@ -3263,11 +3263,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.08231740234845308
+    0.06150374035847238
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.35268276539669186
+    0.42575723778614016
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3275,11 +3275,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.07671227843410362
+    0.10143010324169745
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.11564574342181373
+    -0.08888888888888892
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3287,11 +3287,11 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.031209262535906855
+    0.022205779584216406
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.6367521367521349
+    0.6623931623931619
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3299,11 +3299,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.037744807919241806
+    0.02936684918531098
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.42806267806267834
+    0.4579772079772078
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3335,11 +3335,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.004448004272363533
+    0.0022523345157894445
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.018518518518518507
+    0.01424501424501419
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3347,11 +3347,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.037744807919241806
+    0.02936684918531098
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.42806267806267834
+    0.4579772079772078
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3359,11 +3359,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.005414444477823506
+    0.003437253740916425
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.023583412472300835
+    0.01970560303893687
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3371,11 +3371,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.027616229780176933
+    0.02488192585984553
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.05384615384615385
+    0.002564102564102565
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3383,11 +3383,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.003986059424396929
+    0.003042903097250923
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02538461538461546
+    0.023333333333333345
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3395,11 +3395,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.000642161387025592
+    0.0003032026435994403
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0016692307692307714
+    0.001248717948717948
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3407,11 +3407,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.009198598671685225
+    0.007022084070579055
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.05857988165680475
+    0.05384615384615381
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3419,11 +3419,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.33807533579218874
+    0.22556655077601187
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.6068376068376065
+    4.3247863247863325
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3441,61 +3441,61 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.2528517110266157,
+   "autocorr_time": 0.328252032520325,
    "error": [
-    0.009593993299420359
+    0.011419136081955031
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.13589743589743591
+    0.12564102564102567
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.8185245018847618,
+   "autocorr_time": 0.4876425855513314,
    "error": [
-    0.031209262535906918
+    0.022205779584216382
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8632478632478632
+    0.8376068376068377
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.5442708333333336,
+   "autocorr_time": 0.766376250403356,
    "error": [
-    0.07671227843410364
+    0.10143010324169745
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.11564574342181357
+    -0.088888888888889
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.8185245018847612,
+   "autocorr_time": 0.48764258555133116,
    "error": [
-    0.031209262535906904
+    0.022205779584216382
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.6367521367521369
+    0.6623931623931621
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.7740944919967112,
+   "autocorr_time": 0.5303080055165167,
    "error": [
-    0.03774480791924179
+    0.02936684918531097
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4280626780626781
+    0.457977207977208
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -3513,289 +3513,289 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.581632653061225,
+   "autocorr_time": 0.4999999999999999,
    "error": [
-    0.004448004272363532
+    0.0022523345157894436
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.018518518518518524
+    0.014245014245014249
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.7740944919967112,
+   "autocorr_time": 0.5303080055165167,
    "error": [
-    0.03774480791924179
+    0.02936684918531097
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4280626780626781
+    0.457977207977208
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.6444444444444443,
+   "autocorr_time": 0.5042747087561066,
    "error": [
-    0.027616229780176943
+    0.02488192585984553
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.05384615384615385
+    0.002564102564102565
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.2945641946796682,
+   "autocorr_time": 0.24979773462783192,
    "error": [
-    0.003986059424396931
+    0.0030429030972509243
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.025384615384615394
+    0.02333333333333335
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.39982971811447643,
+   "autocorr_time": 0.3029541605089189,
    "error": [
-    0.0006421613870255918
+    0.0003032026435994404
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0016692307692307703
+    0.0012487179487179491
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.2945641946796682,
+   "autocorr_time": 0.24979773462783184,
    "error": [
-    0.009198598671685225
+    0.007022084070579054
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.05857988165680473
+    0.053846153846153856
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.5442708333333336,
+   "autocorr_time": 0.7663762504033562,
    "error": [
-    0.17702833484793148
+    0.23406946901930176
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.3333333333333333
+    1.358974358974359
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.432712215320911,
+   "autocorr_time": 0.6250112655238916,
    "error": [
-    0.5196131334554073
+    0.8943781853186474
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.871794871794872
+    3.205128205128205
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.8476378532764957,
+   "autocorr_time": 0.4560916767189385,
    "error": [
-    0.3380753357921885
+    0.22556655077601107
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.6068376068376065
+    4.324786324786324
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.596461187214612,
+   "autocorr_time": 0.44942606022765497,
    "error": [
-    0.019015893556655547
+    0.013412269082457453
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.1230769230769231
+    0.09700854700854705
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 0.7008753126116469,
+   "autocorr_time": 0.7506673397428539,
    "error": [
-    0.03008498445606503
+    0.025078103821949013
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.046153846153846156
+    -0.02948717948717949
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag2": {
-   "autocorr_time": 0.7074468085106381,
+   "autocorr_time": 0.4448335997674759,
    "error": [
-    0.006471502289294341
+    0.0034305354257076043
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.026666666666666682
+    0.01735042735042736
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag4": {
-   "autocorr_time": 0.705977977768318,
+   "autocorr_time": 0.47182942733974687,
    "error": [
-    0.0008476249837537226
+    0.0002847212400361502
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0018358974358974383
+    0.0008170940170940175
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMagChi": {
-   "autocorr_time": 0.7074468085106389,
+   "autocorr_time": 0.4384024326050362,
    "error": [
-    0.01493423605221771
+    0.007887855217321407
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.061538461538461556
+    0.03900817131586363
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.596461187214612,
+   "autocorr_time": 0.44942606022765497,
    "error": [
-    0.019015893556655547
+    0.013412269082457453
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.1230769230769231
+    0.09700854700854705
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag": {
-   "autocorr_time": 0.7008753126116469,
+   "autocorr_time": 0.7506673397428539,
    "error": [
-    0.03008498445606503
+    0.025078103821949013
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.046153846153846156
+    0.02948717948717949
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag2": {
-   "autocorr_time": 0.7074468085106381,
+   "autocorr_time": 0.4448335997674759,
    "error": [
-    0.006471502289294341
+    0.0034305354257076043
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.026666666666666682
+    0.01735042735042736
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag4": {
-   "autocorr_time": 0.705977977768318,
+   "autocorr_time": 0.47182942733974687,
    "error": [
-    0.0008476249837537226
+    0.0002847212400361502
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0018358974358974383
+    0.0008170940170940175
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMagChi": {
-   "autocorr_time": 0.7074468085106389,
+   "autocorr_time": 0.4384024326050362,
    "error": [
-    0.01493423605221771
+    0.007887855217321407
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.061538461538461556
+    0.03900817131586363
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYAbsMag": {
-   "autocorr_time": 0.25285171102661586,
+   "autocorr_time": 0.328252032520325,
    "error": [
-    0.009593993299420362
+    0.011419136081955031
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.13589743589743591
+    0.12564102564102567
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag": {
-   "autocorr_time": 0.6444444444444443,
+   "autocorr_time": 0.5042747087561066,
    "error": [
-    0.027616229780176946
+    0.02488192585984553
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.05384615384615385
+    -0.0025641025641025615
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag2": {
-   "autocorr_time": 0.2945641946796682,
+   "autocorr_time": 0.24979773462783192,
    "error": [
-    0.003986059424396931
+    0.0030429030972509243
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.025384615384615394
+    0.02333333333333335
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.39982971811447643,
+   "autocorr_time": 0.3029541605089189,
    "error": [
-    0.0006421613870255918
+    0.0003032026435994404
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0016692307692307703
+    0.0012487179487179491
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.2945641946796682,
+   "autocorr_time": 0.24979773462783184,
    "error": [
-    0.009198598671685225
+    0.007022084070579054
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.05857988165680473
+    0.053846153846153856
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -3803,11 +3803,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.02336522512467038
+    0.033157470067602
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.020797720797720735
+    0.005413105413105492
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3815,11 +3815,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07868247476870387
+    0.0552963647172157
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3490735678714684
+    0.35387709911636794
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3827,11 +3827,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.03008498445606503
+    0.025078103821949013
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.04615384615384627
+    -0.02948717948717955
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3839,11 +3839,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.006471502289294341
+    0.003430535425707605
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02666666666666656
+    0.0173504273504273
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3851,11 +3851,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0008476249837537225
+    0.0002847212400361502
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.00183589743589744
+    0.0008170940170940165
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3863,11 +3863,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.01493423605221771
+    0.007887855217321407
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.06153846153846154
+    0.039008171315863635
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3875,11 +3875,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07868247476870387
+    0.0552963647172157
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3490735678714684
+    0.35387709911636794
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3887,11 +3887,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.03008498445606503
+    0.025078103821949013
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.04615384615384627
+    0.02948717948717955
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3899,11 +3899,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.006471502289294341
+    0.003430535425707605
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02666666666666656
+    0.0173504273504273
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3911,11 +3911,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0008476249837537225
+    0.0002847212400361502
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.00183589743589744
+    0.0008170940170940165
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3923,11 +3923,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.01493423605221771
+    0.007887855217321407
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.06153846153846154
+    0.039008171315863635
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3935,11 +3935,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.08231740234845308
+    0.06150374035847238
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.35268276539669186
+    0.42575723778614016
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3947,11 +3947,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02761622978017694
+    0.02488192585984553
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.05384615384615385
+    -0.002564102564102565
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3959,11 +3959,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.003986059424396929
+    0.003042903097250923
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02538461538461546
+    0.023333333333333345
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3971,11 +3971,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.000642161387025592
+    0.0003032026435994403
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0016692307692307714
+    0.001248717948717948
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -3983,65 +3983,65 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.009198598671685224
+    0.007022084070579055
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.05857988165680475
+    0.05384615384615381
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.8896099995845934,
+   "autocorr_time": 0.9176988153611354,
    "error": [
-    6.641933677980144e-07
+    6.508691672775393e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.531538461538459e-06
+    4.237435897435898e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.6150769860448555,
+   "autocorr_time": 1.0384639527033204,
    "error": [
-    5.039894426641265e-08
+    6.877884627831328e-08
    ],
    "internal_bin_len": 1,
    "mean": [
-    8.651794871794872e-07
+    8.11051282051282e-07
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.5442708333333336,
+   "autocorr_time": 0.7663762504033562,
    "error": [
-    0.17702833484793148
+    0.23406946901930176
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.3333333333333333
+    1.358974358974359
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.6878525479055412,
+   "autocorr_time": 0.478861265187533,
    "error": [
-    0.20344360349433782
+    0.29295222463254955
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.016025641025641
+    4.223076923076924
    ],
    "rebin_count": 13,
    "rebin_len": 2
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0005"
+ "task": "diamond_square_dim_spi_seeded.data/task0005"
 },
 {
  "parameters": {
@@ -4072,11 +4072,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.0515276432999441
+    0.0965177507229005
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3550530586386454
+    0.43608303369420015
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4084,11 +4084,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.09429898171309706
+    0.07911832747610206
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.0015431793192494038
+    -0.0034188034188034427
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4096,11 +4096,11 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.023921446757473874
+    0.020271010642105024
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.6623931623931619
+    0.6837606837606836
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4108,11 +4108,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0283561670048353
+    0.026200437162345977
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.45940170940170916
+    0.4871794871794874
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4144,11 +4144,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.0024327993271509004
+    0.005385230874745375
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.015669515669515712
+    0.024928774928774898
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4156,11 +4156,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0283561670048353
+    0.026200437162345977
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.45940170940170916
+    0.4871794871794874
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4168,11 +4168,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.0063611868533445535
+    0.004020272233356578
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.021209243431465824
+    0.020061728395061845
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4180,11 +4180,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02932882040474101
+    0.03462329760774204
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.010256410256410258
+    0.007692307692307693
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4192,11 +4192,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.00462842412532045
+    0.004582025693565885
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.01897435897435898
+    0.028974358974358964
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4204,11 +4204,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0003685341838467616
+    0.0006707142087786349
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.000989743589743591
+    0.0017666666666666707
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4216,11 +4216,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.008958240242555707
+    0.008868436826256551
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03672456575682386
+    0.05607940446650132
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4228,11 +4228,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.26464690949386416
+    0.2102792821043806
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.3333333333333295
+    4.115384615384622
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4250,61 +4250,61 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.6229911871435976,
+   "autocorr_time": 0.3390903857225099,
    "error": [
-    0.016650221998955692
+    0.011656565552979363
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.1025641025641026
+    0.1461538461538462
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.526843657817109,
+   "autocorr_time": 0.3973048327137547,
    "error": [
-    0.02392144675747388
+    0.020271010642104993
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8376068376068375
+    0.8162393162393162
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.59350595972051,
+   "autocorr_time": 0.5609823399558498,
    "error": [
-    0.09429898171309707
+    0.07911832747610206
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.0015431793192494183
+    -0.003418803418803435
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.526843657817109,
+   "autocorr_time": 0.39730483271375483,
    "error": [
-    0.02392144675747388
+    0.020271010642104997
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.6623931623931625
+    0.6837606837606836
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.5282777251517385,
+   "autocorr_time": 0.406009833028025,
    "error": [
-    0.028356167004835304
+    0.026200437162346074
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4594017094017093
+    0.487179487179487
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -4322,249 +4322,129 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.5926916221033867,
+   "autocorr_time": 0.5398442677269724,
    "error": [
-    0.0024327993271509017
+    0.005385230874745373
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.015669515669515674
+    0.02492877492877493
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.5282777251517385,
+   "autocorr_time": 0.406009833028025,
    "error": [
-    0.028356167004835304
+    0.026200437162346074
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4594017094017093
+    0.487179487179487
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.8661440185830432,
+   "autocorr_time": 0.7877065332726997,
    "error": [
-    0.02932882040474101
+    0.03462329760774204
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.01025641025641026
+    0.007692307692307694
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.6463597132317114,
+   "autocorr_time": 0.43024630076112147,
    "error": [
-    0.004628424125320448
+    0.004582025693565885
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.018974358974358986
+    0.028974358974358988
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.5614360695257792,
+   "autocorr_time": 0.47218156349843377,
    "error": [
-    0.0003685341838467615
+    0.0006707142087786349
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0009897435897435903
+    0.0017666666666666681
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.6463597132317114,
+   "autocorr_time": 0.43024630076112114,
    "error": [
-    0.008958240242555706
+    0.008868436826256551
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.036724565756823827
+    0.05607940446650125
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.5935059597205095,
+   "autocorr_time": 0.5609823399558496,
    "error": [
-    0.18251415815438132
+    0.15313224672793946
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8974358974358974
+    0.9743589743589743
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.8846926092360645,
+   "autocorr_time": 0.4541396688264938,
    "error": [
-    0.8002300786834478
+    0.38146860862258797
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.8717948717948718
+    1.7435897435897436
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.5198478946392139,
+   "autocorr_time": 0.3920951098382825,
    "error": [
-    0.2646469094938639
+    0.21027928210438074
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.333333333333332
+    4.115384615384614
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.13719750195160027,
+   "autocorr_time": 0.6463534018600099,
    "error": [
-    0.006367377959722794
+    0.01745348534757448
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.10512820512820518
+    0.12307692307692307
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 0.5008632138114211,
+   "autocorr_time": 0.4442009132420092,
    "error": [
-    0.02085715272121783
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    -0.012820512820512825
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXMag2": {
-   "autocorr_time": 0.2394308943089433,
-   "error": [
-    0.002101417239853718
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.016666666666666677
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXMag4": {
-   "autocorr_time": 0.377172559833386,
-   "error": [
-    0.00019336745034392248
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.0006282051282051282
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXMagChi": {
-   "autocorr_time": 0.2394308943089433,
-   "error": [
-    0.004067259173910422
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.032258064516129045
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.13719750195160027,
-   "error": [
-    0.006367377959722794
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.10512820512820518
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXStagYMag": {
-   "autocorr_time": 0.5008632138114211,
-   "error": [
-    0.02085715272121783
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.012820512820512825
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXStagYMag2": {
-   "autocorr_time": 0.2394308943089433,
-   "error": [
-    0.002101417239853718
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.016666666666666677
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXStagYMag4": {
-   "autocorr_time": 0.377172559833386,
-   "error": [
-    0.00019336745034392248
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.0006282051282051282
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagXStagYMagChi": {
-   "autocorr_time": 0.2394308943089433,
-   "error": [
-    0.004067259173910422
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.032258064516129045
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagYAbsMag": {
-   "autocorr_time": 0.6229911871435976,
-   "error": [
-    0.016650221998955692
-   ],
-   "internal_bin_len": 1,
-   "mean": [
-    0.1025641025641026
-   ],
-   "rebin_count": 13,
-   "rebin_len": 3
-  },
-  "SignStagYMag": {
-   "autocorr_time": 0.8661440185830436,
-   "error": [
-    0.029328820404741014
+    0.023686164889830802
    ],
    "internal_bin_len": 1,
    "mean": [
@@ -4573,38 +4453,158 @@
    "rebin_count": 13,
    "rebin_len": 3
   },
-  "SignStagYMag2": {
-   "autocorr_time": 0.6463597132317114,
+  "SignStagXMag2": {
+   "autocorr_time": 0.5691404817214821,
    "error": [
-    0.004628424125320448
+    0.005675882979789401
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.018974358974358986
+    0.024102564102564113
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXMag4": {
+   "autocorr_time": 0.45807305250569347,
+   "error": [
+    0.0006880686937251844
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.0016564102564102583
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXMagChi": {
+   "autocorr_time": 0.5691404817214821,
+   "error": [
+    0.010985579960882709
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.0466501240694789
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXStagYAbsMag": {
+   "autocorr_time": 0.6463534018600099,
+   "error": [
+    0.01745348534757448
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.12307692307692307
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXStagYMag": {
+   "autocorr_time": 0.4442009132420092,
+   "error": [
+    0.023686164889830802
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.010256410256410262
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXStagYMag2": {
+   "autocorr_time": 0.5691404817214821,
+   "error": [
+    0.005675882979789401
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.024102564102564113
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXStagYMag4": {
+   "autocorr_time": 0.45807305250569347,
+   "error": [
+    0.0006880686937251844
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.0016564102564102583
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagXStagYMagChi": {
+   "autocorr_time": 0.5691404817214821,
+   "error": [
+    0.010985579960882709
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.0466501240694789
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagYAbsMag": {
+   "autocorr_time": 0.3390903857225099,
+   "error": [
+    0.011656565552979363
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.1461538461538462
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagYMag": {
+   "autocorr_time": 0.7877065332726997,
+   "error": [
+    0.03462329760774204
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    -0.007692307692307694
+   ],
+   "rebin_count": 13,
+   "rebin_len": 3
+  },
+  "SignStagYMag2": {
+   "autocorr_time": 0.43024630076112147,
+   "error": [
+    0.004582025693565885
+   ],
+   "internal_bin_len": 1,
+   "mean": [
+    0.028974358974358988
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.5614360695257792,
+   "autocorr_time": 0.47218156349843377,
    "error": [
-    0.0003685341838467615
+    0.0006707142087786349
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0009897435897435903
+    0.0017666666666666681
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.6463597132317114,
+   "autocorr_time": 0.43024630076112147,
    "error": [
-    0.008958240242555706
+    0.008868436826256553
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.036724565756823827
+    0.05607940446650125
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -4612,11 +4612,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.0351629263172325
+    0.012981603745531034
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.020227920227919978
+    -0.015669515669515632
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4624,11 +4624,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07760755316502072
+    0.09049545122775411
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.41845221745557737
+    0.3228515309506877
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4636,11 +4636,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.020857152721217832
+    0.023686164889830802
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.012820512820512829
+    -0.010256410256410272
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4648,11 +4648,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0021014172398537215
+    0.0056758829797894
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.016666666666666653
+    0.024102564102564138
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4660,11 +4660,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0001933674503439226
+    0.0006880686937251845
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0006282051282051289
+    0.0016564102564102586
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4672,11 +4672,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.004067259173910423
+    0.010985579960882712
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03225806451612901
+    0.046650124069479
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4684,11 +4684,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.07760755316502072
+    0.09049545122775411
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.41845221745557737
+    0.3228515309506877
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4696,11 +4696,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.020857152721217832
+    0.023686164889830802
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.012820512820512829
+    0.010256410256410272
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4708,11 +4708,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.0021014172398537215
+    0.0056758829797894
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.016666666666666653
+    0.024102564102564138
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4720,11 +4720,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0001933674503439226
+    0.0006880686937251845
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0006282051282051289
+    0.0016564102564102586
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4732,11 +4732,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.004067259173910423
+    0.010985579960882712
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03225806451612901
+    0.046650124069479
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4744,11 +4744,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.0515276432999441
+    0.0965177507229005
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.3550530586386454
+    0.43608303369420015
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4756,11 +4756,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.029328820404741007
+    0.03462329760774204
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.010256410256410284
+    -0.007692307692307721
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4768,11 +4768,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.00462842412532045
+    0.004582025693565885
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.01897435897435898
+    0.028974358974358964
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4780,11 +4780,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0003685341838467616
+    0.0006707142087786349
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.000989743589743591
+    0.0017666666666666707
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4792,65 +4792,65 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.008958240242555707
+    0.008868436826256551
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03672456575682386
+    0.05607940446650132
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.8281464838161818,
+   "autocorr_time": 0.9705505771180308,
    "error": [
-    9.266193301306256e-07
+    2.6058389401636462e-06
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.827051282051282e-06
+    1.2363820512820512e-05
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.5379448217692262,
+   "autocorr_time": 1.194020973510905,
    "error": [
-    5.5174670340707856e-08
+    2.947419336863244e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    8.386410256410255e-07
+    2.2253846153846157e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.5935059597205095,
+   "autocorr_time": 0.5609823399558496,
    "error": [
-    0.18251415815438132
+    0.15313224672793946
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8974358974358974
+    0.9743589743589743
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.7437810945273629,
+   "autocorr_time": 0.541590909090909,
    "error": [
-    0.2602082499332666
+    0.28910005879541195
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.625
+    3.8888888888888893
    ],
    "rebin_count": 12,
    "rebin_len": 2
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0006"
+ "task": "diamond_square_dim_spi_seeded.data/task0006"
 },
 {
  "parameters": {
@@ -4881,11 +4881,11 @@
   "BinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.05447969461797034
+    0.07580991694565424
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.28767971058391073
+    0.3163004645301681
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4893,11 +4893,11 @@
   "Energy": {
    "autocorr_time": 0.0,
    "error": [
-    0.13587324409735146
+    0.08815442788549276
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.1378679656440361
+    -0.05384615384615392
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4905,11 +4905,11 @@
   "J": {
    "autocorr_time": 0.0,
    "error": [
-    0.023665595051048666
+    0.026801834362146393
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.6538461538461534
+    0.6538461538461552
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4917,11 +4917,11 @@
   "J2": {
    "autocorr_time": 0.0,
    "error": [
-    0.028368091381731086
+    0.03373743494483628
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.44658119658119566
+    0.4480056980056979
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4953,11 +4953,11 @@
   "JStruc1": {
    "autocorr_time": 0.0,
    "error": [
-    0.004523399544932968
+    0.006303854723338913
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.02279202279202289
+    0.029914529914529985
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4965,11 +4965,11 @@
   "JStruc2": {
    "autocorr_time": 0.0,
    "error": [
-    0.028368091381731086
+    0.03373743494483628
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.44658119658119566
+    0.4480056980056979
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4977,11 +4977,11 @@
   "JVar": {
    "autocorr_time": 0.0,
    "error": [
-    0.00499357377274971
+    0.0044899596557833425
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.01962646407090854
+    0.02120924343146524
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -4989,11 +4989,11 @@
   "Mag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02416703506939947
+    0.02053951254820156
    ],
    "internal_bin_len": 0,
    "mean": [
-    -6.40513283437591e-18
+    0.04871794871794869
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5001,11 +5001,11 @@
   "Mag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005276696314681202
+    0.0035482955136148836
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.023076923076923068
+    0.02435897435897439
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5013,11 +5013,11 @@
   "Mag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0007043095480777455
+    0.0006355846004682619
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0017384615384615407
+    0.0017205128205128254
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5025,11 +5025,11 @@
   "MagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.008794493857801997
+    0.00591382585602481
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.038461538461538575
+    0.04059829059829061
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5037,11 +5037,11 @@
   "NematicityDiagStruc": {
    "autocorr_time": 0.0,
    "error": [
-    0.2584086418383403
+    0.2826226622049414
    ],
    "internal_bin_len": 0,
    "mean": [
-    4.410256410256411
+    4.418803418803415
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5059,61 +5059,61 @@
    "rebin_len": 3
   },
   "SignAbsMag": {
-   "autocorr_time": 0.38024142312579434,
+   "autocorr_time": 0.0885912698412698,
    "error": [
-    0.014390989949130545
+    0.007176434027242163
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11282051282051285
+    0.11538461538461538
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignChiralityOnsite": {
-   "autocorr_time": 0.558109833971903,
+   "autocorr_time": 0.6660724896019017,
    "error": [
-    0.023665595051048646
+    0.02680183436214641
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.8461538461538463
+    0.8461538461538461
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignEnergy": {
-   "autocorr_time": 0.7307692307692312,
+   "autocorr_time": 0.5560011883541293,
    "error": [
-    0.1358732440973515
+    0.08815442788549274
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.1378679656440358
+    -0.05384615384615387
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ": {
-   "autocorr_time": 0.5581098339719032,
+   "autocorr_time": 0.6660724896019017,
    "error": [
-    0.023665595051048646
+    0.02680183436214641
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.6538461538461537
+    0.6538461538461539
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJ2": {
-   "autocorr_time": 0.5022384412006491,
+   "autocorr_time": 0.6551757702435473,
    "error": [
-    0.02836809138173109
+    0.033737434944836296
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4465811965811966
+    0.44800569800569795
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -5131,289 +5131,289 @@
    "rebin_len": 3
   },
   "SignJStruc1": {
-   "autocorr_time": 0.4707207207207212,
+   "autocorr_time": 0.5549341287596323,
    "error": [
-    0.004523399544932966
+    0.006303854723338914
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.022792022792022797
+    0.0299145299145299
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignJStruc2": {
-   "autocorr_time": 0.5022384412006491,
+   "autocorr_time": 0.6551757702435473,
    "error": [
-    0.02836809138173109
+    0.033737434944836296
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.4465811965811966
+    0.44800569800569795
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag": {
-   "autocorr_time": 0.4808641975308639,
+   "autocorr_time": 0.3645833333333332,
    "error": [
-    0.024167035069399472
+    0.020539512548201567
    ],
    "internal_bin_len": 1,
    "mean": [
-    -2.846725704167068e-18
+    0.04871794871794871
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag2": {
-   "autocorr_time": 0.4386926180351105,
+   "autocorr_time": 0.21223168455436306,
    "error": [
-    0.0052766963146812
+    0.003548295513614885
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.023076923076923092
+    0.02435897435897437
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMag4": {
-   "autocorr_time": 0.4521699126723226,
+   "autocorr_time": 0.39259596422931353,
    "error": [
-    0.0007043095480777457
+    0.0006355846004682619
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0017384615384615399
+    0.0017205128205128217
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignMagChi": {
-   "autocorr_time": 0.43869261803511084,
+   "autocorr_time": 0.21223168455436292,
    "error": [
-    0.008794493857802
+    0.005913825856024808
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.038461538461538464
+    0.040598290598290586
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper": {
-   "autocorr_time": 0.7307692307692308,
+   "autocorr_time": 0.5560011883541295,
    "error": [
-    0.22645540682891915
+    0.14692404647582125
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.0
+    0.923076923076923
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNOper2": {
-   "autocorr_time": 0.6096876525134202,
+   "autocorr_time": 0.47371967654986524,
    "error": [
-    0.8656140879674666
+    0.45472173976841535
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.333333333333333
+    1.5897435897435896
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignNematicityDiagStruc": {
-   "autocorr_time": 0.6002275214561374,
+   "autocorr_time": 0.6734934811620983,
    "error": [
-    0.25840864183834017
+    0.2826226622049416
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.41025641025641
+    4.418803418803416
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXAbsMag": {
-   "autocorr_time": 0.9548346055979636,
+   "autocorr_time": 0.28208812260536387,
    "error": [
-    0.020804549478013818
+    0.010094881889758732
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.1102564102564103
+    0.10769230769230771
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag": {
-   "autocorr_time": 0.22762296812328464,
+   "autocorr_time": 0.5194796733842947,
    "error": [
-    0.015771488963458064
+    0.02144430647913569
    ],
    "internal_bin_len": 1,
    "mean": [
-    -0.0025641025641025654
+    0.037606837606837605
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag2": {
-   "autocorr_time": 0.9298941798941802,
+   "autocorr_time": 0.30500978620897334,
    "error": [
-    0.0055873514837633045
+    0.0030572734397469963
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.020769230769230783
+    0.01846153846153847
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMag4": {
-   "autocorr_time": 0.7031060765404563,
+   "autocorr_time": 0.36953054935409424,
    "error": [
-    0.00041095160116077324
+    0.00029891505180629853
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0010692307692307702
+    0.0009230769230769232
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXMagChi": {
-   "autocorr_time": 0.9298941798941797,
+   "autocorr_time": 0.29014230174948913,
    "error": [
-    0.009312252472938841
+    0.004986772382967037
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.03461538461538462
+    0.030484330484330493
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYAbsMag": {
-   "autocorr_time": 0.9548346055979636,
+   "autocorr_time": 0.28208812260536387,
    "error": [
-    0.020804549478013818
+    0.010094881889758732
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.1102564102564103
+    0.10769230769230771
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag": {
-   "autocorr_time": 0.22762296812328464,
+   "autocorr_time": 0.5194796733842947,
    "error": [
-    0.015771488963458064
+    0.02144430647913569
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0025641025641025654
+    -0.037606837606837605
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag2": {
-   "autocorr_time": 0.9298941798941802,
+   "autocorr_time": 0.30500978620897334,
    "error": [
-    0.0055873514837633045
+    0.0030572734397469963
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.020769230769230783
+    0.01846153846153847
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMag4": {
-   "autocorr_time": 0.7031060765404563,
+   "autocorr_time": 0.36953054935409424,
    "error": [
-    0.00041095160116077324
+    0.00029891505180629853
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0010692307692307702
+    0.0009230769230769232
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagXStagYMagChi": {
-   "autocorr_time": 0.9298941798941797,
+   "autocorr_time": 0.29014230174948913,
    "error": [
-    0.009312252472938841
+    0.004986772382967037
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.03461538461538462
+    0.030484330484330493
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYAbsMag": {
-   "autocorr_time": 0.38024142312579434,
+   "autocorr_time": 0.0885912698412698,
    "error": [
-    0.014390989949130545
+    0.007176434027242163
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.11282051282051285
+    0.11538461538461538
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag": {
-   "autocorr_time": 0.4808641975308639,
+   "autocorr_time": 0.3645833333333332,
    "error": [
-    0.024167035069399472
+    0.020539512548201567
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.846725704167068e-18
+    -0.04871794871794871
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag2": {
-   "autocorr_time": 0.4386926180351105,
+   "autocorr_time": 0.21223168455436306,
    "error": [
-    0.0052766963146812
+    0.003548295513614885
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.023076923076923092
+    0.02435897435897437
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMag4": {
-   "autocorr_time": 0.4521699126723226,
+   "autocorr_time": 0.39259596422931353,
    "error": [
-    0.0007043095480777457
+    0.0006355846004682619
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.0017384615384615399
+    0.0017205128205128217
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "SignStagYMagChi": {
-   "autocorr_time": 0.43869261803511084,
+   "autocorr_time": 0.21223168455436292,
    "error": [
-    0.008794493857802
+    0.005913825856024808
    ],
    "internal_bin_len": 1,
    "mean": [
-    0.038461538461538464
+    0.040598290598290586
    ],
    "rebin_count": 13,
    "rebin_len": 3
@@ -5421,11 +5421,11 @@
   "SpecificHeat": {
    "autocorr_time": 0.0,
    "error": [
-    0.03424074462245799
+    0.015951792493911144
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03846153846153793
+    -0.016381766381766638
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5433,11 +5433,11 @@
   "StagXBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.0684015259370921
+    0.05211677665789299
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.39551262773876383
+    0.3549404772727162
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5445,11 +5445,11 @@
   "StagXMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.015771488963458064
+    0.02144430647913569
    ],
    "internal_bin_len": 0,
    "mean": [
-    -0.002564102564102571
+    0.03760683760683772
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5457,11 +5457,11 @@
   "StagXMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005587351483763304
+    0.0030572734397469954
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.020769230769230786
+    0.01846153846153845
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5469,11 +5469,11 @@
   "StagXMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0004109516011607733
+    0.0002989150518062983
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0010692307692307687
+    0.0009230769230769263
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5481,11 +5481,11 @@
   "StagXMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.009312252472938837
+    0.004986772382967034
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03461538461538463
+    0.030484330484330507
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5493,11 +5493,11 @@
   "StagXStagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.0684015259370921
+    0.05211677665789299
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.39551262773876383
+    0.3549404772727162
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5505,11 +5505,11 @@
   "StagXStagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.015771488963458064
+    0.02144430647913569
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.002564102564102571
+    -0.03760683760683772
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5517,11 +5517,11 @@
   "StagXStagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005587351483763304
+    0.0030572734397469954
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.020769230769230786
+    0.01846153846153845
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5529,11 +5529,11 @@
   "StagXStagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0004109516011607733
+    0.0002989150518062983
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0010692307692307687
+    0.0009230769230769263
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5541,11 +5541,11 @@
   "StagXStagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.009312252472938837
+    0.004986772382967034
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.03461538461538463
+    0.030484330484330507
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5553,11 +5553,11 @@
   "StagYBinderRatio": {
    "autocorr_time": 0.0,
    "error": [
-    0.05447969461797034
+    0.07580991694565424
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.28767971058391073
+    0.3163004645301681
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5565,11 +5565,11 @@
   "StagYMag": {
    "autocorr_time": 0.0,
    "error": [
-    0.02416703506939947
+    0.02053951254820156
    ],
    "internal_bin_len": 0,
    "mean": [
-    6.40513283437591e-18
+    -0.04871794871794869
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5577,11 +5577,11 @@
   "StagYMag2": {
    "autocorr_time": 0.0,
    "error": [
-    0.005276696314681202
+    0.0035482955136148836
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.023076923076923068
+    0.02435897435897439
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5589,11 +5589,11 @@
   "StagYMag4": {
    "autocorr_time": 0.0,
    "error": [
-    0.0007043095480777455
+    0.0006355846004682619
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.0017384615384615407
+    0.0017205128205128254
    ],
    "rebin_count": 13,
    "rebin_len": 0
@@ -5601,64 +5601,64 @@
   "StagYMagChi": {
    "autocorr_time": 0.0,
    "error": [
-    0.008794493857801997
+    0.00591382585602481
    ],
    "internal_bin_len": 0,
    "mean": [
-    0.038461538461538575
+    0.04059829059829061
    ],
    "rebin_count": 13,
    "rebin_len": 0
   },
   "_ll_measurement_time": {
-   "autocorr_time": 0.9780279357362017,
+   "autocorr_time": 0.9489570075843671,
    "error": [
-    7.420727415546891e-07
+    6.567339887629493e-07
    ],
    "internal_bin_len": 1,
    "mean": [
-    4.6008717948717945e-06
+    4.179025641025642e-06
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "_ll_sweep_time": {
-   "autocorr_time": 0.7302805410895514,
+   "autocorr_time": 0.6180584446667561,
    "error": [
-    6.136315217882032e-08
+    5.556054481212629e-08
    ],
    "internal_bin_len": 1,
    "mean": [
-    9.285641025641028e-07
+    8.677179487179488e-07
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "nOper": {
-   "autocorr_time": 0.7307692307692308,
+   "autocorr_time": 0.5560011883541295,
    "error": [
-    0.22645540682891915
+    0.14692404647582125
    ],
    "internal_bin_len": 1,
    "mean": [
-    1.0
+    0.923076923076923
    ],
    "rebin_count": 13,
    "rebin_len": 3
   },
   "wormlength_fraction": {
-   "autocorr_time": 0.5766885186888496,
+   "autocorr_time": 0.47312541473125413,
    "error": [
-    0.22056863861534917
+    0.19784189177576658
    ],
    "internal_bin_len": 1,
    "mean": [
-    2.442361111111111
+    4.583333333333333
    ],
    "rebin_count": 12,
    "rebin_len": 2
   }
  },
- "task": "/home/lukas/mc/frust/build/testjobs/./diamond_square_dim_spi_seeded.data/task0007"
+ "task": "diamond_square_dim_spi_seeded.data/task0007"
 }
 ]
