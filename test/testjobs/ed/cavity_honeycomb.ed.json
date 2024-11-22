@@ -3,7 +3,7 @@
   "parameters": {
    "T": 0.05,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -12,6 +12,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -34,6 +35,11 @@
    "PhotonNum": 0.00042663776944669966,
    "PhotonNum2": 0.0008532755388933993,
    "PhotonNumVar": 0.0008530935191070809,
+   "StagUCMag": 4.4408850024636137e-16,
+   "StagUCMag2": 0.1179156405282853,
+   "StagUCMag4": 0.02458653192089961,
+   "StagUCBinderRatio": 0.5655168580069937,
+   "StagUCMagChi": 2.5491512506484675,
    "StagXStagYMag": 2.0816619015812328e-17,
    "StagXStagYMag2": 0.03016535794445283,
    "StagXStagYMag4": 0.0036416754506616695,
@@ -45,7 +51,7 @@
   "parameters": {
    "T": 0.20833333333333331,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -54,6 +60,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -76,6 +83,11 @@
    "PhotonNum": 0.0004191795315162887,
    "PhotonNum2": 0.0008383208998638905,
    "PhotonNumVar": 0.0008381451883842483,
+   "StagUCMag": 3.969268861803439e-16,
+   "StagUCMag2": 0.1171635233310311,
+   "StagUCMag4": 0.02427654417477101,
+   "StagUCBinderRatio": 0.5654549140320773,
+   "StagUCMagChi": 2.336377672669024,
    "StagXStagYMag": 1.666318839835835e-17,
    "StagXStagYMag2": 0.029986515296686174,
    "StagXStagYMag4": 0.0035548071418024193,
@@ -87,7 +99,7 @@
   "parameters": {
    "T": 0.36666666666666664,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -96,6 +108,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -118,6 +131,11 @@
    "PhotonNum": 0.00044853091361660266,
    "PhotonNum2": 0.0008364519274669225,
    "PhotonNumVar": 0.0008362507474864527,
+   "StagUCMag": 2.563839526727907e-16,
+   "StagUCMag2": 0.11199114531762462,
+   "StagUCMag4": 0.022483297467078122,
+   "StagUCBinderRatio": 0.5578370631762694,
+   "StagUCMagChi": 1.7303263729475258,
    "StagXStagYMag": 4.8165537340328445e-18,
    "StagXStagYMag2": 0.029988855450555366,
    "StagXStagYMag4": 0.0033679987626885526,
@@ -129,7 +147,7 @@
   "parameters": {
    "T": 0.525,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -138,6 +156,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -160,6 +179,11 @@
    "PhotonNum": 0.001466084608942076,
    "PhotonNum2": 0.0018071606737818254,
    "PhotonNumVar": 0.0018050112697012486,
+   "StagUCMag": 1.3751223068566805e-16,
+   "StagUCMag2": 0.09960231809908611,
+   "StagUCMag4": 0.018712860155215717,
+   "StagUCBinderRatio": 0.5301499443924624,
+   "StagUCMagChi": 1.2045917759466427,
    "StagXStagYMag": -3.504685737298406e-18,
    "StagXStagYMag2": 0.03127170376506067,
    "StagXStagYMag4": 0.0033491936397528296,
@@ -171,7 +195,7 @@
   "parameters": {
    "T": 0.6833333333333333,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -180,6 +204,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -202,6 +227,11 @@
    "PhotonNum": 0.005724746332891259,
    "PhotonNum2": 0.006078030448224533,
    "PhotonNumVar": 0.006045257727648581,
+   "StagUCMag": 6.945597763926175e-17,
+   "StagUCMag2": 0.08557171333432165,
+   "StagUCMag4": 0.014770456851117223,
+   "StagUCBinderRatio": 0.4957543423863327,
+   "StagUCMagChi": 0.843840182629016,
    "StagXStagYMag": -6.040158473679132e-18,
    "StagXStagYMag2": 0.03280228460893253,
    "StagXStagYMag4": 0.003395309333856845,
@@ -213,7 +243,7 @@
   "parameters": {
    "T": 0.8416666666666667,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -222,6 +252,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -244,6 +275,11 @@
    "PhotonNum": 0.014847462053973132,
    "PhotonNum2": 0.015539292570823348,
    "PhotonNumVar": 0.015318845441379176,
+   "StagUCMag": 3.61587389409027e-17,
+   "StagUCMag2": 0.07423656951614555,
+   "StagUCMag4": 0.01179396133861829,
+   "StagUCBinderRatio": 0.4672788128853705,
+   "StagUCMagChi": 0.617194508721569,
    "StagXStagYMag": -5.617670712811298e-18,
    "StagXStagYMag2": 0.033808963992697144,
    "StagXStagYMag4": 0.003414645129476568,
@@ -255,7 +291,7 @@
   "parameters": {
    "T": 1.0,
    "model": "cavity_magnet",
-   "sweeps": 50000,
+   "sweeps": 100000,
    "thermalization": 10000,
    "binsize": 1000,
    "lattice": "honeycomb",
@@ -264,6 +300,7 @@
    "Ly": 2,
    "measure": [
     "mag",
+    "sucmag",
     "sxsymag"
    ],
    "J": 0.9,
@@ -286,6 +323,11 @@
    "PhotonNum": 0.02913042574830451,
    "PhotonNum2": 0.031045704049124996,
    "PhotonNumVar": 0.030197122344847515,
+   "StagUCMag": 1.9913102207342874e-17,
+   "StagUCMag2": 0.06595824906663623,
+   "StagUCMag4": 0.009744872383924784,
+   "StagUCBinderRatio": 0.44643895256268545,
+   "StagUCMagChi": 0.4739053390482089,
    "StagXStagYMag": -4.447550083141576e-18,
    "StagXStagYMag2": 0.03431015872452325,
    "StagXStagYMag4": 0.0034013314951311445,
