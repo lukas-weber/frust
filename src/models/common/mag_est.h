@@ -79,7 +79,7 @@ public:
 	}
 
 	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
-		if(!(Signs & mag_sign::x) && !(Signs & mag_sign::y)) {
+		if(Signs == mag_sign::none) {
 			return;
 		}
 
@@ -89,11 +89,11 @@ public:
 			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
 			int leg_count = data.get_vertex_data(op.bond()).leg_count;
-			double mdiff = 0;
 			for(int l = 0; l < leg_count / 2; l++) {
 				const auto &b = model_.get_basis(bond[l]);
 				if(auto site = model_.get_lattice_site_idx(bond[l])) {
-					mdiff += stag_sign(*site) * b.m(leg_state[leg_count / 2 + l]) - b.m(l);
+					tmpmag_ +=
+					    stag_sign(*site) * (b.m(leg_state[leg_count / 2 + l]) - b.m(leg_state[l]));
 				}
 			}
 		}
