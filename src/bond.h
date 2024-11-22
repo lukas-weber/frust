@@ -26,10 +26,6 @@ struct bond {
 	int j{0};
 	
 	double J{0};
-
-	// prefactor of S_i^2 and S_j^2 terms
-	double Ki{0};
-	double Kj{0};
 };
 
 struct site {

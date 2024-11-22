@@ -8,28 +8,6 @@
 #include "lattice.h"
 
 class frust : public loadl::mc {
-private:
-	double T_{};
-
-	uint64_t noper_{};
-	std::vector<opercode> operators_;
-	std::vector<jm> spin_;
-
-	std::unique_ptr<lattice> lat_;
-
-	void diagonal_update();
-
-	void make_vertex_list();
-	void worm(int v0);
-	void worm_update();
-
-	void print_vertices();
-	void print_operators();
-
-	// temporary vertex list stuff
-	std::vector<int32_t> vertices_;
-	std::vector<int> v_first_;
-	std::vector<int> v_last_;
 public:
 	void init() override;
 	void do_update() override;
@@ -45,5 +23,31 @@ public:
 	void register_evalables(loadl::evaluator &eval) override;
 
 	frust(const loadl::parser &p);
+private:
+	double T_{};
+
+
+	double avgwormlen_{1};
+	double nworm_{5};
+	int64_t noper_{};
+	
+	std::vector<opercode> operators_;
+	std::vector<jm> spin_;
+
+	lattice lat_;
+
+	void diagonal_update();
+
+	void make_vertex_list();
+	int worm_traverse();
+	void worm_update();
+
+	void print_vertices();
+	void print_operators();
+
+	// temporary vertex list stuff
+	std::vector<int32_t> vertices_;
+	std::vector<int> v_first_;
+	std::vector<int> v_last_;
 };
 

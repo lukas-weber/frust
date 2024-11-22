@@ -3,7 +3,8 @@ frust_sources = files([
   'main.cpp',
   'frust.cpp',
   'lattice.cpp',
-  'vertices.cpp',
+  'vertex_data.cpp',
+  'latticedef.cpp',
 ])
 
 frust = executable('frust',
