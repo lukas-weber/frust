@@ -1,5 +1,6 @@
 test_srcs = files([
   'test_opercode.cpp',
+#  'test_wormfunc.cpp'
 ])
 
 catch2_dep = dependency('catch2', fallback : [ 'catch2', 'catch2_dep' ])

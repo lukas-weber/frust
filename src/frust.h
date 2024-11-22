@@ -41,6 +41,7 @@ private:
 
 	template<class... Estimators>
 	void opstring_measurement(Estimators... est);
+	double measure_sign() const;
 
 	void print_vertices();
 	void print_operators();

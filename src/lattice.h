@@ -26,6 +26,7 @@ public:
 
 	const vertex_data::transition &vertex_transition(opercode op, int leg_in, jm_action action_in) const;
 	double vertex_weight(opercode op) const;
+	int vertex_sign(opercode op) const;
 	opercode vertex_idx_opercode(int bond, int vertex_idx) const;
 	void vertex_print() const;
 
@@ -42,6 +43,10 @@ private:
 
 inline const vertex_data::transition &lattice::vertex_transition(opercode op, int leg_in, jm_action action_in) const {
 	return vertices_[op.bond()%vertices_.size()].get_transition(op, leg_in, action_in);
+}
+
+inline int lattice::vertex_sign(opercode op) const {
+	return vertices_[op.bond()%vertices_.size()].get_sign(op);
 }
 
 inline double lattice::vertex_weight(opercode op) const {

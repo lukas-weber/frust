@@ -69,9 +69,9 @@ H = sps.dok_matrix((2**(N), 2**(N)))
 print('H constructed.')
 
 for b in lat.bonds:
-    for i in mult2half[b.i]:
-        for j in mult2half[b.j]:
-            H += b.J * H_heisen_bond(i, j)
+    for spini, i in enumerate(mult2half[b.i]):
+        for spinj, j in enumerate(mult2half[b.j]):
+            H += b.J[spini*len(mult2half[b.j])+spinj] * H_heisen_bond(i, j)
 
 for idx, s in enumerate(lat.sites):
     for i in mult2half[idx]:
@@ -85,7 +85,10 @@ if num_states == 0:
     print('Full diagonalization done.')
 else:
     E, psi = spsl.eigsh(H, num_states, which='SA')
-    print('Sparse diagonalization done ({} states).'.format(num_states))
+    Emax = E.max()
+    psi = psi[:,E<E.max()-1e-3]
+    E = E[E<E.max()-1e-3]
+    print('Sparse diagonalization done ({}/{} states).'.format(len(E),num_states))
 
 na = np.newaxis
 Egap = E[E>E.min()+1e-8].min()-E.min()
@@ -153,6 +156,7 @@ def calc_observables(E, psi):
     obs['Energy'] = np.sum(E[na,:]*ρ,axis=1)/N
 
     obs.update(mag_obs('', Sz))
+    obs.update(mag_obs('Stag', lambda i: lat.sites[half2mult[i]].sublattice * Sz(i)))
 
     return obs
 
