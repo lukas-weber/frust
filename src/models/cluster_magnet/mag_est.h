@@ -77,7 +77,7 @@ public:
 	}
 
 	void measure(opercode op, const std::vector<state_idx> &, const sse_data &data) {
-		if(Signs & mag_sign::x && Signs & mag_sign::y) {
+		if(!(Signs & mag_sign::x) && !(Signs & mag_sign::y)) {
 			return;
 		}
 
