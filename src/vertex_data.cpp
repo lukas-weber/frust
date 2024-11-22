@@ -206,7 +206,7 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 					int in_inv = var.inverse().worm_in * leg_count + var.inverse().leg_in;
 
 					assert(result.x[i] >= -tolerance);
-					if(result.x[i] < 0) {
+					if(result.x[i] < tolerance) {
 						result.x[i] = 0;
 					}
 
@@ -237,6 +237,14 @@ vertex_data::vertex_data(const uc_bond &b, const uc_site &si, const uc_site &sj)
 	}
 
 	for(auto &t : transitions_) {
+		int idx{};
+		for(auto &p : t.probs) {
+			if(p > 0 && t.targets[idx].invalid()) {
+				throw std::runtime_error{fmt::format("it is possible to reach an invalid vertex with p={}", p)};
+			}
+			idx++;
+		}
+
 		std::partial_sum(t.probs.begin(), t.probs.end(), t.probs.begin());
 		assert(t.probs.back() < 1.0000000001);
 		assert(!t.invalid());

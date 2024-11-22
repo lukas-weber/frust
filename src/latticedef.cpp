@@ -6,37 +6,37 @@ static unitcell make_square(const loadl::parser &p) {
 	uc.a1 = {1,0};
 	uc.a2 = {0,1};
 
-	int nspinhalf{};
-	std::string spin = p.get<std::string>("spin");
-	if(spin == "1/2") {
-		nspinhalf = 1;
-	} else if(spin == "1") {
-		nspinhalf = 2;
-	} else {
-		throw std::runtime_error{"illegal value for spin"};
-	}
-
 	double J = p.get<double>("J");
-	double Jin = p.get<double>("Jin");
 
+	uc.sites = {
+		{{0,0}, 0, site_bases::spin}
+	};
+	uc.bonds = {
+		{0,{1,0,0},{J}},
+		{0,{0,1,0},{J}}
+	};
 
-	if(nspinhalf == 1) {
-		uc.sites = {
-			{{0,0}, 0, site_bases::spin}
-		};
-		uc.bonds = {
-			{0,{1,0,0},{J}},
-			{0,{0,1,0},{J}}
-		};
-	} else {
-		uc.sites = {
-			{{0,0}, Jin, site_bases::dimer}
-		};
-		uc.bonds = {
-			{0,{1,0,0},{J,J,J,J}},
-			{0,{0,1,0},{J,J,J,J}}
-		};
-	}
+	return uc;
+}
+
+static unitcell make_bilayer(const loadl::parser &p) {
+	unitcell uc;
+
+	uc.a1 = {1,0};
+	uc.a2 = {0,1};
+
+	double Jpar = p.get<double>("Jpar");
+	double Jperp = p.get<double>("Jperp");
+
+	double Jx = p.get<double>("Jx", Jpar);
+
+	uc.sites = {
+		{{0,0}, Jperp, site_bases::dimer}
+	};
+	uc.bonds = {
+		{0,{1,0,0},{Jpar,Jx,Jx,Jpar}},
+		{0,{0,1,0},{Jpar,Jx,Jx,Jpar}}
+	};
 
 	return uc;
 }
@@ -124,6 +124,8 @@ lattice lattice_from_param(const loadl::parser &p) {
 		uc = make_triangle_square(p);
 	} else if(name == "square") {
 		uc = make_square(p);
+	} else if(name == "bilayer") {
+		uc = make_bilayer(p);
 	} else if(name == "triangle") {
 		uc = make_triangle(p);
 	} else {

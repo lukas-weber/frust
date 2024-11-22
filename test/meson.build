@@ -18,14 +18,21 @@ test('ed_square',
    is_parallel : false,
    suite : 'ed_test')
 
-test('ed_square_1',
+test('ed_triangle',
    sim_tests,
-   args : [frust, files('testjobs/square1')],
+   args : [frust, files('testjobs/triangle')],
    timeout : 200,
    is_parallel : false,
    suite : 'ed_test')
 
-test('ed_triang',
+test('ed_bilayer',
+   sim_tests,
+   args : [frust, files('testjobs/bilayer')],
+   timeout : 200,
+   is_parallel : false,
+   suite : 'ed_test')
+
+test('ed_triang_square',
    sim_tests,
    args : [frust, files('testjobs/triangle_square')],
    timeout : 5000,

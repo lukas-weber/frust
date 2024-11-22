@@ -70,6 +70,7 @@ public:
 		};
 		
 		eval.evaluate( "J", {p+"J", "Sign"}, unsign);
+		eval.evaluate( "J2", {p+"J2", "Sign"}, unsign);
 		eval.evaluate( "JVar", {p+"J2", p+"J", "Sign"}, [](const std::vector<std::vector<double>> &obs) {
 			return std::vector<double>{(obs[0][0]-obs[1][0]*obs[1][0]/obs[2][0])/obs[2][0]};
 		});
