@@ -33,6 +33,13 @@ test('ed_bilayer',
    is_parallel : false,
    suite : 'ed_test')
 
+test('ed_shastry_sutherland',
+   sim_tests,
+   args : [frust, files('testjobs/shastry_sutherland')],
+   timeout : 200,
+   is_parallel : false,
+   suite : 'ed_test')
+
 test('ed_triang_square',
    sim_tests,
    args : [frust, files('testjobs/triangle_square')],
