@@ -165,6 +165,8 @@ vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamil
 	std::vector<double> constraints_upper(steps.size());
 
 	Highs highs;
+	highs.setOptionValue("log_dev_level", kHighsLogDevLevelNone);
+	highs.setOptionValue("output_flag", false);
 	for(size_t v = 0; v < weights_.size(); v++) {
 		for(int step_in : steps) {
 			std::vector<int> targets(leg_count * max_worm_count_);
