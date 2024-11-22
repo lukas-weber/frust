@@ -26,7 +26,7 @@ double J(int n, int m, double omega, double g, double tolerance = 1e-12) {
 		sum += term;
 	}
 
-	return 0.5*exp(-g*g)*sum;
+	return (1-2*((n-m)/2 & 1)) * 0.5 * exp(-g*g)*sum;
 }
 
 Eigen::MatrixXd downfolded_coupling(double omega, double g, int max_bosons) {
@@ -36,6 +36,5 @@ Eigen::MatrixXd downfolded_coupling(double omega, double g, int max_bosons) {
 			coupling(m,n) = J(n,m,omega,g);
 		}
 	}
-
 	return coupling;
 }
