@@ -138,6 +138,7 @@ vertex_data::vertex_data(int dim_i, int dim_j, const Eigen::MatrixXd& bond_hamil
 		               bool exclude_bounce = vc.inverse() == vc;
 		               return exclude_bounce;
 	               });
+
 	model.lp_.col_cost_ = objective;
 	model.lp_.col_lower_ = std::vector<double>(variables.size(), 0);
 	model.lp_.col_upper_ = std::vector<double>(variables.size(), 1e30);
