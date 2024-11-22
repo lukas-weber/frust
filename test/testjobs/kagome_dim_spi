@@ -7,8 +7,8 @@ tm.sweeps = 800000
 tm.thermalization = 50000
 tm.binsize = 1000
 tm.lattice = 'kagome'
-tm.Lx = 6
-tm.Ly = 6
+tm.Lx = 2
+tm.Ly = 2
 
 tm.measure = ['j', 'jcorrlen', 'mag', 'sxmag', 'symag', 'sxsymag']
 
