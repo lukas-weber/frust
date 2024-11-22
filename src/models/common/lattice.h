@@ -1,23 +1,40 @@
 #pragma once
 
-#include "bond.h"
+#include "util/vec.h"
 #include <nlohmann/json_fwd.hpp>
 
 struct unitcell {
+	struct bond {
+		int i{};
+		struct {
+			int dx{};
+			int dy{};
+			int uc{};
+		} j;
+	};
+
+	struct site {
+		vec2 pos;
+		int coordination{}; // filled automatically
+	};
+
 	vec2 a1;
 	vec2 a2;
 
-	std::vector<uc_site> sites;
-	std::vector<uc_bond> bonds;
+	std::vector<site> sites;
+	std::vector<bond> bonds;
 };
 
 struct lattice {
+	struct bond {
+		int i;
+		int j;
+	};
 	unitcell uc;
 
 	int Lx{}, Ly{};
 
-	//std::vector<lat_site> sites;
-	std::vector<lat_bond> bonds;
+	std::vector<bond> bonds;
 
 	auto split_idx(int site_idx) const;
 	vec2 site_pos(int site_idx) const;
