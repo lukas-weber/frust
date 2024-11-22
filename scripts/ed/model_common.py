@@ -4,6 +4,7 @@ import scipy.sparse as sps
 class Magnet:
     mag_sign_cfgs = {
         "mag": ("", (1, 1, 1)),
+        "sucmag": ("StagUC", (1, 1, -1)),
         "sxmag": ("StagX", (-1, 1, 1)),
         "symag": ("StagY", (1, -1, 1)),
         "sxsymag": ("StagXStagY", (-1, -1, 1)),

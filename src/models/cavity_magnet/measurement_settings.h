@@ -7,14 +7,12 @@ struct cavity_magnet_measurement_settings {
 		for(const auto &obs : p.get<std::vector<std::string>>("measure")) {
 			if(obs == "mag") {
 				measure_mag = true;
-				//} else if(obs == "sxmag") {
-				//	measure_sxmag = true;
-				//} else if(obs == "symag") {
-				//	measure_symag = true;
 			} else if(obs == "sxsymag") {
 				measure_sxsymag = true;
 			} else if(obs == "sxsucmag") {
 				measure_sxsucmag = true;
+			} else if(obs == "sucmag") {
+				measure_sucmag = true;
 			} else {
 				throw std::runtime_error{fmt::format("unknown observable '{}'", obs)};
 			}
@@ -22,8 +20,7 @@ struct cavity_magnet_measurement_settings {
 	}
 
 	bool measure_mag{};
-	// bool measure_sxmag{};
-	// bool measure_symag{};
+	bool measure_sucmag{};
 	bool measure_sxsymag{};
 	bool measure_sxsucmag{};
 };
