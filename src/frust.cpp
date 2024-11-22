@@ -12,6 +12,8 @@ frust::frust(const loadl::parser &p)
 	T_ = param.get<double>("T");
 	v_first_.resize(data_.site_count);
 	v_last_.resize(data_.site_count);
+
+	//data_.print();
 }
 
 /*

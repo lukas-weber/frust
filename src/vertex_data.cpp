@@ -265,8 +265,8 @@ void vertex_data::transition::print() const {
 	std::cout << fmt::format("{:.2f}|{:2d}\n", fmt::join(probs.begin(), probs.end(), " "),
 	                         fmt::join(codes.begin(), codes.end(), " "));
 }
-/*
-void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
+
+void vertex_data::print() const {
 	for(size_t v = 0; v < legstates_.size(); v++) {
 		for(int in = 0; in < max_worm_count_ * leg_count; in++) {
 			const auto &trans = transitions_[v * max_worm_count_ * leg_count + in];
@@ -288,7 +288,7 @@ void vertex_data::print(const site_basis &bi, const site_basis &bj) const {
 	for(const auto &idx : idxs) {
 		const auto &ls = legstates_[idx];
 		std::cout << fmt::format("{}({}): [{}{} {}{}] ~ {}\n", idx, signs_[idx] > 0 ? '+' : '-',
-		                         bi.states[ls[0]].name, bj.states[ls[1]].name,
-		                         bi.states[ls[2]].name, bj.states[ls[3]].name, weights_[idx]);
+		                         ls[0], ls[1],
+		                         ls[2], ls[3], weights_[idx]);
 	}
-}*/
+}
