@@ -27,7 +27,6 @@ static unitcell make_bilayer(const loadl::parser &p) {
 
 	double Jpar = p.get<double>("Jpar");
 	double Jperp = p.get<double>("Jperp");
-
 	double Jx = p.get<double>("Jx", Jpar);
 
 	uc.sites = {
@@ -36,6 +35,30 @@ static unitcell make_bilayer(const loadl::parser &p) {
 	uc.bonds = {
 		{0,{1,0,0},{Jpar,Jx,Jx,Jpar}},
 		{0,{0,1,0},{Jpar,Jx,Jx,Jpar}}
+	};
+
+	return uc;
+}
+
+static unitcell make_dimerized_bilayer(const loadl::parser &p) {
+	unitcell uc;
+
+	uc.a1 = {1,0};
+	uc.a2 = {0,2};
+
+	double Jpar = p.get<double>("Jpar");
+	double Jperp = p.get<double>("Jperp");
+	double Jpardim = p.get<double>("Jpardim");
+
+	uc.sites = {
+		{{0,0}, {Jperp}, site_bases::dimer},
+		{{0,0.5}, {Jperp}, site_bases::dimer}
+	};
+	uc.bonds = {
+		{0,{0,0,1},{Jpardim,Jpardim,Jpardim,Jpardim}},
+		{0,{1,0,0},{Jpar,Jpar,Jpar,Jpar}},
+		{1,{1,0,1},{Jpar,Jpar,Jpar,Jpar}},
+		{1,{0,1,0},{Jpar,Jpar,Jpar,Jpar}}
 	};
 
 	return uc;
@@ -302,6 +325,8 @@ lattice lattice_from_param(const loadl::parser &p, bool with_vertex_data) {
 		uc = make_square(p);
 	} else if(name == "bilayer") {
 		uc = make_bilayer(p);
+	} else if(name == "dimerized_bilayer") {
+		uc = make_dimerized_bilayer(p);
 	} else if(name == "shastry_sutherland") {
 		uc = make_shastry_sutherland(p);
 	} else if(name == "triangle") {
