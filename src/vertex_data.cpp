@@ -257,7 +257,8 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 
 					double prob = solution.col_value[i] / norm;
 					assert(prob >= -tolerance);
-					if(prob > tolerance) {
+					assert(prob <= 1 + tolerance);
+					if(prob > tolerance / steps.size()) {
 						transition_cumprobs_.push_back(prob);
 						int in_inv = var->step_in == in ? var->inverse().step_in : var->step_in;
 						transition_targets_.push_back(wrap_vertex_idx(targets[in_inv]));
@@ -267,15 +268,14 @@ vertex_data::vertex_data(const std::vector<int> &dims, const Eigen::MatrixXd &bo
 						trans.length++;
 					}
 				}
+				auto prob_begin = transition_cumprobs_.begin() + trans.offset;
+				std::partial_sum(prob_begin, prob_begin + trans.length, prob_begin);
+				double normed_norm = *(prob_begin + trans.length - 1);
+				if(!trans.invalid() && abs(normed_norm - 1) > tolerance) {
+					throw std::runtime_error{
+					    fmt::format("normalization error: {} != 1\n", normed_norm)};
+				}
 			}
-		}
-	}
-
-	for(auto &t : transitions_) {
-		auto prob_begin = transition_cumprobs_.begin() + t.offset;
-		std::partial_sum(prob_begin, prob_begin + t.length, prob_begin);
-		if(!t.invalid()) {
-			assert(abs(*(prob_begin + t.length - 1) - 1) < tolerance);
 		}
 	}
 }
@@ -284,6 +284,9 @@ void vertex_data::print() const {
 	for(size_t v = 0; v < weights_.size(); v++) {
 		for(int in = 0; in < max_worm_count_ * leg_count; in++) {
 			const auto &trans = transitions_[v * max_worm_count_ * leg_count + in];
+			if(trans.invalid()) {
+				continue;
+			}
 			std::vector<double> probs(trans.length);
 			std::vector<int> targets(trans.length);
 
