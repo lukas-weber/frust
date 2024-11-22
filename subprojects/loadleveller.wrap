@@ -1,0 +1,4 @@
+[wrap-git]
+directory = loadleveller
+url = https://git.rwth-aachen.de/lukas.weber2/load_leveller.git
+revision = master
