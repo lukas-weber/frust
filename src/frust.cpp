@@ -472,13 +472,15 @@ void frust::do_measurement() {
 	double sign = measure_sign();
 
 	if(model_->type == model::model_type::cluster_magnet) {
+		using M = cluster_magnet;
+		const auto &cm_model = static_cast<const M &>(*model_);
 		auto obs = std::tuple{
 		    j_est{*model_, sign, settings_.measure_jcorrlen},
-		    mag_est<1, 1, 1>{*model_, T_, sign},
-		    mag_est<1, -1, 1>{*model_, T_, sign},
-		    mag_est<-1, 1, 1>{*model_, T_, sign},
-		    mag_est<-1, -1, 1>{*model_, T_, sign},
-		    mag_est<-1, 1, -1>{*model_, T_, sign},
+		    mag_est<mag_sign::none, M>{cm_model, T_, sign},
+		    mag_est<mag_sign::x, M>{cm_model, T_, sign},
+		    mag_est<mag_sign::y, M>{cm_model, T_, sign},
+		    mag_est<mag_sign::x | mag_sign::y, M>{cm_model, T_, sign},
+		    mag_est<mag_sign::x | mag_sign::uc, M>{cm_model, T_, sign},
 		};
 
 		std::array<bool, 6> flags = {
@@ -565,28 +567,30 @@ void frust::register_evalables(loadl::evaluator &eval, const loadl::parser &p) {
 	std::unique_ptr<model> m = model_from_param(p);
 
 	if(m->type == model::model_type::cluster_magnet) {
+		using M = cluster_magnet;
+		const auto &cm = static_cast<const M &>(*m);
 		if(settings.measure_j || settings.measure_chirality) {
-			j_est{*m, 0, settings.measure_jcorrlen}.register_evalables(eval);
+			j_est{cm, 0, settings.measure_jcorrlen}.register_evalables(eval);
 		}
 
 		if(settings.measure_mag) {
-			mag_est<1, 1, 1>{*m, T, 0}.register_evalables(eval);
+			mag_est<mag_sign::none, M>{cm, T, 0}.register_evalables(eval);
 		}
 
 		if(settings.measure_sxmag) {
-			mag_est<-1, 1, 1>{*m, T, 0}.register_evalables(eval);
+			mag_est<mag_sign::x, M>{cm, T, 0}.register_evalables(eval);
 		}
 
 		if(settings.measure_symag) {
-			mag_est<1, -1, 1>{*m, T, 0}.register_evalables(eval);
+			mag_est<mag_sign::y, M>{cm, T, 0}.register_evalables(eval);
 		}
 
 		if(settings.measure_sxsymag) {
-			mag_est<-1, -1, 1>{*m, T, 0}.register_evalables(eval);
+			mag_est<mag_sign::x | mag_sign::y, M>{cm, T, 0}.register_evalables(eval);
 		}
 
 		if(settings.measure_sxsucmag) {
-			mag_est<-1, 1, -1>{*m, T, 0}.register_evalables(eval);
+			mag_est<mag_sign::x | mag_sign::uc, M>{cm, T, 0}.register_evalables(eval);
 		}
 
 		if(settings.measure_chirality) {
