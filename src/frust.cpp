@@ -531,7 +531,7 @@ void frust::checkpoint_read(const loadl::iodump::group &in) {
 
 	operators_.resize(saveops.size());
 	std::transform(saveops.begin(), saveops.end(), operators_.begin(),
-	               [](uint32_t c) { return opercode{c}; });
+	               [](opercode_uint c) { return opercode{c}; });
 
 	in.read("spin", spin_);
 
