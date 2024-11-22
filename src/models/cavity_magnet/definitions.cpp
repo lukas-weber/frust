@@ -97,6 +97,7 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 	int Ly = p.get<int>("Ly", Lx);
 
 	double U = p.get<double>("U");
+	double heisenberg_offset = p.get<double>("heisenberg_offset", 0.25);
 
 	if(lat == "square") {
 		proto = make_square(p);
@@ -122,5 +123,6 @@ std::unique_ptr<cavity_magnet> cavity_magnet_from_param(const loadl::parser &p) 
 	               });
 
 	return std::make_unique<cavity_magnet>(lattice{proto.uc, Lx, Ly}, modes, sites, bonds, U,
+	                                       heisenberg_offset,
 	                                       cavity_magnet_measurement_settings{p});
 }
