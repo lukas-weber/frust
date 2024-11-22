@@ -25,7 +25,7 @@ private:
 		double sign = 1;
 
 		if(SignUC < 0) {
-			sign *= model_.get_site(idx).sublattice_sign;
+			sign *= model_.lat.site_sublattice_sign(idx);
 		}
 
 		idx /= model_.lat.uc.sites.size();

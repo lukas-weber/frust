@@ -30,7 +30,7 @@ static cluster_magnet_proto make_dimerized_bilayer(const loadl::parser &p) {
 	double Jpardim = p.get<double>("Jpardim");
 
 	return {unitcells::columnar_dimer,
-	        {{{Jperp}, site_bases::dimer, 0, 1}, {{Jperp}, site_bases::dimer, 0, -1}},
+	        {{{Jperp}, site_bases::dimer, 0}, {{Jperp}, site_bases::dimer, 0}},
 	        {{{Jpardim, Jpardim, Jpardim, Jpardim}},
 	         {{Jpar, Jpar, Jpar, Jpar}},
 	         {{Jpar, Jpar, Jpar, Jpar}},
