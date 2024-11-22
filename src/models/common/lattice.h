@@ -86,7 +86,7 @@ const unitcell columnar_dimer{{1, 0},
 const unitcell honeycomb{{sqrt(3) / 2, -0.5},
                          {sqrt(3) / 2, 0.5},
                          {{{0, 0}, 1}, {{1.0 / 3, 1.0 / 3}, -1}},
-                         {{0, {0, 0, 1}}, {1, {0, 1, 1}}, {1, {1, 0, 0}}}};
+                         {{0, {0, 0, 1}}, {1, {0, 1, 0}}, {1, {1, 0, 0}}}};
 
 const unitcell shastry_sutherland{{1, 0},
                                   {0, 1},
