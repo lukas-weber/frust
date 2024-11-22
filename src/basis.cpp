@@ -12,30 +12,6 @@ static std::array<Eigen::Matrix2d, 3> gen_spinhalfop() {
 	return S;
 }
 
-std::vector<worm_function> generate_xor_worms(uint32_t basis_size) {
-	std::vector<worm_function> res;
-	for(uint32_t i = 1; i < basis_size; i++) {
-		std::vector<state_idx> action;
-		for(uint32_t j = 0; j < basis_size; j++) {
-			action.push_back(j ^ i);
-		}
-		res.push_back(worm_function{"^", static_cast<int>(i - 1), action});
-	}
-	return res;
-}
-
-std::vector<worm_function> generate_addmod_worms(uint32_t basis_size) {
-	std::vector<worm_function> res;
-	for(uint32_t i = 1; i < basis_size; i++) {
-		std::vector<state_idx> action;
-		for(uint32_t j = 0; j < basis_size; j++) {
-			action.push_back((j + i) % basis_size);
-		}
-		res.push_back(worm_function{"+", static_cast<int>(basis_size - i - 1), action});
-	}
-	return res;
-}
-
 site_basis::site_basis(int nspinhalfs, const std::vector<state> &states,
                        const Eigen::MatrixXd &trans)
     : nspinhalfs{nspinhalfs}, states{states}, trans_{trans} {}
