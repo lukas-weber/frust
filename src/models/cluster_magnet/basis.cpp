@@ -3,7 +3,7 @@
 
 site_basis::site_basis(int nspinhalfs, const std::vector<state> &states,
                        const Eigen::MatrixXd &trans)
-    : nspinhalfs{nspinhalfs}, states{states}, trans_{trans} {}
+    : states_{states}, nspinhalfs{nspinhalfs}, trans_{trans} {}
 
 static const std::array<Eigen::MatrixXd, 2> Shalf = spin_operators(2);
 

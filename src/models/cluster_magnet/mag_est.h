@@ -61,7 +61,7 @@ public:
 		tmpmag_ = 0;
 
 		for(uint32_t i = 0; i < spin.size(); i++) {
-			tmpmag_ += stag_sign(i) * model_.get_site(i).basis.states[spin[i]].m;
+			tmpmag_ += stag_sign(i) * model_.get_site(i).basis.m(spin[i]);
 		}
 
 		mag_ = tmpmag_;
@@ -82,8 +82,8 @@ public:
 
 			const auto &leg_state = data.get_vertex_data(op.bond()).get_legstate(op.vertex());
 
-			double m20 = bi.states[leg_state[2]].m - bi.states[leg_state[0]].m;
-			double m31 = bj.states[leg_state[3]].m - bj.states[leg_state[1]].m;
+			double m20 = bi.m(leg_state[2]) - bi.m(leg_state[0]);
+			double m31 = bj.m(leg_state[3]) - bj.m(leg_state[1]);
 
 			tmpmag_ += stag_sign(bond.i) * m20 + stag_sign(bond.j) * m31;
 		}
